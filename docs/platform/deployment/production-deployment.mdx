@@ -37,7 +37,7 @@ You can [use Terraform to deploy Redpanda](../../deployment/production-deploymen
 
 ## Install the Redpanda binary
 
-Install the binary on either Fedora/RedHat or Debian systems.
+Install Redpanda on each system you want to be part of your cluster. There are binaries available for Fedora/RedHat or Debian systems.
 
 You can also install Redpanda using an [Ansible playbook](../../deployment/production-deployment-automation).
 
@@ -83,7 +83,7 @@ sudo rpk redpanda tune all
 
 :::note Optional: Benchmark your SSD
 On taller machines, Redpanda recommends benchmarking your SSD. This can be done
-with `rpk iotune`. You only need to run this once. 
+with `rpk iotune`. You only need to run this once.
 
 For reference, a local NVMe SSD should yield around 1GB/s sustained writes.
 `rpk iotune` captures SSD wear and tear and gives accurate measurements
@@ -99,20 +99,20 @@ sudo rpk iotune # takes 10mins
 
 :::
 
-## Configure and start seed nodes
+## Configure and start nodes
 
-Configure and start up the seed servers with the [`rpk redpanda config bootstrap`](../../reference/rpk/rpk-redpanda/rpk-redpanda-config-bootstrap) command: 
+Configure and start up the nodes with the [`rpk redpanda config bootstrap`](../../reference/rpk/rpk-redpanda/rpk-redpanda-config-bootstrap) command: 
 
 ```bash
 sudo rpk redpanda config bootstrap --self <private ip> --ips <seed nodes ips> && \
-sudo rpk redpanda config set redpanda.empty_seed_starts_cluster false && \ 
+sudo rpk redpanda config set redpanda.empty_seed_starts_cluster false && \
 sudo systemctl start redpanda-tuner redpanda
 ```
 
 - The `--self` flag tells the node which interface address to bind to. Usually this is its private IP.
-- The `--ips` flag must be identical on all nodes when deploying a cluster for the first time.
+- The `--ips` flag lists the all seed nodes in the cluster (equivalent to the `seed_servers` property in `redpanda.yaml`).
 
-A Redpanda cluster starts with the seed nodes that are specified in the `--ips` flag, instantiating a controller Raft group with the seed nodes. The cluster grows as nodes start up and is available after all seed servers are up. 
+A Redpanda cluster starts with the seed nodes that are specified in the `--ips` flag, instantiating a controller Raft group with all the seed nodes at once. The cluster is then available after all seed nodes complete their startup procedure and become accessible. After that, the cluster's node count grows as non-seed nodes start up.
 
 :::info
 - Redpanda strongly recommends at least three seed nodes when forming a cluster. A larger number of seed nodes increases the robustness of consensus and minimizes any chance that new clusters get spuriously formed after nodes are lost or restarted without any data.
@@ -121,16 +121,6 @@ A Redpanda cluster starts with the seed nodes that are specified in the `--ips` 
 :::
 
 If clients will connect from a different subnet, see [Configuring Listeners](../../cluster-administration/listener-configuration).
-
-## Configure and start other nodes
-
-Let every other node know where to reach the seed nodes:
-
-```bash
-sudo rpk redpanda config bootstrap --self <private ip> --ips <seed nodes ips> && \
-sudo rpk redpanda config set redpanda.empty_seed_starts_cluster false && \ 
-sudo systemctl start redpanda-tuner redpanda
-```
 
 ## Verify the installation
 
