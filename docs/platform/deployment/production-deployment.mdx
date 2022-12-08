@@ -110,9 +110,9 @@ sudo systemctl start redpanda-tuner redpanda
 ```
 
 - The `--self` flag tells the node which interface address to bind to. Usually this is its private IP.
-- The `--ips` flag lists the all seed nodes in the cluster (equivalent to the `seed_servers` property in `redpanda.yaml`).
+- The `--ips` flag lists all the seed nodes in the cluster (seed nodes correspond to the `seed_servers` property in `redpanda.yaml`).
 
-A Redpanda cluster starts with the seed nodes that are specified in the `--ips` flag, instantiating a controller Raft group with all the seed nodes at once. The cluster is then available after all seed nodes complete their startup procedure and become accessible. After that, the cluster's node count grows as non-seed nodes start up.
+When a Redpanda cluster starts, it instantiates a controller Raft group with all the seed nodes that are specified in the `--ips` flag. After all seed nodes complete their startup procedure and become accessible, the cluster is then available. After that, non-seed nodes start up and are added to the cluster.
 
 :::info
 - Redpanda strongly recommends at least three seed nodes when forming a cluster. A larger number of seed nodes increases the robustness of consensus and minimizes any chance that new clusters get spuriously formed after nodes are lost or restarted without any data.
