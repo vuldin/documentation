@@ -52,33 +52,26 @@ The decommissioning process is designed to tolerate controller leadership transf
 :::
 
 :::tip
-This guide uses `jq` to make parsing JSON output easier. If you want more details, see the [jq downloads page](https://stedolan.github.io/jq/download/).
+This guide uses `jq` to make parsing JSON output easier. If you want more details, see [jq downloads](https://stedolan.github.io/jq/download/).
 :::
 
 ## Should you decommission brokers?
 
-There are several considerations in order to determine your cluster's minimum broker count and to decide whether to decommission any brokers. As an example, this section focuses on a cluster with 7 brokers. In each section, the output from the given commands will provide further details to help determine the minimum number of brokers.
+There are several considerations for determining your cluster's minimum broker count, and whether or not to decommission any brokers. For the purposes of this section, the focus is on a cluster with 7 brokers. In subsequent sections, the output from the given commands provides additional details to help you determine the minimum number of brokers.
 
 ### Availability
 
-You want enough brokers to properly span across each rack or availability zone. Run the following command in order to determine whether rack awareness is enabled in your cluster:
+You should have a sufficient number of brokers to properly span across each rack or availability zone. Run the following command to determine whether rack awareness is enabled in your cluster:
 
 ```bash
 rpk cluster config get enable_rack_awareness
 ```
 
-<details>
-<summary>
-Example output
-</summary>
-
 ```
 true
 ```
 
-</details>
-
-If enabled, then you should see which rack each broker is assigned to with the following command:
+When enabled, you can view which rack each broker is assigned to by running the following command:
 
 ```bash
 rpk cluster info
@@ -108,17 +101,17 @@ ID    HOST                          PORT   RACK
 
 </details>
 
-This shows we have four racks (A/B/C/D), so we may want to have at least 4 brokers in order to make use of all racks.
+The output shows four racks (A/B/C/D), so you might want to have at least four brokers to make use of all racks.
 
-Rack awareness is just one aspect of availability. Check out [this guide](https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/manual/high-availability/) for more details on deploying Redpanda for high availability.
+Rack awareness is just one aspect of availability. Check out [High Availability](https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/manual/high-availability/) for more details on deploying Redpanda for high availability.
 
 ### Cost
 
-Your infrastructure costs will increase with each broker, and adding a broker means an additional instance to pay for. In our example we are deploying to GKE on [n2-standard-8](https://gcloud-compute.com/n2-standard-8.html) GCP instances. This means that the instance cost of our cluster is &dollar;1925 per month. Dropping down to 5 brokers would save &dollar;550 per month, and dropping down to 3 brokers would save &dollar;1100 per month. There are other costs to consider of course, but they won't be as impacted by changing the broker count.
+Infrastructure costs increase with each broker, so adding a broker means an additional instance to pay for. In this example we deploy to GKE on [n2-standard-8](https://gcloud-compute.com/n2-standard-8.html) GCP instances. This means that the instance cost of the cluster is &dollar;1925 per month. Dropping down to 5 brokers would save &dollar;550 per month, and dropping down to 3 brokers would save &dollar;1100 per month. Of course, there are other costs to consider, but they won't be as impacted by changing the broker count.
 
 ### Data retention
 
-Local data retention is determined by the storage capability of each broker and how much data is being produced over a given period (ie. producer throughput). When decommissioning, storage capability needs to take into account both the free storage space as well as the amount of a space already used by existing partitions.
+Local data retention is determined by the storage capability of each broker and how much data is being produced over a given period (that is, producer throughput). When decommissioning, storage capability must take into account both the free storage space as well as the amount of space already used by existing partitions.
 
 Run the following command to determine how much storage is being used (in bytes) on each broker:
 
@@ -148,7 +141,7 @@ The example output shows that each broker contains roughly 240GB of data. This m
 
 Keep in mind that actual space used on disk will be greater than the data size reported by Redpanda. Redpanda reserves a certain amount of data on disk per partition, and will reserve less space per partition as available disk space decreases. Incoming data for each partition is then written to disk in the form of segments (actual files). The time when segments are written to disk is based on a number of factors, including the topic's segment configuration, broker restarts, and changes in raft leadership.
 
-Throughput is the primary measurement required to calculate future data storage requirements. In our example cluster we have a throughput of 200MB/sec, which means we will generate 0.72TB/hour (or 17.28TB/day, or 120.96TB/wk). We can divide this amount by the target number of brokers to get an estimate of how much storage we need to retain that much data for various periods of time:
+Throughput is the primary measurement required to calculate future data storage requirements. In the example cluster there is a throughput of 200MB/sec, which means it will generate 0.72TB/hour (or 17.28TB/day, or 120.96TB/wk). Divide this amount by the target number of brokers to get an estimate of how much storage is needed to retain that much data for various periods of time:
 
 | Retention | Disk size (on each of the 5 brokers) |
 | - | - |
@@ -157,61 +150,45 @@ Throughput is the primary measurement required to calculate future data storage 
 | 1d | `(200MB/sec * 1d * 1.1) = 19.008TB  / 5 brokers = 3.8TB` |
 | 3d | `(200MB/sec * 3d * 1.1) = 57.024TB / 5 brokers = 11.4TB` |
 
-In our example cluster we only need to retain 6 hours of data locally (and any older data is moved to tiered storage with a retention of 1 year). So we will need to ensure each broker has available storage of around 1.2TB (taking into account both throughput and current data).
+In the example cluster, only 6 hours of data locally must be retained (any older data is moved to tiered storage with a retention of 1 year). So each broker should have available storage of around 1.2TB (taking into account both throughput and current data).
 
-Cost and your use case requirements will dictate how much to spend on local disk capacity. Tiered storage can help with both decreasing costs and expanding data retention capabilities. More details [here](https://docs.redpanda.com/docs/manage/tiered-storage/).
-
-:::note
-At this point in the example we don't know for sure that we can scale down to 5 brokers. But we are calculating based on 5 brokers for now, and later we can use other broker counts as needed.
-:::
+Cost and use case requirements will dictate how much to spend on local disk capacity. Tiered storage can help to both decrease costs and expand data retention capabilities. For details, see [Tiered Storage](https://docs.redpanda.com/docs/manage/tiered-storage/).
 
 :::note
-Some assumption were made regarding a constant throughput and perfect data balancing. In reality, throughput fluctuates across all partitions which causes data imbalance. The calculations above attempted to accomodate this by padding disk size by 1%, and this buffer can be increased (in the case of expected hot spot partitions, for example). For more details on sizing, see [this link](https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/manual/sizing/).
+At this point in the example, it remains unclear that we can scale down to 5 brokers. Current calculations are based on 5 brokers. Other broker counts can be used later as needed.
+
+Additionally, some assumptions have been made regarding a constant throughput and perfect data balancing. In reality, throughput fluctuates across all partitions, which causes data imbalance. The calculations above attempt to accommodate for this by padding disk size by 1%. You can increase this buffer (for example, in the case of expected hot spot partitions). For details on sizing, see [Sizing Guidelines](https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/manual/sizing/).
 :::
 
 ### Durability
 
-The brokers in a Redpanda cluster are part of a raft group that requires at least enough brokers to form a quorum-based majority (which would mean 3 brokers at minimum). Each topic's partitions are also raft groups, so your cluster also needs to have at least as many brokers as the lowest replication factor across all topics. One way to find the max replication factor across all topics in your cluster is the following command:
+The brokers in a Redpanda cluster are part of a raft group that requires at least enough brokers to form a quorum-based majority (which would mean 3 brokers at minimum). Each topic's partitions are also raft groups, so your cluster also needs to have at least as many brokers as the lowest replication factor across all topics. One way to find the max replication factor across all topics in a cluster is to run the following command:
 
 ```bash
 rpk topic list | tail -n +2 | awk '{print $3}' | sort -n | tail -1
 ```
 
-<details>
-<summary>
-Example output
-</summary>
-
 ```
 5
 ```
 
-</details>
+In this example the highest replication factor is 5, which means at least 5 brokers are required in this cluster.
 
-In this example the highest replication factor is 5, which means we will need at least 5 brokers in our cluster.
-
-In general your cluster will withstand a higher number of brokers going down if you have more brokers as part of the cluster. See [this link](https://docs.redpanda.com/docs/get-started/architecture/#raft-consensus-algorithm) for more details on the raft consensus algorithm used by Redpanda.
+In general, a cluster will withstand a higher number of brokers going down if there are more brokers in the cluster. For details, see [Raft consensus algorithm](https://docs.redpanda.com/docs/get-started/architecture/#raft-consensus-algorithm).
 
 ### Partition count
 
-In general, make sure your total partition count does not exceed 1K per core. In practice this max partition count depends on many other factors (such as memory per core, CPU performance, throughput, latency requirements, etc.). But going over 1K partitions per core can lead to issues such as increased latency, increased number of partition leadership elections, and general reduced stability. Run the following command to get your total partition count:
+It is a best practice to make sure the total partition count does not exceed 1K per core. This max partition count depends on many other factors (such as memory per core, CPU performance, throughput, and latency requirements). Exceeding 1K partitions per core can lead to increased latency, increased number of partition leadership elections, and general reduced stability. Run the following command to get the total partition count:
 
 ```bash
 curl -sk http://<broker-url>:<admin-api-port>/v1/partitions/local_summary | jq .count
 ```
 
-<details>
-<summary>
-Example output
-</summary>
-
 ```
 3018
 ```
 
-</details>
-
-Now you need to determine the number of cores you will have available across your remaining brokers:
+Next, determine the number of cores that are available across the remaining brokers:
 
 ```bash
 rpk redpanda admin brokers list
@@ -224,34 +201,34 @@ Example output
 
 ```
 NODE-ID  NUM-CORES  MEMBERSHIP-STATUS  IS-ALIVE  BROKER-VERSION
-0        8          active             true      v23.1.8 - e8cf768bdff324f947ba067219c9c9a3a559b248
-1        8          active             true      v23.1.8 - e8cf768bdff324f947ba067219c9c9a3a559b248
-2        8          active             true      v23.1.8 - e8cf768bdff324f947ba067219c9c9a3a559b248
-3        8          active             true      v23.1.8 - e8cf768bdff324f947ba067219c9c9a3a559b248
-4        8          active             true      v23.1.8 - e8cf768bdff324f947ba067219c9c9a3a559b248
-5        8          active             true      v23.1.8 - e8cf768bdff324f947ba067219c9c9a3a559b248
-6        8          active             true      v23.1.8 - e8cf768bdff324f947ba067219c9c9a3a559b248
+0        8          active             true      v23.1.8
+1        8          active             true      v23.1.8
+2        8          active             true      v23.1.8
+3        8          active             true      v23.1.8
+4        8          active             true      v23.1.8
+5        8          active             true      v23.1.8
+6        8          active             true      v23.1.8
 ```
 
 </details>
 
-In the above example each broker has 12 cores available. If you plan to scale down the number of brokers to 5, then you would have 40 cores available. This means that your cluster will be limited by core count to 40K partitions (well above the current 3018 partitions).
+In this example each broker has 12 cores available. If you plan to scale down the number of brokers to 5, then you would have 40 cores available, which means that your cluster is limited by core count to 40K partitions (well above the current 3018 partitions).
 
 :::note
-In order to best ensure stability of the cluster, keep under 50K partitions per cluster.
+To best ensure the stability of the cluster, keep under 50K partitions per cluster.
 :::
 
-### Decommission verdict
+### Decommission assessment
 
-Here are the details of each considerations above:
+The following details summarize the considerations tested above:
 
-- At least 4 brokers based on availability
-- Cost won't be a limiting factor in this example, but less cost (and lower broker count) is better
-- At least 1.2TB of data on each broker (if spreading across 5 brokers). This falls within the 1.5TB of local storage available in our example.
-- At least 5 brokers based on the highest replication factor across all topics
-- At 3018 partitions, the partition count is so low as to not be a determining factor in broker count (a single broker in our example environment could handle many more partitions)
+- At least 4 brokers are required based on availability.
+- Cost is not a limiting factor in this example, but less cost (and lower broker count) is always best.
+- At least 1.2TB of data resides on each broker (if spread across 5 brokers). This falls within the 1.5TB of local storage available in the example.
+- At least 5 brokers are required based on the highest replication factor across all topics.
+- At 3018 partitions, the partition count is so low as to not be a determining factor in broker count (a single broker in this example environment could handle many more partitions).
 
-So the most limiting consideration is the replication factor of 5, meaning we can scale down to 5 brokers at minimum.
+So the primary limitation consideration is the replication factor of 5, meaning that you could scale down to 5 brokers at minimum.
 
 ## Decommission a broker
 
@@ -338,16 +315,9 @@ When decommissioning brokers, you may initially want to selectively decommission
   </TabItem>
   </Tabs>
 
-  <details>
-  <summary>
-  Example output
-  </summary>
-
   ```
   Success, broker <broker-id> has been decommissioned!
   ```
-
-  </details>
 
   :::note
   If the broker is not running, use the `--force` flag.
@@ -382,16 +352,9 @@ When decommissioning brokers, you may initially want to selectively decommission
   </TabItem>
   </Tabs>
 
-  <details>
-  <summary>
-  Example output
-  </summary>
-
   ```
   Success, broker <broker-id> has been decommissioned!
   ```
-
-  </details>
 
   The output uses cached cluster health data that is refreshed every 10 seconds. When the completion column for all rows is 100%, the broker is decommissioned.
   
