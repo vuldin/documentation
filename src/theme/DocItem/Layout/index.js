@@ -14,6 +14,7 @@ import styles from "./styles.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import Icon from "@material-ui/core/Icon";
 import ContributionIcon from "../../../../static/img/contribution.svg";
+import { useLocation } from 'react-router-dom';
 
 // Set mouseflow custom variable
 // (See https://help.mouseflow.com/en/articles/4312070-custom-variables)
@@ -291,6 +292,7 @@ export default function DocItemLayout({ children,
     const docsHomeUrlPattern = /\/docs\/[A-Za-z0-9.\/]*home/
     isDocsHome = docsHomeUrlPattern.test(window.location.href);
   }
+  let isCloud =useLocation().pathname.includes("/deploy/deployment-option/cloud/") || useLocation().pathname.includes("/get-started/quick-start-cloud/");
   // Hide the feedback thumbs in the Toc when the user reaches the bottom of the page.
   useEffect(() => {
     document.addEventListener('scroll', function(e){
@@ -325,11 +327,11 @@ export default function DocItemLayout({ children,
   return (
     <div className="row">
       <div className={clsx("col", !docTOC.hidden && styles.docItemCol)}>
-        <DocVersionBanner />
+      {!isCloud &&<DocVersionBanner />}
         <div className={styles.docItemContainer}>
           <article>
             {!isDocsHome && <DocBreadcrumbs />}
-            <DocVersionBadge />
+            {!isCloud && <DocVersionBadge />}
             {docTOC.mobile}
             <DocItemContent>{children}</DocItemContent>
             <DocItemFooter />
