@@ -137,6 +137,7 @@ module.exports = {
               },
             ]
           },
+        "develop/benchmark",
         "develop/http-proxy",
         "develop/config-topics",
         {
