@@ -4795,7 +4795,7 @@
             },
             "-z, --compression": {
                 "type": "string",
-                "description": "Compression to use for producing batches (none, gzip, snapy, lz4, zstd) (default \"snappy\")."
+                "description": "Compression to use for producing batches (none, gzip, snappy, lz4, zstd) (default \"snappy\")."
             },
             "--delivery-timeout": {
                 "type": "duration",
