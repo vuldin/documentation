@@ -685,6 +685,11 @@ module.exports = {
                         "type": "doc",
                         "label": "Plain",
                         "id": "manage/security/console/plain"
+                      },
+                      {
+                        "type": "doc",
+                        "label": "TLS Termination",
+                        "id": "manage/security/console/tls-termination"
                       }
                     ]
                   },
