@@ -313,11 +313,6 @@ module.exports = {
                       label: "Create a Dedicated Cluster on AWS",
                       id: "deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws",
                     },
-                    {
-                      type: "doc",
-                      label: "Add a VPC Peering Connection",
-                      id: "deploy/deployment-option/cloud/vpc-peering",
-                    },
                   ],
                 },
                 {
@@ -336,6 +331,23 @@ module.exports = {
                       id: "deploy/deployment-option/cloud/create-byoc-cluster-gcp",
                     },
                   ]
+                },
+                {
+                  type: "category",
+                  label: "Networking",
+                  link: { type: "doc", id: "deploy/deployment-option/cloud/networking/index" },
+                  items: [
+                    {
+                      type: "doc",
+                      label: "Choosing CIDR ranges",
+                      id: "deploy/deployment-option/cloud/cidr-ranges"
+                    },
+                    {
+                      type: "doc",
+                      label: "Add a VPC Peering Connection",
+                      id: "deploy/deployment-option/cloud/vpc-peering",
+                    }
+                  ],
                 },
                 {
                   type: "doc",

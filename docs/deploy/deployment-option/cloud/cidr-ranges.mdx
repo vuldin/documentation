@@ -1,0 +1,78 @@
+---
+title: Choosing CIDR ranges 
+---
+
+<head>
+    <meta name="title" content="Choose CIDR ranges | Redpanda Docs"/>
+    <meta name="description" content="Guidelines for choosing CIDR ranges when VPC peering"/>
+    <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/deployment-option/cloud/cidr-ranges/" />
+</head>
+
+Choosing Classless Inter-Domain Routing (CIDR) ranges is an essential part of the VPC peering process, required to ensure that data will be transferred between the networks. Choosing incorrect CIDRs means that the connection between your cloud provider and Redpanda will be unsuccessful. This topic provides guidance for selecting the correct CIDR range for Redpanda.
+
+:::note
+This topic provides a set of general recommendations for choosing a CIDR range to peer. If you have a complex networking setup, it's recommended that you work with a networking engineer to identify the Redpanda CIDRs that do not conflict with your existing VPCs.
+:::
+
+## Prerequisites
+
+* **VPC network** - Before setting up a peering connection in Redpanda Cloud, you must have another VPC to which Redpanda can connect. If you do not already have a network, create one in your cloud provider.
+* **Matching Region** - VPC peering connections can only be established between your and Redpanda VPC networks created in the _same region_. Redpanda Cloud does not support Inter-Region VPC peering connections.
+
+:::tip
+Consider adding an `rp-` prefix to the VPC name to indicate that the VPC is for deploying a Redpanda cluster.
+:::
+
+## What are CIDRs? 
+
+CIDR ranges are a critical part of Redpanda’s BYOC setup process. Two important CIDR values are: 
+
+1. Your existing (client) VPC CIDR 
+2. Your Redpanda cluster CIDR  
+
+While it may be a challenge to identify these ranges, you must ensure that that they don’t overlap when setting up VPC peering. 
+
+## Choose the CIDR ranges
+
+To choose a range for Redpanda, you must know your VPC CIDR, which you can find in the VPC area of the AWS Management Console, labeled **IPv4 CIDRs**. In GCP, it is located in the Details view of your VPC, and labeled **Internal IP Ranges**.
+
+You can check which IPs this range encompasses by using the [ipcalc](https://www.linux.com/topic/networking/how-calculate-network-addresses-ipcalc/) command in your terminal or the [CIDR Calculation tool](https://www.ipaddressguide.com/cidr). For example, if your client's CIDR range is 10.0.0.0/20, then run the following command: 
+
+`ipcalc 10.0.0.0/20`
+
+The output should look similar to the following: 
+
+```bash
+Address:   10.0.0.0             00001010.00000000.0000 0000.00000000
+Netmask:   255.255.240.0 = 20   11111111.11111111.1111 0000.00000000
+Wildcard:  0.0.15.255           00000000.00000000.0000 1111.11111111
+=>
+Network:   10.0.0.0/20          00001010.00000000.0000 0000.00000000
+HostMin:   10.0.0.1             00001010.00000000.0000 0000.00000001
+HostMax:   10.0.15.254          00001010.00000000.0000 1111.11111110
+Broadcast: 10.0.15.255          00001010.00000000.0000 1111.11111111
+Hosts/Net: 4094                  Class A, Private Internet
+``` 
+
+Note the values for `HostMin` (10.0.0.1) and `HostMax` (10.0.15.254); these are the minimum and maximum of the range of 4,094 IPs that this CIDR covers. The number of IPs is governed by the suffix: /16 contains 65534 IPs, /21 contains 2046, /24 contains 254, and so on. For private networks, this number can range from 8 (which contains 16777214 IPs) to 30 (which contains 2). 
+
+:::note
+The Redpanda CIDR requires a block size between /16 and /20.
+:::
+
+## Example 
+
+Assuming that your client's CIDR range is `10.0.0.0/20`, then your Redpanda range cannot overlap with it; if it does, VPC peering will not work. 
+A limited set of examples that would work with `10.0.0.0/20` would be `10.8.0.0/20`, `10.0.16.0/20`, or `10.1.0.0/20`. Ranges like `10.0.0.6/20`, `10.0.8.0/20`, or `10.0.1.7/20` would not work. You can use [ipcalc](http://trk.free.fr/ipcalc/tools.html) to check for overlapping IPs. 
+
+## Multi-VPC example 
+
+If you have many IP ranges allocated in a complex system, it's recommended that you seek guidance from a network engineer who can help with IP allocation. Your Redpanda CIDR cannot overlap with any of your existing VPCs, nor can it overlap with the VPC you want to peer with.
+
+If the following example ranges are in use, then a Redpanda CIDR that would work (and not overlap) with any of them would be `10.8.48.8/20`:
+
+- `10.0.0.0/20`
+- `10.8.0.0/20`
+- `10.0.35.8/20`
+- `10.0.16.8/20` 
+
