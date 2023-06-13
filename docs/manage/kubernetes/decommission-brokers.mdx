@@ -103,7 +103,7 @@ ID    HOST                          PORT   RACK
 
 The output shows four racks (A/B/C/D), so you might want to have at least four brokers to make use of all racks.
 
-Rack awareness is just one aspect of availability. Refer to [High Availability](https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/manual/high-availability/) for more details on deploying Redpanda for high availability.
+Rack awareness is just one aspect of availability. Refer to [High Availability](../../../deploy/deployment-option/self-hosted/manual/high-availability) for more details on deploying Redpanda for high availability.
 
 ### Cost
 
@@ -152,12 +152,12 @@ Throughput is the primary measurement required to calculate future data storage 
 
 In the example cluster, only six hours of data locally must be retained (any older data is moved to Tiered Storage with a retention of one year). So each broker should have available storage of around 1.2TB (taking into account both throughput and current data).
 
-Cost and use case requirements will dictate how much to spend on local disk capacity. Tiered Storage can help to both decrease costs and expand data retention capabilities. For details, see [Tiered Storage](https://docs.redpanda.com/docs/manage/tiered-storage/).
+Cost and use case requirements will dictate how much to spend on local disk capacity. Tiered Storage can help to both decrease costs and expand data retention capabilities. For details, see [Tiered Storage](../../../manage/tiered-storage).
 
 :::note
 At this point in the example, it remains unclear that we can scale down to five brokers. Current calculations are based on five brokers. Other broker counts can be used later as needed.
 
-Additionally, some assumptions have been made regarding a constant throughput and perfect data balancing. Throughput fluctuates across all partitions, which causes data imbalance. The calculations above attempt to accommodate for this by padding disk size by 1%. You can increase this buffer (for example, in the case of expected hot spot partitions). For details on sizing, see [Sizing Guidelines](https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/manual/sizing/).
+Additionally, some assumptions have been made regarding a constant throughput and perfect data balancing. Throughput fluctuates across all partitions, which causes data imbalance. The calculations above attempt to accommodate for this by padding disk size by 1%. You can increase this buffer (for example, in the case of expected hot spot partitions). For details on sizing, see [Sizing Guidelines](../../../deploy/deployment-option/self-hosted/manual/sizing).
 :::
 
 ### Durability
@@ -174,7 +174,7 @@ rpk topic list | tail -n +2 | awk '{print $3}' | sort -n | tail -1
 
 In this example the highest replication factor is five, which means at least five brokers are required in this cluster.
 
-Generally, a cluster can withstand a higher number of brokers going down if there are more brokers in the cluster. For details, see [Raft consensus algorithm](https://docs.redpanda.com/docs/get-started/architecture/#raft-consensus-algorithm).
+Generally, a cluster can withstand a higher number of brokers going down if there are more brokers in the cluster. For details, see [Raft consensus algorithm](../../../get-started/architecture/#raft-consensus-algorithm).
 
 ### Partition count
 
