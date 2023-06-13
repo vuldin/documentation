@@ -152,7 +152,7 @@ Throughput is the primary measurement required to calculate future data storage 
 
 In the example cluster, only six hours of data locally must be retained (any older data is moved to Tiered Storage with a retention of one year). So each broker should have available storage of around 1.2TB (taking into account both throughput and current data).
 
-Cost and use case requirements will dictate how much to spend on local disk capacity. Tiered Storage can help to both decrease costs and expand data retention capabilities. For details, see [Tiered Storage](../../../manage/tiered-storage).
+Cost and use case requirements will dictate how much to spend on local disk capacity. Tiered Storage can help to both decrease costs and expand data retention capabilities. For details, see [Tiered Storage](../../../manage/kubernetes/tiered-storage).
 
 :::note
 At this point in the example, it remains unclear that we can scale down to five brokers. Current calculations are based on five brokers. Other broker counts can be used later as needed.
