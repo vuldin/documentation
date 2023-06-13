@@ -24,7 +24,7 @@ must:
 
 The PostgreSQL (Debezium) Source connector has the following limitations:
 
-- Only `JSON` or `AVRO` formats can be used for a Kafka message key and value format.
+- Only `JSON`, `CloudEvents` or `AVRO` formats can be used for a Kafka message key and value format.
 - PostgreSQL (Debezium) connector can work with only a single task at a time.
 
 ## Create a PostgreSQL (Debezium) Source connector
@@ -62,7 +62,7 @@ Use the appropriate key or value converter (input data format) for your data as 
   `Exclude Tables`, and `Exclude Columns` to define lists of columns, tables, and
   schemas to exclude from sources list.
 
-- Use only `JSON` and `AVRO` formats for the Kafka message key and value format.
+- Use only `JSON`, `AVRO` and `CloudEvents` formats for the Kafka message key and value format.
 
 ## Test the connection
 

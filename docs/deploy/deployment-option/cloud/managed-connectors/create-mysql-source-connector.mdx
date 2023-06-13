@@ -19,7 +19,7 @@ AmazonRDS, and Amazon Aurora.
 
 ## Limitations
 
-- Only `JSON` or `AVRO` formats can be used as a a Kafka message key and value format.
+- Only `JSON`, `CloudEvents` or `AVRO` formats can be used as a a Kafka message key and value format.
 - The MySQL (Debezium) Source connector can work with only a single task at a time.
 
 ## Create a MySQL (Debezium) Source connector
@@ -130,6 +130,12 @@ For `Kafka message value format = AVRO`, the connector creates a Schema Registry
 }
 ```
 
+For `Kafka message value format = CloudEvents`, the connector uses `JSON` or `AVRO` data serializer.
+
+* For `JSON` data serializer, enable `Message value CloudEvents JSON contains schema` to include JSON schema in message
+* For `AVRO` data serializer, connector creates schema in Schema Registry
+and produces messages in CloudEvents data format.
+
 ## Test the connection
 
 After the connector is created:
@@ -177,3 +183,7 @@ Additional errors and corrective actions follow.
 | **Unable to connect: Communications link failure** | Confirm that `Hostname` and `Port` are correct. |
 | **Access denied for user** | Confirm that `User` and `Password` credentials are valid. |
 | **Caused by: io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException: Invalid schema Invalid namespace: from-mysql.db.Persons; error code: 422** | The Schema Registry namespace is incorrect. Consider changing the `Topic prefix` value, remove unallowed characters. |
+
+## Suggested reading
+
+* [Debezium connector for MySQL](https://debezium.io/documentation/reference/stable/connectors/mysql.html)
