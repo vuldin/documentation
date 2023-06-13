@@ -128,6 +128,10 @@
   line-height: normal;
 }
 
+.footerList a{
+  font-family: Calibre;
+}
+
 [data-theme="dark"] .footerList {
   background-color: var(--ifm-background-container-color);
 }
@@ -155,10 +159,6 @@
 
 [data-theme="light"] .footerList a {
   color: rgb(102, 112, 133) !important;
-}
-
-a {
-  font-family: Calibre;
 }
 
 .copyright{
