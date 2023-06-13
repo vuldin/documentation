@@ -15,7 +15,7 @@
   --v-gray1: #98A2B3;
   --v-gray2: #EAECF0;
   --v-gray2b: #F2F4F7;
-  --v-gray3: #F4F4F4 ;
+  --v-gray3: #f9fafb ;
   --v-gray4: #FCFCFD;
   --v-green: #64C97B;
   --v-background: #FFFFFF;
@@ -261,6 +261,14 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
   font-style: normal;
   src: local('example'),
     url('../fonts/SimplonMono.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SimplonMonoS';
+  font-weight: 400;
+  font-style: bold;
+  src: local('example'),
+    url('../fonts/SimplonMono-S.ttf') format('truetype');
 }
 
 @font-face {
