@@ -91,13 +91,13 @@ Monitor the health of your cluster with the [`rpk cluster health`](../../../../.
 
 ### Rack awareness
 
-Rack awareness is one of the most important features for HA. It lets Redpanda spread partition replicas across available brokers in different failure zones.
+Rack awareness is one of the most important features for HA. It lets Redpanda spread partition replicas across available brokers in different failure zones. Rack awareness ensures that no more than a minority of replicas are placed on a single rack, even during cluster balancing. 
 
 :::tip
 Make sure you assign separate rack IDs that actually correspond to a physical separation of brokers.
 :::
 
-See also: [Rack Awareness](../../../../../manage/rack-awareness)
+See also: [Enable Rack Awareness](../../../../../manage/rack-awareness)
 
 ### Partition leadership
 
@@ -123,7 +123,7 @@ In a disaster, your secondary cluster may still be available, but you need to qu
 
 See also: [Tiered Storage](../../../../../manage/tiered-storage)
 
-## Single-AZ deployment details
+## Single-AZ deployments
 
 When deploying a cluster for high availability into a single AZ or data center, you need to ensure that, within the AZ, single points of failure are minimized and that Redpanda is configured to be aware of any discrete failure domains within the AZ. This is achieved with Redpanda’s rack awareness, which deploys *n* Redpanda brokers across three or more racks (or failure domains) within the AZ.
 
@@ -133,7 +133,7 @@ Single-AZ deployments in the cloud have less network costs than multi-AZ deploym
 - Performance: Spreading Redpanda replicas across racks and switches increases the number of network hops between Redpanda brokers; however, normal intra-data center network latency should be measured in microseconds rather than milliseconds. Ensure that there’s sufficient bandwidth between brokers to handle replication traffic.
 - Complexity: A benefit of Redpanda is the simplicity of deployment. Because Redpanda is deployed as a single binary with no external dependencies, it doesn't need any infrastructure for ZooKeeper or for a Schema Registry. Redpanda also includes cluster balancing, so there’s no need to run Cruise Control.
 
-### Infrastructure considerations
+### Single-AZ infrastructure
 
 In a single-AZ deployment, ensure that brokers are spread across at least three failure domains. This generally means separate racks, under separate switches, ideally powered by separate electrical feeds or circuits. Also, ensure that there's sufficient network bandwidth between brokers, particularly considering shared uplinks, which could be subject to high throughput intra-cluster replication traffic. In an on-premises network, this HA configuration refers to separate racks or data halls within a data center.
 
@@ -149,9 +149,9 @@ Cloud providers support various HA configurations:
 
 You can automate this using Terraform or a similar infrastructure-as-code (IaC) tool. See [AWS](https://github.com/redpanda-data/deployment-automation/blob/main/aws/cluster.tf#L23-L24), [Azure](https://github.com/redpanda-data/deployment-automation/blob/main/azure/network.tf#L39-L50), and [GCP](https://github.com/redpanda-data/deployment-automation/blob/main/gcp/cluster.tf#L17-L19).
 
-### Configure rack awareness
+### Single-AZ rack awareness
 
-To make Redpanda aware of the topology it's running on, you need to configure the cluster to enable rack awareness and then configure each broker with the identifier of the rack.
+To make Redpanda aware of the topology it's running on, configure the cluster to [enable rack awareness](../../../../manage/rack-awareness.mdx), then configure each broker with the identifier of the rack.
 
 Set the `enable_rack_awareness custer` property either in `/etc/redpanda/.bootstrap.yaml` or with `rpk`:
 
@@ -165,9 +165,9 @@ For each broker, set the rack ID in `/etc/redpanda/redpanda.yaml` file or with `
 rpk redpanda config set redpanda.rack <rackid>
 ```
 
-The modified Ansible playbooks take a per-instance rack variable from the Terraform output and use that to set the relevant cluster and broker configuration. Redpanda deployment automation can provision public cloud infrastructure with discrete failure domains (`-var=ha=true`) and use the resulting inventory to provision rack-aware clusters using Ansible.
+The modified Ansible playbooks take a per-instance rack variable from the Terraform output and use that to set the relevant cluster and broker configuration. Redpanda deployment automation can provision public cloud infrastructure with discrete failure domains (`-var=ha=true`) and use the resulting inventory to provision rack-aware clusters using Ansible. 
 
-With rack awareness enabled, Redpanda ensures that no more than a minority of replicas appear on a single rack, even during cluster balancing.
+See also: [Automate Deployment for Production](../manual/production/production-deployment-automation.mdx)
 
 ### Single-AZ example
 
