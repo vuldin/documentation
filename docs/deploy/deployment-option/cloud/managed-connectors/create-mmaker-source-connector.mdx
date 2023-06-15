@@ -67,7 +67,7 @@ time of creation.
 
 | Message | Action |
 |---------|--------|
-| **Connection to node -1 (invalid-url.com/103.224.182.242:9092) could not be established. Broker may not be available. / LOGS: Timed out while checking for or creating topic 'mm2-offset-syncs.target.internal'. This could indicate a connectivity issue / TimeoutException: Timed out waiting for a node assignment** | Make sure broker URLs are correct and that the `security.protocol` is correct. |
+| **Connection to node -1 (/127.0.0.1:9092) could not be established. Broker may not be available. / LOGS: Timed out while checking for or creating topic 'mm2-offset-syncs.target.internal'. This could indicate a connectivity issue / TimeoutException: Timed out waiting for a node assignment** | Make sure broker URLs are correct and that the `security.protocol` is correct. |
 | **SaslAuthenticationException: SASL authentication failed: security: Invalid credentials** | Confirm that the username and password specified are correct. |
 | **Terminated during authentication. This may happen due to any of the following reasons: (1) Authentication failed due to invalid credentials with brokers older than 1.0.0, (2) Firewall blocking Kafka TLS traffic (eg it may only allow HTTPS traffic), (3) Transient network issue** | Error indicates that the SSL should be enabled using `Source cluster security protocol` (use `SSL` or `SASL_SSL`). |
 | **RecordTooLargeException: The message is N bytes (...)** | Use `producer.override.max.request.size` property to change max request size. |

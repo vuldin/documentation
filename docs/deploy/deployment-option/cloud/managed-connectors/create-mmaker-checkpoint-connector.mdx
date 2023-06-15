@@ -72,7 +72,7 @@ time of creation.
 
 | Message | Action |
 |---------|--------|
-| **Connection to node -1 (invalid-url.com/103.224.182.242:9092) could not be established. Broker may not be available. / LOGS: Timed out while checking for or creating topic 'mm2-offset-syncs.target.internal'. This could indicate a connectivity issue / TimeoutException: Timed out waiting for a node assignment** | Make sure broker URLs are correct and that the source cluster security protocol is correct. |
+| **Connection to node -1 (/127.0.0.1:9092) could not be established. Broker may not be available. / LOGS: Timed out while checking for or creating topic 'mm2-offset-syncs.target.internal'. This could indicate a connectivity issue / TimeoutException: Timed out waiting for a node assignment** | Make sure broker URLs are correct and that the source cluster security protocol is correct. |
 | **SaslAuthenticationException: SASL authentication failed: security: Invalid credentials** | Check to confirm that the username and password specified are correct. |
 | **java.lang.IllegalArgumentException: No serviceName defined in either JAAS or Kafka config** | Check to confirm that the username and password specified are correct. |
 | **Client SASL mechanism 'PLAIN' not enabled in the server, enabled mechanisms are [SCRAM-SHA-256, SCRAM-SHA-512]** | Check to confirm that the respective `Source cluster SASL mechanism` is correct. |
