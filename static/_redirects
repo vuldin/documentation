@@ -624,3 +624,38 @@
 /docs/reference/reference/rpk/rpk-cluster/                                            /docs/reference/rpk/rpk-cluster/ 301!
 /docs/deployment/performance-storage-tuning/                                          /docs/deploy/deployment-option/self-hosted/manual/ 301!
 /docs/beta                                                                            /docs/beta/home 301!
+
+# General version rules
+/docs/23.2/:splat                                                                     /docs/beta/:splat 301!
+/docs/21.1/:splat                                                                     /docs/21.11/:splat 301! 
+
+/docs/api                                                                             /docs/reference/api-reference 301!
+
+# New redirects from 404 notifier
+
+/docs/21.11/cluster-administration/monitoring/guide-nodejs                                                /docs/development/guide-nodejs 301!
+/docs/22.1/home/monitoring                                                                                /docs/22.1/cluster-administration/monitoring 301!
+/docs/22.2/reference/docker-compose/                                                                      /docs/22.2/console/reference/docker-compose 301!
+/docs/22.2/home/monitoring                                                                                /docs/22.2/cluster-administration/monitoring 301!
+/docs/22.3/home/guide-nodejs                                                                              /docs/22.3/develop/guide-nodejs 301!
+/docs/deploy/deployment-option/self-hosted/manual/production/production/:splat                            /docs/deploy/deployment-option/self-hosted/manual/production/:splat 301!
+/docs/guide-nodejs/                                                                                       /docs/develop/guide-nodejs 301!
+/docs/guide-nodejs-cloud/                                                                                 /docs/develop/guide-nodejs-cloud 301!
+/docs/guide-java-cloud/                                                                                   /docs/develop/guide-java-cloud 301!
+/docs/manage/cluster-maintenance/cluster-maintenance/cluster-property-configuration/                      /docs/manage/cluster-maintenance/cluster-property-configuration 301!
+/docs/platform/reference/rpk/rpk-group/                                                                   /docs/reference/rpk/rpk-group 301!
+/docs/data-migration/                                                                                     /docs/manage/data-migration 301!
+/docs/security/sasl-kubernetes/                                                                           /docs/manage/kubernetes/security/sasl-kubernetes 301!
+/docs/home/monitoring                                                                                     /docs/manage/monitoring 301!
+/docs/reference/redpanda/config/                                                                          /docs/reference/console/config 301!
+/docs/deploy/deployment-option/self-hosted/kubernetes/eks-guide/eks-guide                                 /docs/deploy/deployment-option/self-hosted/kubernetes/eks-guide 301!
+/docs/reference/reference/api-reference/                                                                  /docs/reference/api-reference 301!
+/docs/reference/rpk/rpk-acl/monitor                                                                       /docs/manage/kubernetes/monitor 301!
+/docs/beta/home/kafka-clients                                                                             /docs/develop/kafka-clients 301!
+/docs/home/rpk-acl                                                                                        /docs/reference/rpk/rpk-acl 301!
+/docs/home/licenses                                                                                       /docs/get-started/licenses 301!
+/reference/cluster-properties/                                                                            /docs/reference/cluster-properties 301!
+/docs/security/kubernetes-tls/                                                                            /docs/manage/kubernetes/security/kubernetes-tls 301!
+/quick-start                                                                                              /docs/get-started/quick-start 301!
+/manage/schema-registry/                                                                                  /docs/manage/console/schema-registry 301!
+/reference/tunable-properties/                                                                            /docs/reference/tunable-properties 301!
