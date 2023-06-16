@@ -1,5 +1,6 @@
 [![Slack](https://img.shields.io/badge/slack-purple)](https://redpanda.com/slack)
 [![Twitter](https://img.shields.io/twitter/follow/redpandadata.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=redpandadata)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/5b89dd6f-1847-419c-b3be-a1650ce8992f/deploy-status)](https://app.netlify.com/sites/redpanda-documentation/deploys)
 
 <p>
 <a href="https://docs.redpanda.com">
