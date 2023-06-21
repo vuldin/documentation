@@ -48,6 +48,12 @@ As long as there is a timing inequality between heartbeat time, election timeout
 
 If a follower triggers an election, but the incumbent leader subsequently springs back to life and starts sending data again, then it’s too late. As part of the election process, the follower (now an election candidate) incremented the term and rejects requests from the previous term, essentially forcing a leadership change. If a cluster is experiencing wider network infrastructure problems that result in latencies above the heartbeat timeout, then back-to-back election rounds can be triggered. During this period, unstable Raft groups may not be able to form a quorum. This results in partitions rejecting writes, but no data loss can occur. Redpanda has a Raft-priority implementation that allows the system to settle quickly after network outages.
 
+## Controller partition and snapshots
+
+Redpanda stores metadata update commands (such as creating and deleting topics or users) in a system partition called the controller partition. A new snapshot is created after each controller command is added, or, with rapid updates, after a set period of time (default is 60 seconds). Controller snapshots save the current cluster metadata state to disk, so startup is fast. For example, with a partition that has moved several times, a snapshot can restore the latest state without replaying every move command.  
+
+Each broker has a snapshot file stored in the controller log directory, such as `/var/lib/redpanda/data/redpanda/controller/0_0/snapshot`. The controller partition is replicated by a Raft group that includes all cluster brokers, and the controller snapshot is the Raft snapshot for this group. Snapshots are hydrated when a broker joins the cluster or restarts. Controller snapshots are enabled by default in new clusters. To enable controller snapshots in existing clusters, contact [Redpanda Support](https://support.redpanda.com/hc/en-us).
+
 ## Optimized platform performance
 
 Redpanda is designed to exploit advances in modern hardware, from the network down to the disks. Network bandwidth has increased considerably, especially in object storage, and spinning disks have been replaced by SSD devices that deliver better I/O performance. CPUs are faster too, but this is largely due to the increased core counts as opposed to the increase in single-core speeds. Redpanda has tuners that detect your hardware configuration to automatically optimize itself.
