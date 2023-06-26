@@ -20,7 +20,9 @@ You can also use it to:
 - The external Kafka cluster must be accessible.
 - A service account with full access to the external cluster must be available.
   You can also use a service account with read-only ACLs when the `Offset-Syncs`
-  topic location is set to `target`.
+  topic location is set to `target`. You must have describe and/or describe-configs ACLs for
+  the connector to read topic configurations on the source cluster and create the topics
+  on the target cluster, unless you create the topics yourself.
 
 ## Limitations
 
@@ -73,3 +75,4 @@ time of creation.
 | **RecordTooLargeException: The message is N bytes (...)** | Use `producer.override.max.request.size` property to change max request size. |
 | **RecordTooLargeException: The request included (...)** | The target server is not able to receive message because it is too large in size. Disabled compression can be a root cause. Consider enabling compression: `"Compression type": "snappy",` |
 | **Scheduler for MirrorSourceConnector caught exception in scheduled task: syncing topic ACLs** | MirrorMaker2 requires an authorizer to be configured by the broker side, but it is not. Change the `Sync topic ACLs enabled` MirrorMaker2 property to `false` (default is `true`) to disable ACL syncing. |
+| **TopicAuthorizationException: Topic authorization failed** | Confirm the service account for the source cluster contains describe and/or describe-configs ACLs. |
