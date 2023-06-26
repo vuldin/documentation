@@ -802,7 +802,9 @@ If `null`, the property is disabled, and traffic is not limited.
 
 ### log_segment_ms
 
-Default lifetime of log segments for topics which do not set `segment.ms` to override it. If `null`, the property is disabled, and no default lifetime is set. It's also accessible using the Kafka API under its Kafka-compatible alias, `log.roll.ms`.
+Default lifetime of log segments. If `null`, the property is disabled, and no default lifetime is set. This property can also be set in the Kafka API using the Kafka-compatible alias, `log.roll.ms`.
+
+The topic property [`segment.ms`](../topic-properties#segmentms) overrides the value of `log_segment_ms` at the topic level.
 
 **Units**: milliseconds
 
@@ -1041,6 +1043,14 @@ Raft learner recovery rate limit. Throttles the rate of data communicated to nod
 
 Delete segments that are older than this age.
 
+The topic property [`retention.ms`](../topic-properties#retentionms) overrides the value of `delete_retention_ms` at the topic level.
+
+:::note
+The `delete_retention_ms` cluster property is different than the `delete.retention.ms` Apache Kafka topic property, and Redpanda doesn't support `delete.retention.ms`.
+- `delete_retention_ms` sets the same time-based retention limit value for all topics in the cluster. 
+- `delete.retention.ms` sets the time-based retention limit for tombstone markers of a compacted topic. 
+::: 
+
 **Units**: milliseconds
 
 **Default**: 604800000 (1 week)
@@ -1051,7 +1061,9 @@ Delete segments that are older than this age.
 
 ### log_cleanup_policy
 
-Bit flags setting the default topic cleanup policy: compact and/or delete.
+Default cleanup policy for topic logs. 
+
+The topic property [`cleanup.policy`](../topic-properties#cleanuppolicy) overrides the value of `log_cleanup_policy` at the topic level.
 
 **Default**: `delete`
 
@@ -1077,6 +1089,8 @@ How often to trigger background compaction.
 
 Default topic compression type (gzip, snappy, lz4, zstd, producer, or none).
 
+The topic property [`compression.type`](../topic-properties#compressiontype) overrides the value of `log_compression_type` at the topic level.
+
 **Default**: `producer`
 
 **Valid values**: `gzip`, `snappy`, `lz4`, `zstd`, `producer`, `none`
@@ -1087,7 +1101,9 @@ Default topic compression type (gzip, snappy, lz4, zstd, producer, or none).
 
 ### log_message_timestamp_type
 
-Default timestamp type for topic messages (CreateTime or LogAppendTime).
+Default timestamp type for topic messages (CreateTime or LogAppendTime). 
+
+The topic property [`message.timestamp.type`](../topic-properties#messagetimestamptype) overrides the value of `log_message_timestamp_type` at the topic level.
 
 **Default**: `CreateTime`
 
@@ -1213,6 +1229,8 @@ Default number of partitions per topic.
 
 Default replication factor for new topics.
 
+The topic property [`replication.factor`](../topic-properties#replicationfactor) overrides the value of `default_topic_replications` at the topic level.
+
 **Units**: number of replicas per topic
 
 **Default**: 1
@@ -1238,6 +1256,8 @@ Target replication factor for internal topics.
 ### retention_bytes
 
 Default maximum number of bytes per partition on disk before triggering deletion of the oldest messages. If `null` (the default value), no limit is applied.
+
+The topic property [`retention.bytes`](../topic-properties#retentionbytes) overrides the value of `retention_bytes` at the topic level.
 
 **Units**: bytes per partition
 

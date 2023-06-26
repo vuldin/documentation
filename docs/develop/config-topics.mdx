@@ -23,6 +23,10 @@ The following table shows the topic property settings listed in the cluster conf
  | `log_message_timestamp_type` | CreateTime                | `message.timestamp.type`  |
  | `kafka_batch_max_bytes`      | 1048576 bytes (1 MiB)     | `max.message.bytes`       |
 
+:::note
+For details about topic properties, refer to [Topic Configuration Properties](../../reference/topic-properties).
+:::
+
 These default settings are best suited to a one-broker cluster in a development environment. To learn how to modify the default values in the configuration file, see [Configure Cluster Properties](../../manage/cluster-maintenance/cluster-property-configuration). Even if you set default values that work for most topics, you may still want to change some properties for a specific topic.
 
 ## Create a topic
