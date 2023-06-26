@@ -88,12 +88,30 @@ rpk redpanda admin brokers decommission [BROKER ID] [flags]
       </td>
     </tr>
     <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
+        SCRAM-SHA-512.
+      </td>
+    </tr>
+    <tr>
       <td>--hosts</td>
       <td>strings</td>
       <td>
         A comma-separated list of Admin API addresses (&lt;ip&gt;:&lt;port&gt; You must
         specify one for each node.
       </td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
