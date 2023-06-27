@@ -19,9 +19,20 @@ Configuring Redpanda Console with a plain login provider allows your users to au
 username and password. Plain logins are the easiest way to set up a login-protected deployment of Redpanda Console. However,
 plain logins are not secure, and Redpanda recommends them only for development environments or demo purposes.
 
+:::tip
+You can test this feature using Docker Compose. See the [Plain login authentication for Redpanda Console](../../../../reference/docker-compose#plain-login-authentication-for-redpanda-console) sample.
+:::
+
+To configure a plain login provider, you must:
+
+1. [Configure the plain login provider with user credentials](#configure-the-plain-login-provider-with-user-credentials).
+1. [Define role-bindings for the users](#define-role-bindings).
+
 ## Configure the plain login provider with user credentials
 
-```yaml
+To configure the users' plain login credentials, add them to the `login.plain.credentials` setting in the [Redpanda Console Configuration](../../../../reference/console/config).
+
+```yaml title="redpanda-console-config.yaml"
 login:
   enabled: true
 
@@ -40,6 +51,13 @@ login:
   # to log in again.
   jwtSecret: ""
 
+  # useSecureCookies controls the storage of session cookies in Console.
+  # Enabling this option ensures that session cookies are stored with the 
+  # secure attribute, allowing them to be sent only over HTTPS.
+  # If you are not using SSL in your environment, you must 
+  # disable this setting.
+  useSecureCookies: false
+
   plain:
     enabled: true
     # Credentials are username and password combinations that you can use to log in.
@@ -51,13 +69,15 @@ login:
         password: "some-secret-password"
 ```
 
+:::note
+Disable the `useSecureCookies` option shown in the code snippet if Console is exposed using HTTP instead of HTTPS.
+:::
+
 ## Define role-bindings
 
-By default, each user has no permissions. You must bind a role to the user. 
-After you've configured the plain login provider, you can bind users to roles. 
-The following is an example:
+By default, each user has no permissions. To give users permissions, you must bind a role to them. After you've [configured the plain login provider](#configure-the-plain-login-provider-with-user-credentials), you can bind users to roles in the [Redpanda Console Role-Binding Configuration](../../../../reference/console/role-bindings).
 
-```yaml
+```yaml title="role-bindings.yaml"
 roleBindings:
   - metadata:
       name: Platform Ops
@@ -75,4 +95,12 @@ roleBindings:
     roleName: editor
 ```
 
-Refer to [Authorization](../authorization) to learn more about managing user permissions with RBAC.
+## Next steps
+
+See [Authorization](../authorization) to learn more about managing user permissions with RBAC.
+
+## Suggested reading
+
+- [Redpanda Console Configuration](../../../../reference/console/config)
+- [Redpanda Console Role-Binding Configuration](../../../../reference/console/role-bindings)
+

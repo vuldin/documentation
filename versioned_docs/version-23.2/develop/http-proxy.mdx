@@ -1,5 +1,5 @@
 ---
-title: Use Redpanda with the HTTP Proxy API 
+title: Use Redpanda with the HTTP Proxy API
 ---
 
 <head>
@@ -12,7 +12,7 @@ title: Use Redpanda with the HTTP Proxy API
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-Redpanda HTTP Proxy (`pandaproxy`) allows access to your data through a REST API. For example, you can list topics or brokers, get events, produce events, subscribe to events from topics using consumer groups, and commit offsets for a consumer. 
+Redpanda HTTP Proxy (`pandaproxy`) allows access to your data through a REST API. For example, you can list topics or brokers, get events, produce events, subscribe to events from topics using consumer groups, and commit offsets for a consumer.
 
 ## Prerequisites
 
@@ -104,7 +104,7 @@ Curl is likely already installed on your system. If not, see [curl download inst
   <TabItem value="env-nodejs" label="NodeJS">
 
 :::note
-This assumes you're in the root directory of an existing NodeJS project. See [Use NodeJS with Redpanda](../../develop/guide-nodejs) for one way to get started with a new NodeJS project and examples of connecting to Redpanda with a native library. 
+This is based on the assumption that you're in the root directory of an existing NodeJS project. See [Use NodeJS with Redpanda](../../develop/guide-nodejs) for one way to get started with a new NodeJS project and examples of connecting to Redpanda with a native library.
 :::
 
 In a terminal window, run:
@@ -747,9 +747,47 @@ res = requests.delete(
   </TabItem>
 </Tabs>
 
+## Authenticate with HTTP Proxy
+
+If the Redpanda HTTP Proxy is [configured to use SASL](../../manage/security/authentication), you can provide the SCRAM username and password as part of the Basic Authentication header in your request. For example, to list topics as an authenticated user:
+
+<Tabs>
+  <TabItem value="auth-curl" label="Curl" default>
+
+```bash
+curl -s -u "<username>:<password>" "localhost:8082/topics"
+```
+
+  </TabItem>
+
+  <TabItem value="auth-nodejs" label="NodeJS" default>
+
+```javascript
+let options = {
+  auth: { username: "<username>", password: "<password>" },
+};
+
+axios
+  .get(`${base_uri}/topics`, options)
+  .then(response => console.log(response.data))
+  .catch(error => console.log);
+```
+
+  </TabItem>
+  <TabItem value="auth-python" label="Python">
+
+```python
+auth = ("<username>", "<password>")
+res = requests.get(f"{base_uri}/topics", auth=auth).json()
+pretty(res)
+```
+
+  </TabItem>
+</Tabs>
+
 ## Use Swagger with HTTP Proxy
 
-You can use Swagger UI to test and interact with Redpanda HTTP Proxy endpoints. 
+You can use Swagger UI to test and interact with Redpanda HTTP Proxy endpoints.
 
 Use Docker to start Swagger UI:
 
@@ -763,7 +801,7 @@ Verify that the Swagger container is available:
 docker ps
 ```
 
-Verify that the Docker container has been added and is running: 
+Verify that the Docker container has been added and is running:
 
 `swaggerapi/swagger-ui` with `Up…` status
 

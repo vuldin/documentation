@@ -49,6 +49,23 @@ Flag to auto-enable new feature flags after upgrades.
 
 ## Object storage properties
 
+### cloud_storage_backend
+
+Optional cloud storage backend variant used to select API capabilities. If `unknown`, will be inferred from other configuration parameters.
+
+**Default**: `unknown`
+
+**Valid values**:
+- `unknown`
+- `aws`
+- `google_s3_compat`
+- `azure`
+- `minio`
+
+**Restart required**: yes
+
+---
+
 ### cloud_storage_cache_check_interval
 
 Minimum time between trims of tiered storage cache. If a fetch operation requires trimming the cache, and the time interval between the fetch and the most recent trim is less than this property, then trimming will be delayed until this property's interval has elapsed.
@@ -72,15 +89,14 @@ Size of chunks of segments downloaded into object (cloud) storage cache. Reduces
 **Restart required**: yes
 
 **Related topics**:
-- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
 
----
+- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
 
 ### cloud_storage_chunk_eviction_strategy
 
 Strategy for evicting unused cache chunks.
-
 Available eviction strategies:
+
 - `eager`: evicts all chunks which are not in use by any data source.
 - `capped`: evicts chunks up to a preconfigured amount.
 - `predictive`: uses statistics from readers to determine which chunks to evict. 
@@ -97,7 +113,41 @@ Available eviction strategies:
 **Restart required**: no
 
 **Related topics**:
+
 - [Chunk eviction strategies for Tiered Storage](../../manage/tiered-storage#chunk-eviction-strategies)
+
+### cloud_storage_credentials_host
+
+Hostname to connect to for retrieving role-based credentials. If `null`, hostname is derived from [`cloud_storage_credentials_source`](#cloud_storage_credentials_source). Only required when using IAM role based access.
+
+**Type**: string
+
+**Default**: null
+
+**Restart required**: yes
+
+---
+
+### cloud_storage_credentials_source
+
+The source of credentials to connect to cloud services. If [`cloud_storage_credentials_host`](#cloud_storage_credentials_host) is `null`, this is used to derive the hostname to connect to retrieve role-based credentials.
+
+Valid values:
+- If deploying on an EC2 VM: `aws_instance_metadata`
+- If deploying on EKS: `sts` (AWS service token service)
+- If deploying on a GCE VM: `gcp_instance_metadata`
+- If deploying on GKE: `gcp_instance_metadata`
+- If using fixed credentials from a configuration file: `config_file`
+
+**Default**: `config_file`
+
+**Valid values**:
+- `config_file`
+- `aws_instance_metadata`
+- `sts`
+- `gcp_instance_metadata`
+
+**Restart required**: yes
 
 ---
 
@@ -112,9 +162,8 @@ Flag for turning off chunk-based reads and enabling full-segment downloads.
 **Restart required**: no
 
 **Related topics**:
-- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
 
----
+- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
 
 ### cloud_storage_enable_compacted_topic_reupload
 
@@ -171,6 +220,18 @@ Flag to enable adjacent segment merging in cloud object storage. When this prope
 
 ---
 
+### cloud_storage_graceful_transfer_timeout_ms
+
+Maximum duration to wait for uploads to complete before a leadership transfer. If `null`, leadership transfers proceed with no delay.
+
+**Units**: milliseconds
+
+**Default**: 5000 (5 sec)
+
+**Restart required**: no
+
+---
+
 ### cloud_storage_housekeeping_interval_ms
 
 Interval for object storage housekeeping tasks.
@@ -180,6 +241,9 @@ Interval for object storage housekeeping tasks.
 **Default**: 300000 (5 minutes)
 
 **Restart required**: no
+
+**Related topics**:
+- [Object storage housekeeping for Tiered Storage](../../manage/tiered-storage#object-storage-housekeeping)
 
 ---
 
@@ -194,9 +258,8 @@ The desired ratio of hydrated to non-hydrated chunks for each segment, where a c
 **Restart required**: no
 
 **Related topics**:
-- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
 
----
+- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
 
 ### cloud_storage_idle_threshold_rps
 
@@ -329,6 +392,7 @@ The minimum number of chunks per segment for trimming to be enabled. If the numb
 **Restart required**: no
 
 **Related topics**:
+
 - [Caching for Tiered Storage](../../manage/tiered-storage#caching)
 
 ---
@@ -368,6 +432,18 @@ The number of bytes of size-based retention for topics that are created during a
 **Default**: 1073741824 (1 GiB)
 
 **Restart required**: no
+
+---
+
+### cloud_storage_roles_operation_timeout_ms
+
+Timeout for IAM role related operations. While connecting to object storage, failed tasks that refresh the IAM roles token are retried after this timeout elapses.
+
+**Units**: milliseconds
+
+**Default**: 30000 (30 sec)
+
+**Restart required**: yes
 
 ---
 
@@ -987,6 +1063,9 @@ Default duration of quota tracking window.
 
 **Restart required**: no
 
+**Related properties**:
+- [`kafka_admin_topic_api_rate`](../cluster-properties#kafka_admin_topic_api_rate) refers to the number of partition mutations per `default_window_sec`. 
+
 ---
 
 ### fetch_reads_debounce_timeout
@@ -1094,6 +1173,8 @@ Number of partitions in the internal group membership topic.
 ### kafka_batch_max_bytes
 
 Maximum size of a batch processed by the server. If the batch is compressed, this limit applies to the compressed batch size.
+
+The topic property [`max.message.bytes`](../topic-properties#maxmessagebytes) overrides `kafka_batch_max_bytes`.
 
 **Type**: unsigned integer
 
@@ -1835,6 +1916,18 @@ Max compacted segment size after consolidation.
 **Units**: bytes
 
 **Default**: 5368709120 (5 GiB)
+
+**Restart required**: no
+
+---
+
+### memory_abort_on_alloc_failure
+
+Flag to enable termination of the Redpanda process when a memory allocation fails. If `false`, a failed memory allocation throws an exception.
+
+**Type**: boolean
+
+**Default**: true
 
 **Restart required**: no
 

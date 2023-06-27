@@ -1,10 +1,17 @@
 ---
 title: Redpanda Quickstart
+deployment: Docker
+linkRoot: ../
+contextLinks:
+  - name: 'Docker'
+    to: quick-start
+  - name: 'Cloud'
+    to: quick-start-cloud
 ---
 
 <head>
     <meta name="title" content="Redpanda Quickstart | Redpanda Docs"/>
-    <meta name="description" content="Spin up a Redpanda cluster with Docker or Redpanda Cloud, create a basic streaming application, and explore your cluster in Redpanda Console."/>
+    <meta name="description" content="Spin up a Redpanda cluster in Docker, create a basic streaming application, and explore your cluster in Redpanda Console."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/get-started/quick-start/" />
 </head>
 
@@ -15,33 +22,24 @@ import InstallRpkLinux from "../get-started/shared/_install-rpk-linux.mdx"
 import CreateNamespace from '../deploy/deployment-option/cloud/shared/dedicated/_create-namespace.mdx'
 import Link from '@docusaurus/Link';
 
-Spin up a Redpanda cluster, create a basic streaming application, and explore your cluster in Redpanda Console.
+import ContextLink from '@site/src/components/ContextButton.js'
 
-Choose one of the following options:
+<ContextLink frontmatter={frontMatter}
+/>
 
-- <Link to="../quick-start?quickstart=cloud#prerequisites">Redpanda Cloud - Dedicated</Link>: Use a fully managed Redpanda cluster hosted on dedicated resources and configurable instance types in Redpanda Cloud.
+Spin up a Redpanda cluster in Docker to evaluate Redpanda on your Linux, macOS, or Windows machine. Then, create a basic streaming application and explore your cluster in Redpanda Console.
 
-- <Link to="../quick-start?quickstart=docker#prerequisites">Docker (self-hosted)</Link>: Evaluate Redpanda on your Linux, macOS, or Windows machine.
+:::info
 
-  :::info
+Redpanda in Docker is supported only for development and testing.
+To deploy self-hosted Redpanda in production, use one of the following environments:
 
-  Redpanda in Docker is supported only for development and testing. 
-  To deploy self-hosted Redpanda in production, use one of the following environments:
+- [Linux](../../deploy/deployment-option/self-hosted/manual)
+- [Kubernetes](../../deploy/deployment-option/self-hosted/kubernetes)
 
-  - [Linux](../../deploy/deployment-option/self-hosted/manual)
-  - [Kubernetes](../../deploy/deployment-option/self-hosted/kubernetes)
-
-  :::
+:::
 
 ## Prerequisites
-
-<Tabs groupId="quickstart" queryString>
-<TabItem value="cloud" label="Redpanda Cloud">
-
-[Sign up for a trial](https://redpanda.com/try-redpanda?section=cloud-trial) of Redpanda Cloud - Dedicated Clusters.
-
-</TabItem>
-<TabItem value="docker" label="Docker">
 
 You need Docker Compose. For installation instructions, see the [Docker Compose documentation](https://docs.docker.com/compose/install/).
 
@@ -53,66 +51,17 @@ docker compose version
 
 You should see the version of Docker Compose that's installed on your local machine.
 
-</TabItem>
-</Tabs>
-
 ## Deploy Redpanda
 
-<Tabs groupId="quickstart" queryString>
-<TabItem value="cloud" label="Redpanda Cloud">
-
-To deploy a Redpanda cluster in the Dedicated cloud, create a namespace, then follow the steps for creating a Dedicated cluster.
-
-To create a namespace:
-
-<CreateNamespace/>
-
-To create a cluster:
-
-1. Click **Add Cluster**.
-
-1. Click **Create Dedicated cluster**, and enter the following values:
-
-    - **Cluster name**:
-
-      ```
-      redpandaquickstart
-      ```
-
-    - **Throughput**: 1 MBps
-
-    - **Version**: Choose the latest available version
-
-1. Click **Next** to see the **Cloud settings** options, and enter the following values:
-
-    - **Provider**: AWS
-
-    - **Region**: Any region that's closest to you
-
-    - **Availability**: Single AZ
-
-    - **Select a zone**: Choose any zone
-
-1. Click **Next** to see the **Networking** options, and enter the following values:
-
-    - **Connection Type**: Public Network
-
-1. Click **Create**.
-
-1. Wait for both your network and your cluster to be created.
-
-</TabItem>
-<TabItem value="docker" label="Docker">
-
-For lightweight testing, you can start a single Redpanda broker, 
-or you can use a more robust example with three Redpanda brokers. 
-With three brokers, you can configure your topics with a replication factor of three 
+For lightweight testing, you can start a single Redpanda broker,
+or you can use a more robust example with three Redpanda brokers.
+With three brokers, you can configure your topics with a replication factor of three
 so that the cluster can recover from a single-broker failure.
 
 <Tabs groupId="num-brokers" queryString>
 <TabItem value="one" label="Single Broker">
 
-1. Copy and paste the following YAML content into a file named `docker-compose.yml` on your local filesystem.
+1. Copy and paste the following YAML content into a file named [`docker-compose.yml`](pathname:///files/docker/single-broker/docker-compose.yml) on your local filesystem.
 
   <details>
   <summary>
@@ -168,12 +117,12 @@ so that the cluster can recover from a single-broker failure.
         - 19644:9644
     console:
       container_name: redpanda-console
-      image: docker.redpanda.com/vectorized/console:vVAR::CONSOLE_LATEST_VERSION
+      image: docker.redpanda.com/redpandadata/console:vVAR::CONSOLE_LATEST_VERSION
       networks:
         - redpanda_network
       entrypoint: /bin/sh
       command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
-      environment: 
+      environment:
         CONFIG_FILEPATH: /tmp/config.yml
         CONSOLE_CONFIG_FILE: |
           kafka:
@@ -198,11 +147,6 @@ so that the cluster can recover from a single-broker failure.
   docker compose up -d
   ```
 
-  <details>
-  <summary>
-  Example output
-  </summary>
-
   ```
   [+] Running 4/4
   ⠿ Network redpanda_network                 Created  0.0s
@@ -211,12 +155,10 @@ so that the cluster can recover from a single-broker failure.
   ⠿ Container redpanda-console               Started  0.6s
   ```
 
-  </details>
-
 </TabItem>
 <TabItem value="three" label="Three Brokers">
 
-1. Copy and paste the following YAML content into a file named `docker-compose.yml` on your local filesystem.
+1. Copy and paste the following YAML content into a file named [`docker-compose.yml`](pathname:///files/docker/three-brokers/docker-compose.yml) on your local filesystem.
 
   <details>
   <summary>
@@ -337,7 +279,7 @@ so that the cluster can recover from a single-broker failure.
         - redpanda_network
       entrypoint: /bin/sh
       command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
-      environment: 
+      environment:
         CONFIG_FILEPATH: /tmp/config.yml
         CONSOLE_CONFIG_FILE: |
           kafka:
@@ -362,11 +304,6 @@ so that the cluster can recover from a single-broker failure.
   docker compose up -d
   ```
 
-  <details>
-  <summary>
-  Example output
-  </summary>
-
   ```
   [+] Running 8/8
   ⠿ Network redpanda_network                  Created  0.0s
@@ -379,170 +316,15 @@ so that the cluster can recover from a single-broker failure.
   ⠿ Container redpanda-2                      Started  0.7s
   ```
 
-  </details>
-
-</TabItem>
-</Tabs>
-
 </TabItem>
 </Tabs>
 
 ## Start streaming
 
-To start building a basic streaming application, you can use rpk to create a topic, produce messages to it, and consume messages from it. 
-rpk is a CLI tool for connecting to and interacting with Redpanda brokers.
+To start building a basic streaming application, you can use rpk to create a topic, produce messages to it, and consume messages from it.
+rpk is a command-line tool for connecting to and interacting with Redpanda brokers.
 
-<Tabs groupId="quickstart" queryString>
-<TabItem value="cloud" label="Redpanda Cloud">
-
-1. Install rpk on your local machine:
-
-  :::note
-  The `rpk` binary is not supported on Windows.
-  :::
-
-  <Tabs>
-  <TabItem value="ubuntu" label="Linux" default>
-
-    <InstallRpkLinux/>
-
-  </TabItem>
-
-  <TabItem value="macos" label="macOS">
-
-    <InstallRpkHomebrew/>
-
-  </TabItem>
-  </Tabs>
-
-1. On the **Overview** page of Redpanda Cloud, copy your bootstrap server address and set it as an environment variable on your local machine:
-
-  ```bash
-  export REDPANDA_BROKERS="<bootstrap-server-address>"
-  ```
-
-1. In Redpanda Cloud, go to **Security** and create a user called **redpanda-twitch-account**.
-
-1. Copy the password, and mechanism, and set the following environment variables on your local machine:
-
-  ```bash
-  export REDPANDA_SASL_USERNAME="redpanda-twitch-account"
-  export REDPANDA_SASL_PASSWORD="<password>"
-  export REDPANDA_SASL_MECHANISM="<mechanism>"
-  ```
-
-1. In Redpanda Cloud, click the name of your user and add the following permissions to the ACL (access control list):
-
-    - **Host**: *
-    - **Topic name**:
-      
-      ```
-      twitch_chat
-      ```
-
-    - **Operations**: All
-
-1. Use rpk on your local machine to authenticate to Redpanda as the redpanda-twitch-account user and get information about the cluster:
-
-  ```bash
-  rpk cluster info --tls-enabled
-  ```
-
-  <details>
-  <summary>
-  Example output
-  </summary>
-
-  ```
-  CLUSTER
-  =======
-  redpanda.rp-example-cluster-id
-
-  BROKERS
-  =======
-  ID    HOST                                  PORT   RACK
-  0*    0-example.fmc.prd.cloud.redpanda.com  30092  euw1-az1
-  1     1-example.fmc.prd.cloud.redpanda.com  30092  euw1-az1
-  2     2-example.fmc.prd.cloud.redpanda.com  30092  euw1-az1
-  ```
-
-  </details>
-
-1. Create a topic called `twitch_chat`.
-
-  You granted permissions to the **redpanda-twitch-account** user to access only this topic. 
-
-  ```bash
-  rpk topic create twitch_chat --tls-enabled
-  ```
-
-  <details>
-  <summary>
-  Example output
-  </summary>
-
-  ```bash
-  TOPIC       STATUS
-  twitch_chat  OK
-  ```
-
-  </details>
-
-1. Produce a message to the topic:
-
-  ```bash
-  rpk topic produce twitch_chat --tls-enabled
-  ```
-
-1. Enter a message, then press <kbd>Enter</kbd>:
-
-  ```text
-  Pandas are fabulous!
-  ```
-
-  <details>
-  <summary>
-  Example output
-  </summary>
-
-  ```text
-  Produced to partition 0 at offset 0 with timestamp 1663282629789.
-  ```
-
-  </details>
-
-1. Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to finish producing messages to the topic.
-
-1. Consume one message from the topic:
-
-  ```bash
-  rpk topic consume twitch_chat --num 1 --tls-enabled
-  ```
-
-  <details>
-  <summary>
-  Example output
-  </summary>
-
-  Your message is displayed along with its metadata,:
-
-  ```json
-  {
-    "topic": "twitch_chat",
-    "value": "Pandas are fabulous!",
-    "timestamp": 1663282629789,
-    "partition": 0,
-    "offset": 0
-  }
-  ```
-
-  </details>
-
-
-</TabItem>
-<TabItem value="docker" label="Docker">
-
-Each Redpanda broker comes preinstalled with rpk, so you can use it inside one of the Redpanda broker's Docker containers or you can use install it on your local machine to test external connectivity. 
+Each Redpanda broker comes preinstalled with rpk, so you can use it inside one of the Redpanda broker's Docker containers or you can use install it on your local machine to test external connectivity.
 The `docker-compose.yml` file configured the containers to expose ports on your localhost so that you can communicate with the cluster outside the Docker network.
 
 To use rpk inside the Redpanda broker's Docker container:
@@ -553,44 +335,23 @@ To use rpk inside the Redpanda broker's Docker container:
   docker exec -it redpanda-0 rpk cluster info
   ```
 
-  <details>
-  <summary>
-  Example output
-  </summary>
+1. Create a topic called `chat-room`:
 
   ```bash
-  BROKERS
-  =======
-  ID    HOST        PORT
-  0*    172.24.1.2  9092
-  1     172.24.1.3  9092
-  2     172.24.1.4  9092
+  docker exec -it redpanda-0 rpk topic create chat-room
   ```
 
-  </details>
-
-1. Create a topic called `twitch_chat`:
-
-  ```bash
-  docker exec -it redpanda-0 rpk topic create twitch_chat
-  ```
-
-  <details>
-  <summary>
-  Example output
-  </summary>
+  Output:
 
   ```bash
   TOPIC       STATUS
-  twitch_chat  OK
+  chat-room  OK
   ```
-
-  </details>
 
 1. Produce a message to the topic:
 
   ```bash
-  docker exec -it redpanda-0 rpk topic produce twitch_chat
+  docker exec -it redpanda-0 rpk topic produce chat-room
   ```
 
 1. Enter a message, then press <kbd>Enter</kbd>:
@@ -599,43 +360,31 @@ To use rpk inside the Redpanda broker's Docker container:
   Pandas are fabulous!
   ```
 
-  <details>
-  <summary>
-  Example output
-  </summary>
+  Example output:
 
   ```text
   Produced to partition 0 at offset 0 with timestamp 1663282629789.
   ```
-
-  </details>
 
 1. Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to finish producing messages to the topic.
 
 1. Consume one message from the topic:
 
   ```bash
-  docker exec -it redpanda-0 rpk topic consume twitch_chat --num 1
+  docker exec -it redpanda-0 rpk topic consume chat-room --num 1
   ```
-
-  <details>
-  <summary>
-  Example output
-  </summary>
 
   Your message is displayed along with its metadata,:
 
   ```json
   {
-    "topic": "twitch_chat",
+    "topic": "chat-room",
     "value": "Pandas are fabulous!",
     "timestamp": 1663282629789,
     "partition": 0,
     "offset": 0
   }
   ```
-
-  </details>
 
 To test external connectivity using your local machine:
 
@@ -665,73 +414,26 @@ To test external connectivity using your local machine:
   rpk cluster info --brokers 127.0.0.1:19092
   ```
 
-  <details>
-  <summary>
-  Example output
-  </summary>
-
-  ```
-  BROKERS
-  =======
-  ID    HOST        PORT
-  0*    127.0.0.1   19092
-  1     127.0.0.1   29092
-  2     127.0.0.1   39092
-
-  TOPICS
-  ======
-  NAME         PARTITIONS  REPLICAS
-  twitch_chat  1           1
-  ```
-
-  </details> 
-
   :::note
   The Redpanda broker returns a list of all broker addresses so that rpk can communicate with all brokers directly. Each broker returns its configured `advertise-*` address that matches the port to which the initial connection has been made.
   :::
 
-</TabItem>
-</Tabs>
-
 ## Explore your topic
 
-<Tabs groupId="quickstart" queryString>
-<TabItem value="cloud" label="Redpanda Cloud">
-
-In Redpanda Cloud, go to **Topics** > **twitch_chat**.
-
-The message that you produced to the topic is displayed along with some other details about the topic.
-
-</TabItem>
-<TabItem value="docker" label="Docker">
-
-To explore your topic, you can use Redpanda Console, which you deployed in the `docker-compose.yml` file and is running locally on port 8080. 
+To explore your topic, you can use Redpanda Console, which you deployed in the `docker-compose.yml` file and is running locally on port 8080.
 Redpanda Console is a developer-friendly web UI for managing and debugging your Redpanda cluster and your applications.
 
 1. [Open Redpanda Console](http://127.0.0.1:8080/brokers) in a web browser.
 
   All your Redpanda brokers are listed along with their IP addresses and IDs.
 
-1. Go to [**Topics** > **twitch_chat**](http://127.0.0.1:8080/topics/twitch_chat).
+1. Go to [**Topics** > **chat-room**](http://127.0.0.1:8080/topics/chat-room).
 
   The message that you produced to the topic is displayed along with some other details about the topic.
 
-</TabItem>
-</Tabs>
-
 ## Clean up
 
-<Tabs groupId="quickstart" queryString>
-<TabItem value="cloud" label="Redpanda Cloud">
-
-When you're finished with the cluster, you can delete it.
-
-Go to **Cluster settings** and click **Delete cluster**.
-
-</TabItem>
-<TabItem value="docker" label="Docker">
-
-When you're finished with the cluster, shut down and delete the containers:
+If you don't want to continue experimenting with your cluster, you can shut it down and delete the containers:
 
 ```bash
 docker compose down
@@ -743,31 +445,15 @@ To delete the volumes along with all your cluster data, run the following:
 docker compose down -v
 ```
 
-</TabItem>
-</Tabs>
-
 ## Next steps
 
-<Tabs groupId="quickstart" queryString>
-<TabItem value="cloud" label="Redpanda Cloud">
-
-- [Build a sample application](../../develop/code-examples).
-- [Learn more about rpk](../rpk-install).
-- [Learn more about Redpanda Cloud](../../deploy/deployment-option/cloud).
-
-</TabItem>
-<TabItem value="docker" label="Docker">
-
-- [Build a sample application](../../develop/code-examples).
+- [Continue building the chat room application](../../develop/code-examples) with a Kafka client library.
 - [Learn more about Redpanda Console](../../manage/console).
 - [Learn more about rpk](../rpk-install).
 - [Deploy for development or production](../../deploy/deployment-option/self-hosted/manual/production/).
 - [Try more Docker Compose examples](../../reference/docker-compose).
 - Find the [Docker images for Redpanda](https://hub.docker.com/r/redpandadata/redpanda) on Docker Hub.
 - Find the [Docker images for Redpanda Console](https://hub.docker.com/r/redpandadata/console/tags) on Docker Hub.
-
-</TabItem>
-</Tabs>
 
 ## Suggested reading
 

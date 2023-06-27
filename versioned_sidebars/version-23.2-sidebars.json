@@ -69,11 +69,81 @@
           "id": "develop/kafka-clients"
         },
         {
-          "type": "doc",
-          "label": "Build a Sample Application",
-          "id": "develop/code-examples"
+          "type": "category",
+          "label": "Build a Chat Room Application",
+          "link": {
+            "type": "doc",
+            "id": "develop/code-examples"
+          },
+          "items": [
+            {
+              "type": "doc",
+              "label": "Chat Room Application",
+              "id": "develop/chat-room"
+            },
+            {
+              "type": "category",
+              "label": "Docker",
+              "link": {
+                "type": "doc",
+                "id": "develop/chat-room-docker"
+              },
+              "items": [
+                {
+                  "type": "doc",
+                  "label": "Go",
+                  "id": "develop/guide-go"
+                },
+                {
+                  "type": "doc",
+                  "label": "Java",
+                  "id": "develop/guide-java"
+                },
+                {
+                  "type": "doc",
+                  "label": "Node.js",
+                  "id": "develop/guide-nodejs"
+                },
+                {
+                  "type": "doc",
+                  "label": "Python",
+                  "id": "develop/guide-python"
+                }
+              ]
+            },
+            {
+              "type": "category",
+              "label": "Redpanda Cloud",
+              "link": {
+                "type": "doc",
+                "id": "develop/chat-room-cloud"
+              },
+              "items": [
+                {
+                  "type": "doc",
+                  "label": "Go",
+                  "id": "develop/guide-go-cloud"
+                },
+                {
+                  "type": "doc",
+                  "label": "Java",
+                  "id": "develop/guide-java-cloud"
+                },
+                {
+                  "type": "doc",
+                  "label": "Node.js",
+                  "id": "develop/guide-nodejs-cloud"
+                },
+                {
+                  "type": "doc",
+                  "label": "Python",
+                  "id": "develop/guide-python-cloud"
+                }
+              ]
+            }
+          ]
         },
-        "develop/guide-nodejs",
+        "develop/benchmark",
         "develop/http-proxy",
         "develop/config-topics",
         {
@@ -271,7 +341,7 @@
             {
               "type": "doc",
               "label": "Quickstart",
-              "id": "get-started/quick-start"
+              "id": "get-started/quick-start-cloud"
             },
             {
               "type": "category",
@@ -285,11 +355,6 @@
                   "type": "doc",
                   "label": "Create a Dedicated Cluster on AWS",
                   "id": "deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws"
-                },
-                {
-                  "type": "doc",
-                  "label": "Add a VPC Peering Connection",
-                  "id": "deploy/deployment-option/cloud/vpc-peering"
                 }
               ]
             },
@@ -314,6 +379,26 @@
               ]
             },
             {
+              "type": "category",
+              "label": "Networking",
+              "link": {
+                "type": "doc",
+                "id": "deploy/deployment-option/cloud/networking/index"
+              },
+              "items": [
+                {
+                  "type": "doc",
+                  "label": "Choosing CIDR ranges",
+                  "id": "deploy/deployment-option/cloud/cidr-ranges"
+                },
+                {
+                  "type": "doc",
+                  "label": "Add a VPC Peering Connection",
+                  "id": "deploy/deployment-option/cloud/vpc-peering"
+                }
+              ]
+            },
+            {
               "type": "doc",
               "label": "Create a Topic",
               "id": "deploy/deployment-option/cloud/create-topic"
@@ -328,8 +413,73 @@
               "items": [
                 {
                   "type": "doc",
-                  "label": "Create an S3 Sink Connector",
+                  "label": "AWS S3 Sink Connector",
                   "id": "deploy/deployment-option/cloud/managed-connectors/create-s3-sink-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "Google BigQuery Sink Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-gcp-bigquery-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "GCS Sink Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-gcs-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "HTTP Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-http-source-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "JDBC Sink Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-jdbc-sink-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "JDBC Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-jdbc-source-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "MirrorMaker2 Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-mmaker-source-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "MirrorMaker2 Checkpoint Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-mmaker-checkpoint-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "MirrorMaker2 Heartbeat Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-mmaker-heartbeat-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "MongoDB Sink Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-mongodb-sink-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "MongoDB Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-mongodb-source-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "MySQL (Debezium) Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-mysql-source-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "PostgreSQL (Debezium) Source Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-postgresql-connector"
+                },
+                {
+                  "type": "doc",
+                  "label": "Snowflake Sink Connector",
+                  "id": "deploy/deployment-option/cloud/managed-connectors/create-snowflake-connector"
                 }
               ]
             }
@@ -508,11 +658,7 @@
             "id": "manage/cluster-maintenance/index"
           },
           "items": [
-            {
-              "type": "doc",
-              "label": "Cluster Configuration",
-              "id": "manage/cluster-maintenance/configuration"
-            },
+            "manage/cluster-maintenance/cluster-property-configuration",
             "manage/cluster-maintenance/cluster-balancing",
             {
               "type": "doc",
@@ -541,11 +687,6 @@
               "id": "manage/cluster-maintenance/manage-throughput"
             },
             "manage/cluster-maintenance/configure-availability",
-            {
-              "type": "doc",
-              "label": "Cluster Properties",
-              "id": "manage/cluster-maintenance/cluster-property-configuration"
-            },
             {
               "type": "doc",
               "label": "Cluster Diagnostics",
@@ -593,18 +734,13 @@
                 },
                 {
                   "type": "doc",
+                  "label": "Azure AD",
+                  "id": "manage/security/console/azure-ad"
+                },
+                {
+                  "type": "doc",
                   "label": "GitHub",
                   "id": "manage/security/console/github"
-                },
-                {
-                  "type": "doc",
-                  "label": "Google",
-                  "id": "manage/security/console/google"
-                },
-                {
-                  "type": "doc",
-                  "label": "Okta",
-                  "id": "manage/security/console/okta"
                 },
                 {
                   "type": "doc",
@@ -613,8 +749,28 @@
                 },
                 {
                   "type": "doc",
+                  "label": "Google",
+                  "id": "manage/security/console/google"
+                },
+                {
+                  "type": "doc",
+                  "label": "Keycloak",
+                  "id": "manage/security/console/keycloak"
+                },
+                {
+                  "type": "doc",
+                  "label": "Okta",
+                  "id": "manage/security/console/okta"
+                },
+                {
+                  "type": "doc",
                   "label": "Plain",
                   "id": "manage/security/console/plain"
+                },
+                {
+                  "type": "doc",
+                  "label": "TLS Termination",
+                  "id": "manage/security/console/tls-termination"
                 }
               ]
             },
@@ -641,17 +797,7 @@
           "label": "Remote Read Replicas",
           "id": "manage/remote-read-replicas"
         },
-        {
-          "type": "category",
-          "label": "Schema Registry",
-          "link": {
-            "type": "doc",
-            "id": "manage/schema-registry"
-          },
-          "items": [
-            "manage/schema-id-validation"
-          ]
-        },
+        "manage/schema-registry",
         {
           "type": "category",
           "label": "Redpanda Console",
@@ -693,6 +839,7 @@
         "reference/cluster-properties",
         "reference/tunable-properties",
         "reference/node-properties",
+        "reference/topic-properties",
         "reference/node-configuration-sample",
         "reference/api-reference",
         "reference/redpanda-helm-spec",

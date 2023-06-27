@@ -16,22 +16,28 @@ import EnterpriseLicenseNote from '@site/docs/shared/_enterprise-license.mdx'
 :::
 
 Integrating Redpanda Console with Google allows your users to use their Google identities to sign in to Console.
-This guide assumes you already have a Google account to setup the OAuth application.
+This guide assumes you already have a Google account to set up the OAuth application.
 
-## Create an OpenID connect application
+## Prerequisites
+
+You must create an OpenID Connect (OIDC) application for your Google account.
 
 Follow this [Google guide](https://developers.google.com/identity/protocols/oauth2/openid-connect#appsetup) to create
-an OAuth application at Google. As you follow the guide to create the OAuth app, use the following inputs
-when you are asked for it:
+an OAuth application. Provide the following inputs
+when you are asked for them:
+
+- **Application name:** Choose a descriptive name for your specific Redpanda Console deployment (for example Console Analytics Prod)
+- **Application type:** Web application
+- **Authorized redirect URI:** `https://console.<your-company>.com/login/callbacks/google`
 
 :::note
-The following configurations are based on the assumption that you want to host Redpanda Console so that it would be accessible using
-`https://console.yourcompany.com`.
+The redirect URI is based on the assumption that you want to host Redpanda Console so it is accessible from
+`https://console.<your-company>.com`.
 :::
 
-- **Application name:** Any descriptive name for your specific Console deployment (for example Console Analytics Prod)
-- **Application type:** Web application
-- **Authorized redirect URI:** `https://console.yourcompany.com/login/callbacks/google`
+## Edit the console configuration file
+
+Edit the console configuration file associated with your deployment method and incorporate the details from your client application. For example, Kubernetes deployments use the `values.yaml` file. Linux deployments use the `redpanda-console-config.yaml` file, which is in `/etc/redpanda`.
 
 ```yaml
 login:
@@ -41,25 +47,25 @@ login:
   # web token used to store user sessions. This secret key is 
   # critical for the security of Redpanda Console's authentication and 
   # authorization system. Use a long, complex key with a combination of 
-  # numbers, letters, and special characters. While you must use a minimum of 
-  # 10 characters, Redpanda recommends using more than 32 
+  # numbers, letters, and special characters. The minimum number of
+  # characters is 10, but Redpanda recommends using more than 32
   # characters. For additional security, use a different secret key for 
   # each environment. jwtSecret can be securely generated with the following 
   # command: LC_ALL=C tr -dc '[:alnum:]' < /dev/random | head -c32
   #
   # If you update this secret key, any users who are 
-  # already logged into Redpanda Console will be logged out and will have 
+  # already logged in to Redpanda Console will be logged out and will have 
   # to log in again.
   jwtSecret: ""
 
   google:
     enabled: true
     clientId: ""
-    # ClientSecret is sensitive. You can provide this config also via the
-    # the environment variable LOGIN_GOOGLE_CLIENTSECRET
+    # ClientSecret is sensitive. You can also provide this config by setting
+    # the environment variable LOGIN_GOOGLE_CLIENTSECRET.
     clientSecret: ""
     # The directory config is only required if you want to use Google
-    # groups in your role bindings. Described further in the next section.
+    # groups in your role bindings. This is described further in the next section.
     # directory:
     #   serviceAccountFilepath: ""
     #   targetPrincipal: ""
@@ -67,14 +73,14 @@ login:
 
 ## RBAC Google groups sync
 
-If you want to bind roles to Google groups from a workspace organization you have to set up a service account, so that Redpanda Console can retrieve groups
+To bind roles to Google groups from a workspace organization, you must set up a service account so Redpanda Console can retrieve groups
 and their memberships using the Google Workspace API. Follow this [guide](https://developers.google.com/admin-sdk/directory/v1/guides/delegation) 
-to create the required service account and to delegate domain-wide authority to it. Make sure to create and download the service account key in JSON
-format.
+to create the required service account and to delegate domain-wide authority to it. Create and download the service account key in JSON
+format and mount the JSON file so it is available to Console. Specify
+the filepath to the JSON file in the Redpanda Console configuration file so it can be loaded at startup.
 
-You need to make the service account key (a JSON file) available to Console by mounting the file. The Console configuration expects you to specify
-the filepath to the JSON file so that it can be loaded at startup. Because only Google users with access to the Admin APIs have access to Google's
-Admin SDK Directory API, it is required that the service account impersonates such a user. Specify which user the service account shall impersonate
+Because only Google users with access to the Admin APIs have access to Google's
+Admin SDK Directory API, the service account must impersonate this user. Specify which user the service account will impersonate
 by setting the `targetPrincipal` to this user's email address.
 
 ```yaml
@@ -112,6 +118,6 @@ roleBindings:
 
 :::note
 Group memberships will be resolved proactively in order to support nested groups. If the service account doesn't have permissions
-to resolve a certain group memberships, it will be printed in the logs. Group memberships will be cached for 15 minutes before
-they will be refreshed.
+to resolve a certain group membership, a message is printed in the logs. Group memberships are cached for 15 minutes before
+they are refreshed.
 :::

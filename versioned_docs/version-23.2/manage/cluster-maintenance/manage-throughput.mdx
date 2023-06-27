@@ -47,7 +47,7 @@ The properties for node-wide throughput quota balancing are configured at the cl
 Similar to [node-wide throughput limits](#node-wide-throughput-limits) but for clients, Redpanda provides configurable throughput quotas that apply to an individual client or a group of clients. 
 
 :::note
-The client throughput quotas limit the rates within each shard of a Redpanda cluster's node. The quotas are neither shared nor balanced between shards and nodes.
+The client throughput quotas limit the rates within each shard (logical CPU core) of a Redpanda cluster's node. The quotas are neither shared nor balanced between shards and nodes.
 :::
 
 ### Individual client throughput limit

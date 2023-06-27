@@ -20,6 +20,7 @@ When you select a network for deploying your Redpanda Dedicated cluster, you hav
 
 * **VPC network** - Before you set up a peering connection in the Redpanda Cloud UI, you must have a VPC in your own account for Redpanda's VPC to connect to. If you do not already have a VPC, log in to the AWS VPC Console and create one.
 * **Matching Region** - VPC peering connections can only be established between your and Redpanda VPC networks created in the **same region**. We don't support Inter-Region VPC peering connections.
+* **Non-overlapping CIDR blocks** - The CIDR block for your VPC network cannot match or overlap with the CIDR block for the Redpanda Cloud VPC.
 
 :::tip
 Consider adding `rp` at the beginning of the VPC name to indicate that this VPC is for deploying a Redpanda cluster.

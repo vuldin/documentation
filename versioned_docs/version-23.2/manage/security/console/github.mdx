@@ -18,22 +18,28 @@ import EnterpriseLicenseNote from '@site/docs/shared/_enterprise-license.mdx'
 Integrating Redpanda Console with GitHub allows your users to use their GitHub identities to sign-in to Console.
 This guide assumes you already have a GitHub account and permissions to create Applications within your organization.
 
-## Create an OpenID connect application
+## Prerequisites
+
+You must create an OpenID Connect (OIDC) application for your GitHub account.
 
 Follow this [GitHub guide](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) to create
 an OAuth application at GitHub. You can create the OAuth application either under your personal account or under any
-organization you have admin access to. As you follow the guide to create the GitHub OAuth app, use the following inputs
-when you are asked for it:
+organization you have admin access to. As you create the GitHub OAuth app, provide the following inputs
+when you are asked for them:
 
 :::note
-Below configurations assume that you want to host Redpanda Console so that it would be accessible via
-`https://console.yourcompany.com`.
+The following configurations are based on the assumption that you want to host Redpanda Console so it is accessible from
+`https://console.<your-company>.com`.
 :::
 
-- **Application name:** Any descriptive name for your specific Console deployment (for example Console Analytics Prod)
-- **Homepage URL:** `https://console.yourcompany.com`
-- **Authorization callback URL:** `https://console.yourcompany.com/login/callbacks/github`
+- **Application name:** Choose a descriptive name for your specific Console deployment (for example Console Analytics Prod)
+- **Homepage URL:** `https://console.<your-company>.com`
+- **Authorization callback URL:** `https://console.<your-company>.com/login/callbacks/github`
 - **Enable device flow:** False / Not selected
+
+## Edit the console configuration file
+
+Edit the console configuration file associated with your deployment method and incorporate the details from your client application. For example, Kubernetes deployments use the `values.yaml` file. Linux deployments use the `redpanda-console-config.yaml` file, which is in `/etc/redpanda`.
 
 ```yaml
 login:
@@ -43,14 +49,14 @@ login:
   # web token used to store user sessions. This secret key is 
   # critical for the security of Redpanda Console's authentication and 
   # authorization system. Use a long, complex key with a combination of 
-  # numbers, letters, and special characters. While you must use a minimum of 
-  # 10 characters, Redpanda recommends using more than 32 
+  # numbers, letters, and special characters. The minimum number of
+  # characters is 10, but Redpanda recommends using more than 32
   # characters. For additional security, use a different secret key for 
   # each environment. jwtSecret can be securely generated with the following 
   # command: LC_ALL=C tr -dc '[:alnum:]' < /dev/random | head -c32
   #
   # If you update this secret key, any users who are 
-  # already logged into Redpanda Console will be logged out and will have 
+  # already logged in to Redpanda Console will be logged out and will have 
   # to log in again.
   jwtSecret: ""
 

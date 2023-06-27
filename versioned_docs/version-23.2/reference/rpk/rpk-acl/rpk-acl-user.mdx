@@ -9,13 +9,13 @@ rpk_version: v23.1.6 (rev cc47e1ad1)
   <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-acl/rpk-acl-user/" />
 </head>
 
-Manage SASL users.
+Manage SCRAM users.
 
-If SASL is enabled, a SASL user is what you use to talk to Redpanda, and ACLs
+If SCRAM is enabled, a SCRAM user is what you use to talk to Redpanda, and ACLs
 control what your user has access to. See `rpk acl --help` for more information
 about ACLs, and `rpk acl user create --help` for more information about
-creating SASL users. Using SASL requires setting `enable_sasl: true` in the
-redpanda section of your `redpanda.yaml`.
+creating SCRAM users. Using SCRAM requires setting `kafka_enable_authorization: true` and `authentication_method: sasl` in the
+redpanda section of your `redpanda.yaml`, and setting `sasl_mechanisms` with `SCRAM` for your Redpanda cluster.
 
 ## Usage
 

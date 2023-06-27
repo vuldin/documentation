@@ -31,6 +31,9 @@ If you are using Amazon Web Services (AWS) as your cloud provider, you must sati
 3. [Create an IAM role and assign the policy to that role](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions_create-policies.html). 
 4. Tiered Storage with AWS requires that the user have the following permissions to read and create objects on the bucket to be used with the cluster (or on all buckets): `GetObject`, `DeleteObject`, `PutObject`, `PutObjectTagging`, `ListBucket`. 
 5. [Bind the VM](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#attach-iam-role), or [Pod in the case of Kubernetes](https://docs.aws.amazon.com/eks/latest/userguide/specify-service-account-role.html), to the IAM role.
+6. Ensure that [IMDSv2 is optional](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-IMDS-existing-instances.html) for your EC2 instance.
+
+  Redpanda supports only IMDSv1. Now that all EC2 instances default to IMDSv2, you must configure IMDSv2 as optional so that Redpanda can use IMDSv1. For details see the [AWS announcement](https://aws.amazon.com/about-aws/whats-new/2023/06/imds-packet-analyzer-simplifies-migration-imdsv2/).
 
 :::caution
 `GetObject`, `DeleteObject`, `PutObject`, `PutObjectTagging`, and `ListBucket` are required to fully utilize cloud storage. If the bucket is dedicated to Redpanda, we recommend allowing all (*) actions within the bucket.

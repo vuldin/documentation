@@ -221,7 +221,7 @@ high chance messages arrive around the same time to be batched together.
 
 #### `compression.type`
 
-`compression.type` controls how the producer should compress a batch of messages
+[compression.type](../../../reference/topic-properties#compressiontype) controls how the producer should compress a batch of messages
 before sending it to the broker. The default is `none`, which means the batch of
 messages will not be compressed at all. Compression occurs on full batches, so
 you can improve batching throughput by setting this parameter to use one of the

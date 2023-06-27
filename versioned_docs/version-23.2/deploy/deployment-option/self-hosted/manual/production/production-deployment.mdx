@@ -15,8 +15,8 @@ import Versions from '../../../../../shared/_versions.mdx'
 You can deploy Redpanda for production with a default deployment, which uses recommended deployment tools, or with a custom deployment, which uses unsupported deployment tools.
 
 :::note
-- See [Automate Deployment for Production](../../production/production-deployment-automation) to use Terraform and Ansible to deploy Redpanda. 
-- See [Redpanda Quickstart](../../../../../../get-started/quick-start) to try out Redpanda in Docker or [Deploy for Development](../../production/dev-deployment). 
+- See [Automate Deployment for Production](../../production/production-deployment-automation) to use Terraform and Ansible to deploy Redpanda.
+- See [Redpanda Quickstart](../../../../../../get-started/quick-start) to try out Redpanda in Docker or [Deploy for Development](../../production/dev-deployment).
 :::
 
 ## Prerequisites
@@ -182,16 +182,18 @@ sudo rpk iotune # takes 10mins
 
 ### Start Redpanda
 
-Configure Redpanda using the [`rpk redpanda config bootstrap`](../../../../../../reference/rpk/rpk-redpanda/rpk-redpanda-config-bootstrap) command, then start Redpanda: 
+Configure Redpanda using the [`rpk redpanda config bootstrap`](../../../../../../reference/rpk/rpk-redpanda/rpk-redpanda-config-bootstrap) command, then start Redpanda:
 
 ```bash
-sudo rpk redpanda config bootstrap --self <private-ip> --ips <seed-node-ips> && \
+sudo rpk redpanda config bootstrap --self <ip-address-of-your-node> --ips <seed-node-ips> && \
 sudo rpk redpanda config set redpanda.empty_seed_starts_cluster false && \
 sudo systemctl start redpanda-tuner redpanda
 ```
 
-- The `--self` flag tells Redpanda the interface address to bind to. Usually this is its private IP.
-- The `--ips` flag lists all the seed nodes in the cluster, including the one being started. Seed nodes correspond to the `seed_servers` property in `redpanda.yaml`. 
+Replace the following placeholders:
+
+- `<ip-address-of-your-node>`: The `--self` flag tells Redpanda the interface address to bind to for the Kafka API, the RPC API, and the Admin API. Usually, this is the node's private IP address.
+- `<seed-node-ips>`: The `--ips` flag lists all the seed nodes in the cluster, including the one being started. Seed nodes correspond to the `seed_servers` property in `redpanda.yaml`.
 
   :::note
   The `--ips` flag must be set *identically* (with nodes listed in identical order) on each node.
@@ -260,7 +262,7 @@ in the same directory as `redpanda.yaml`.
 
 This file is only read on the first startup of the cluster. Any subsequent
 changes to `.bootstrap.yaml` are ignored, so changes to
-cluster configuration must be done with the Admin API. 
+cluster configuration must be done with the Admin API.
 
 The content format is a YAML dictionary of cluster configuration properties. For example, to initialize a cluster with Admin API authentication enabled
 and a single superuser, the `.bootstrap.yaml` file would contain the following:
@@ -309,14 +311,14 @@ Seed servers help new nodes join a cluster by directing requests from newly-star
 Starting with Redpanda version 22.3, you should explicitly set `empty_seed_starts_cluster` to `false` on every node, and every node in the cluster should have the same value set for `seed_servers`. With this set of configurations, Redpanda clusters form with these guidelines:
 
 - When a node starts and it is a seed server (its address is in the `seed_servers` list), it waits for all other seed servers to start up, and it forms a cluster with all seed servers as members.
-- When a node starts and it is not a seed server, it sends requests to the seed servers to join the cluster. 
- 
+- When a node starts and it is not a seed server, it sends requests to the seed servers to join the cluster.
+
 It is essential that all seed servers have identical values for the `seed_servers` list. Redpanda strongly recommends at least three seed nodes when forming a cluster. Each seed server decreases the likelihood of unintentionally forming a split brain cluster. To ensure nodes can always discover the cluster, at least one seed node should be available at all times.
 
 By default, for backward compatibility, `empty_seed_starts_cluster` is set to `true`, and Redpanda clusters form with the guidelines used prior to version 22.3:
 - When a node starts with an empty `seed_servers` list, it creates a single node cluster with itself as the only member.
 - When a node starts with a non-empty `seed_servers` list, it sends requests to the nodes in that list to join the cluster. 
- 
+
 You should never have more than one node with an empty `seed_servers` list, which would result in the creation of multiple clusters.
 
 :::important
@@ -325,7 +327,7 @@ to erase a node's drive and restart it. However, in some environments (like when
 and nodes may find their data volumes erased. For such environments, Redpanda recommends setting `empty_seed_starts_cluster` to false and designating a set of seed nodes such that they couldn't lose their storage simultaneously.
 :::
 
-### Configure node IDs 
+### Configure node IDs
 
 Redpanda automatically generates unique node IDs for each new node. This means that you don't need to include node IDs in configuration files or worry about policies on `node_id` re-use. 
 
@@ -339,7 +341,7 @@ Never reuse node IDs, even for nodes that have been decommissioned and restarted
 
 Deployment automation should place each node into maintenance mode and wait for it to drain leadership before restarting it with a newer version of Redpanda. For more information, see [Upgrade](../../../../../../manage/cluster-maintenance/rolling-upgrade).
 
-If upgrading multiple [feature release versions of Redpanda](../../../../../../manage/kubernetes/rolling-upgrade#find-a-new-version) in succession, make sure to verify that each version upgrades to completion before proceeding to the next version. You can verify by reading the `/v1/features` Admin API endpoint and checking that `cluster_version` has increased. 
+If upgrading multiple [feature release versions of Redpanda](../../../../../../manage/kubernetes/rolling-upgrade#find-a-new-version) in succession, make sure to verify that each version upgrades to completion before proceeding to the next version. You can verify by reading the `/v1/features` Admin API endpoint and checking that `cluster_version` has increased.
 
 Starting with Redpanda version 23.1, the `/v1/features` endpoint also includes a `node_latest_version` attribute, and installers can verify that the cluster has activated any new functionality from a previous upgrade by checking for `cluster_version` == `node_latest_version`.
 
@@ -351,6 +353,6 @@ If clients connect from a different subnet, see [Configure Listeners](../../../.
 
 ## Suggested reading
 
-- [Cluster Configuration](../../../../../../manage/cluster-maintenance/configuration)
+- [Configure Cluster Properties](../../../../../../manage/cluster-maintenance/cluster-property-configuration)
 - [Redpanda Console Configuration](../../../../../../reference/console/config)
 - [Schema Registry](../../../../../../manage/schema-registry)

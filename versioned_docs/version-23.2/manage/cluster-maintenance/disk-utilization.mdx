@@ -25,14 +25,16 @@ By default, all topics on self-hosted Redpanda clusters keep the last 24 hours o
 Retention properties control how long messages are kept on disk before they're deleted or compacted. Setting message retention properties is the best way to prevent old messages from accumulating on disk to the point that the disk becomes full. You can configure retention properties to delete messages based on the following conditions:
 
 * Message age is exceeded.
-* Aggregate message size in the topic is exceeded. 
+* Aggregate message size in the topic is exceeded.
 * Either message age or aggregate message size in the topic is exceeded.
+
+Set retention properties at the topic level or the cluster level. If a value isn't specified for the topic, then the topic uses the value for the cluster. Note that cluster-level property names use snake-case, while topic-level properties use dots.
 
 | Retention property | Cluster level | Topic level <br /> (overrides cluster configuration) |
 | ---               | ---                                                |  ---                                 |
 | Time-based        | `delete_retention_ms` <br /> Default - `604800000` | `retention.ms` <br /> No default     |
-| Time-based (with Tiered Storage enabled)       | `retention_local_target_ms_default` <br /> Default - `86400000`| `retention.local.target.ms` <br /> No default     |
 | Size-based        | `retention_bytes`  <br /> Default - `null`         | `retention.bytes`  <br /> No default |
+| Time-based (with Tiered Storage enabled)       | `retention_local_target_ms_default` <br /> Default - `86400000`| `retention.local.target.ms` <br /> No default     |
 | Size-based (with Tiered Storage enabled)       | `retention_local_target_bytes_default`  <br /> Default - `null`         | `retention.local.target.bytes`  <br /> No default |
 | Segment size      | `log_segment_size`  <br /> Default - `1073741824`  | `segment.bytes`  <br /> No default |
 
@@ -118,15 +120,17 @@ To configure log segment size on a topic:
 rpk topic alter-config <topic> --set segment.bytes=<segment_size>
 ```
 
-### Segment size for compacted segments
+### Segment size for compacted topics
  
-Compaction saves space by retaining only the last known value for each message key within the segment. The latest value for each key is preserved, and all older values are discarded. 
+Compaction, or key-based retention, saves space by retaining at least the most recent value for a message key within a topic partition's log and discarding older values. Compaction runs periodically in the background in a best effort fashion, and it doesn't guarantee that there are no duplicate values per key.
 
 When compaction is configured, topics take their size from `compacted_log_segment_size`. The `log_segment_size` property does not apply to compacted topics. 
 
 Setting a `segment.bytes` size on a topic applies whether the topic is compacted or not, and the `max_compacted_log_segment_size` property applies to compacted topics regardless of any other properties. The `max_compacted_log_segment_size` property controls how many segments are merged together. For example, if you set `segment.bytes` to 128 MB, but leave `max_compacted_log_segment_size` at 5 GB, then you get 128 MB segments when they're written, but up to 5 GB segments after compaction.
 
-Keep in mind that very large segments prevent compaction, and very small segments increase the risk of encountering resource limits. To calculate an upper limit on segment size, divide the disk size by the number of partitions. For example, if you have a 128 GB disk and 1000 partitions, the upper limit of the segment size is `134217728`. Default is `1073741824`. 
+Redpanda periodically performs compaction in the background. The compaction period is configured by the cluster property [log_compaction_interval_ms](../../../reference/cluster-properties#log_compaction_interval_ms).
+
+Keep in mind that very large segments delay, or possibly prevent, compaction. A very large active segment cannot be cleaned up or compacted until it is closed, and very large closed segments require significant memory and CPU to process for compaction. Very small segments increase the frequency of processing for applying compaction and resource limits. To calculate an upper limit on segment size, divide the disk size by the number of partitions. For example, if you have a 128 GB disk and 1000 partitions, the upper limit of the segment size is `134217728`. Default is `1073741824`. 
 
 For details about how to modify cluster configuration properties, see [Cluster configuration](../cluster-property-configuration). 
 
@@ -158,7 +162,7 @@ Log rolling can also be triggered by configurable timeouts. This is useful when 
 
 If you exceed your low disk space threshold, Redpanda blocks clients from producing. In that state, Redpanda returns errors to external writers, but it still allows internal write traffic, such as replication and rebalancing. 
 
-The `storage_min_free_bytes` configuration field determines the threshold of free space–the hard limit–for this write rejection. 
+The [`storage_min_free_bytes`](../../../reference/tunable-properties/#storage_min_free_bytes) tunable configuration property sets the low disk space threshold–the hard limit–for this write rejection. The default value is 5 GiB, which means that when any broker’s free space falls below 5 GiB, Redpanda rejects writes to all brokers.
 
 You can also set a soft limit for a minimum free disk space _alert_. This soft limit generates an error message and affects the value of the `redpanda_storage_disk_free_space_alert` metric. The alert works with the following configuration properties, which you can set on any data disk (one drive per node):
 

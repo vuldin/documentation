@@ -18,6 +18,12 @@ To detect unexpected idling, you can query the rate of change as a percentage of
 rate(redpanda_cpu_busy_seconds_total[5m])
 ```
 
+:::note
+While CPU utilization at the host-level can typically appear high (for example, 99-100% utilization) when I/O events like message arrival occur, the actual Redpanda process utilization is likely low and can be monitored with `redpanda_cpu_busy_seconds_total`. 
+
+This high host-level CPU utilization happens because Redpanda uses Seastar and constantly polls and increments clock ticks, and it doesn't necessarily mean that Redpanda is busy.
+:::
+
 #### Memory allocated
 
 To monitor the percentage of memory allocated, use a formula with <Link to={props.frontmatter && props.frontmatter.linkRoot + 'reference/public-metrics-reference#redpanda_memory_allocated_memory'}><code>redpanda_memory_allocated_memory</code></Link> and <Link to={props.frontmatter && props.frontmatter.linkRoot + 'reference/public-metrics-reference#redpanda_memory_free_memory'}><code>redpanda_memory_free_memory</code></Link>:
