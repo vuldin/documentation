@@ -3,6 +3,7 @@ name: Generate Helm Spec Docs
 on:
   repository_dispatch:
     types: [generate-helm-spec-docs]
+  workflow_dispatch:
 
 jobs:
   trigger:
@@ -49,7 +50,7 @@ jobs:
         run: |
           ls -R redpanda-docs
         working-directory: ${{ github.workspace }}
-        
+
       - name: Check if changes were made
         id: check_changes
         run: |

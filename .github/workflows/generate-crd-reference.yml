@@ -1,0 +1,134 @@
+name: Generate CRD Reference Docs
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Redpanda maintenance branch to generate CRD Docs from'
+        required: true
+  repository_dispatch:
+    types: [generate-crd-docs]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set branch variable
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "BRANCH=${{ github.event.inputs.branch }}" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            echo "BRANCH=${{ github.event.client_payload.branch }}" >> $GITHUB_ENV
+          fi
+
+      - name: Verify branch exists
+        run: |
+          response=$(curl -fs -o /dev/null -w "%{http_code}" -H "Authorization: Bearer ${{ secrets.ACTIONS_BOT_TOKEN }}" "https://api.github.com/repos/redpanda-data/redpanda/branches/${{ env.BRANCH }}")
+          if [ "$response" -ne 200 ]; then
+            echo "Branch '${{ env.BRANCH }}' does not exist." >&2
+            exit 1
+          fi
+
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+        with:
+          repository: redpanda-data/documentation
+          path: docs-repo
+
+      - name: Checkout redpanda repository
+        uses: actions/checkout@v2
+        with:
+          repository: redpanda-data/redpanda
+          ref: ${{ env.BRANCH }}
+          path: redpanda
+          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+
+      - name: Get latest release tag
+        id: get_latest_release
+        run: |
+          response=$(curl -fs -H "Authorization: Bearer ${{ secrets.ACTIONS_BOT_TOKEN }}" "https://api.github.com/repos/redpanda-data/redpanda/releases/latest")
+          latest_release_tag=$(echo $response | jq -r .tag_name)
+          if [ "$latest_release_tag" == "null" ]; then
+            echo "No tag_name in the release info." >&2
+            exit 1
+          fi
+          echo "tag=$latest_release_tag" >> $GITHUB_ENV
+
+      - name: Format latest tag for latest maintenance branch
+        id: format_tag
+        run: |
+          tag=${{ env.tag }}
+          formatted_tag="$(echo "$tag" | sed 's/\([0-9]*\.[0-9]*\)\.[0-9]*/\1.x/')"
+          echo "formatted_tag=$formatted_tag" >> $GITHUB_ENV
+
+      - name: Set output path
+        run: |
+          if [[ "${{ env.formatted_tag }}" == "${{ env.BRANCH }}" ]]; then
+            echo "OUTPUT_PATH=./docs-repo/docs/reference/redpanda-operator" >> $GITHUB_ENV
+          else
+            # extract major.minor version
+            version=$(echo "${{ env.BRANCH }}" | grep -oP '[0-9]+\.[0-9]+')
+            echo "OUTPUT_PATH=./docs-repo/versioned_docs/version-$version/reference/redpanda-operator" >> $GITHUB_ENV
+          fi
+
+      - name: Download crd-ref-docs
+        run: |
+          curl -fLO https://github.com/elastic/crd-ref-docs/releases/download/v0.0.9/crd-ref-docs
+          chmod +x crd-ref-docs
+          echo "crd-ref-docs" >> $GITHUB_PATH
+          sudo mv crd-ref-docs /usr/local/bin/
+
+      - name: Generate CRD Docs
+        run: |
+          crd-ref-docs --source-path=./redpanda/src/go/k8s/apis/redpanda/v1alpha1 --max-depth=10 --templates-dir=./docs-repo/.github/crd-config/templates/markdown --config=./docs-repo/.github/crd-config/config.yaml --renderer=markdown --output-path=${{ env.OUTPUT_PATH}}
+
+      - name: Rename the output file
+        run: |
+          mv ${{ env.OUTPUT_PATH}}/out.md ${{ env.OUTPUT_PATH}}/crd.mdx
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Create JS script to process Markdown
+        run: |
+          cat << 'EOF' > script.js
+          const fs = require('fs');
+          const path = process.env.OUTPUT_PATH + '/crd.mdx';
+          let data = fs.readFileSync(path, 'utf8');
+
+          data = data.replace(/'(<[^>]*>)'/g, "`$1`");
+          data = data.replace(/'(<[^>]*>)/g, "`$1`");
+          data = data.replace(/(?<!`)(<[^>]*>)(?!`)/g, "`$1`");
+
+          fs.writeFileSync(path, data, 'utf8');
+          EOF
+
+      - name: Run JS script
+        run: node script.js
+        env:
+          OUTPUT_PATH: ${{ env.OUTPUT_PATH }}
+
+      - name: Check if changes were made
+        id: check_changes
+        run: |
+          cd ./docs-repo
+          changes=$(git status --porcelain)
+          if [ -z "$changes" ]; then
+            echo "has_changes=false" >> $GITHUB_ENV
+          else
+            echo "has_changes=true" >> $GITHUB_ENV
+          fi
+
+      - name: Commit changes
+        if: env.has_changes == 'true'
+        run: |
+          cd ./docs-repo
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add .
+          git commit -m "auto-docs: Update CRD doc for ${{ env.BRANCH }}"
+          git push origin dev
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

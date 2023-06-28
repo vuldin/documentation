@@ -844,6 +844,7 @@
         "reference/api-reference",
         "reference/redpanda-helm-spec",
         "reference/console-helm-spec",
+        "reference/redpanda-operator/crd",
         {
           "type": "category",
           "label": "Monitoring Metrics",
