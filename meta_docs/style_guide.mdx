@@ -6,7 +6,7 @@ This guide is intended to be helpful to documentation team writers and reviewers
 
 - If you are a member of the Redpanda documentation team, you should propose your updates to your docs team peers before adding to this document. For example, you can demo at a team meeting or in the #doc-team Slack group.
 
-- If you are not a member of the Redpanda doc team, you should start a conversation on [the community channel](https://rpnda.co/slack).
+- If you are not a member of the Redpanda doc team, you should start a conversation on [the community channel](https://redpanda.com/slack).
 
 # Organization of product documentation
 Before you start writing, create an outline with the information you intend to add to each section. It might look something like this:

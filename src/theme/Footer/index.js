@@ -141,7 +141,7 @@ function Footer() {
               </svg>
             </a>
             <a
-              href="https://rpnda.co/slack"
+              href="https://redpanda.com/slack"
               rel="noopener noreferrer"
               target="_blank"
             >

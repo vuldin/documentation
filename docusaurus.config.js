@@ -42,7 +42,7 @@ module.exports = async () => {
           { href: 'https://university.redpanda.com/', label: 'Training', position: 'right', target: '_self' },
           { href: 'https://redpanda.com/blog/', label: 'Blog', position: 'right', target: '_self' },
           { href: 'https://support.redpanda.com/hc/en-us/', label: 'Helpdesk', position: 'right', target: '_self' },
-          { href: 'https://rpnda.co/slack', label: 'Community', position: 'right', target: '_self' },
+          { href: 'https://redpanda.com/slack', label: 'Community', position: 'right', target: '_self' },
           { href: 'https://github.com/redpanda-data/redpanda/', label: 'GitHub', position: 'right', target: '_self' },
         ],
       },
