@@ -89,6 +89,9 @@ on the **Create Connector** page:
 | `S3 maximum back-off` | S3 maximum back-off time (in milliseconds) before retrying a request. Default is 20000. |
 | `S3 max retries` | Maximum retry limit (if the value is greater than 30, there can be integer overflow issues during delay calculation). Default is 3. |
 | `Error tolerance` | Error tolerance response during connector operation. Default value is `none` and signals that any error will result in an immediate connector task failure. Value of `all` changes the behavior to skip over problematic records. |
+| `Dead letter queue topic name` | The name of the topic to be used as the dead letter queue (DLQ) for messages that result in an error when processed by this sink connector, its transformations, or converters. The topic name is blank by default, which means that no messages are recorded in the DLQ. |
+| `Dead letter queue topic replication factor` | Replication factor used to create the dead letter queue topic when it doesn't already exist. |
+| `Enable error context headers` | When `true`, adds a header containing error context to the messages written to the dead letter queue. To avoid clashing with headers from the original record, all error context header keys, start with `__connect.errors`. |
 
 
 ## Map data

@@ -86,6 +86,12 @@ on the **Create Connector** page:
    | `Upsert enabled` | Enables upsert functionality on the connector. |
    | `Delete enabled` | Enable delete functionality on the connector.
    | `Time partitioning type` | The time partitioning type to use when creating tables. |
+   | `BigQuery retry attempts` | The number of retry attempts made for each BigQuery request that fails with a backend or quota exceeded error. |
+   | `BigQuery retry attempts interval` | The minimum amount of time, in milliseconds, to wait between BigQuery backend or quota exceeded error retry attempts. |
+   | `Error tolerance` | Error tolerance response during connector operation. Default value is `none` and signals that any error will result in an immediate connector task failure. Value of `all` changes the behavior to skip over problematic records. |
+   | `Dead letter queue topic name` | The name of the topic to be used as the dead letter queue (DLQ) for messages that result in an error when processed by this sink connector, its transformations, or converters. The topic name is blank by default, which means that no messages are recorded in the DLQ. |
+   | `Dead letter queue topic replication factor` | Replication factor used to create the dead letter queue topic when it doesn't already exist. |
+   | `Enable error context headers` | When `true`, adds a header containing error context to the messages written to the dead letter queue. To avoid clashing with headers from the original record, all error context header keys, start with `__connect.errors`. |
 
 ## Map data
 

@@ -89,7 +89,6 @@ Additional errors and corrective actions follow.
 | **Password authentication failed for user** | Make sure that the `User` and `Password` credentials are valid. |
 | **The Plugin name value is invalid** | Make sure that `Plugin` contains a [valid value](https://debezium.io/documentation/reference/stable/connectors/postgresql.html#postgresql-property-plugin-name), either `decoderbufs` or `pgoutput`. |
 | **Postgres server `wal_level` property is `replica`** | Specify `wal_level` as `logical` for your database. |
-| **Error while fetching metadata with correlation id 3163753:{.....=UNKNOWN_TOPIC_OR_PARTITION}** | Desired topic does not exist. The `auto_create_topics_enabled` property is disabled and should not be enabled in production, so the topic must be created manually. Usually the topic matches `topic_prefix.full DB table name`. The `topic.creation.enable` property requires [additional configuration](https://debezium.io/documentation/reference/stable/configuration/topic-auto-create-config.html). |
 | **RecordTooLargeException: The message is 1050766 bytes when serialized, which is larger than 1048576, the value of the max.request.size configuration.** | Increase the max request size to unblock the connector and allow large messages to pass: ```"producer.override.max.request.size": "209715200".``` The connector may be reaching memory limits and failing if the amount of data to pass or your messages are too large. |
 
 ## Suggested reading
