@@ -806,9 +806,13 @@ Default lifetime of log segments. If `null`, the property is disabled, and no de
 
 The topic property [`segment.ms`](../topic-properties#segmentms) overrides the value of `log_segment_ms` at the topic level.
 
+:::note
+The default value of `log_segment_ms` (14 days) is different than Kafka's default value (7 days). Redpanda's segments store timestamps in 32-bit signed values that represent a range of up to about 24 days, and we chose as default a 14 day roll period that's a nice round number that keeps us well within that range.
+:::
+
 **Units**: milliseconds
 
-**Default**: null
+**Default**: 1209600000 (14 days)
 
 **Range**: [60000 (60 sec), ...]
 
