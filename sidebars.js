@@ -9,7 +9,7 @@
  Create as many sidebars as you want.
  */
 
-module.exports = {
+ module.exports = {
   // By default, Docusaurus generates a sidebar from the docs folder structure
   docsSidebar: [
     {
@@ -296,7 +296,7 @@ module.exports = {
                 {
                   type: "doc",
                   label: "Redpanda Cloud Overview",
-                  id: "deploy/deployment-option/cloud/dedicated-byoc",
+                  id: "deploy/deployment-option/cloud/cloud-overview",
                 },
                 {
                   type: "doc",
@@ -305,20 +305,23 @@ module.exports = {
                 },
                 {
                   type: "category",
-                  label: "Dedicated Cloud",
-                  link: { type: "doc", id: "deploy/deployment-option/cloud/dedicated/index" },
+                  label: "Provision a Dedicated Cluster",
                   items: [
                     {
                       type: "doc",
-                      label: "Create a Dedicated Cluster on AWS",
+                      label: "Create a Dedicated Cloud Cluster on AWS",
                       id: "deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws",
+                    },
+                    {
+                      type: "doc",
+                      label: "Add a VPC Peering Connection",
+                      id: "deploy/deployment-option/cloud/vpc-peering",
                     },
                   ],
                 },
                 {
                   type: "category",
-                  label: "BYOC",
-                  link: { type: "doc", id: "deploy/deployment-option/cloud/byoc/index" },
+                  label: "Provision a BYOC Cluster",
                   items: [
                     {
                       type: "doc",
@@ -330,7 +333,61 @@ module.exports = {
                       label: "Create a BYOC Cluster on GCP",
                       id: "deploy/deployment-option/cloud/create-byoc-cluster-gcp",
                     },
-                  ]
+                  ],
+                },
+                {
+                  type: "category",
+                  label: "Security",
+                  link: { type: "doc", id: "deploy/deployment-option/cloud/security/index" },
+                  items: [
+                    {
+                      type: "doc",
+                      label: "Authentication",
+                      id: "deploy/deployment-option/cloud/security/cloud-authentication",
+                    },
+                    {
+                      type: "category",
+                      label: "Authorization",
+                      link: { type: "doc", id: "deploy/deployment-option/cloud/security/authorization/index" },
+                      items: [
+                        {
+                          type: "doc",
+                          label: "Cloud Authorization",
+                          id: "deploy/deployment-option/cloud/security/authorization/cloud-authorization",
+                        },
+                        {
+                          type: "doc",
+                          label: "Cloud IAM Policies",
+                          id: "deploy/deployment-option/cloud/security/authorization/cloud-iam-policies",
+                        },
+                      ],
+                    },
+                    {
+                      type: "doc",
+                      label: "Encryption",
+                      id: "deploy/deployment-option/cloud/security/cloud-encryption",
+                    },
+                    {
+                      type: "doc",
+                      label: "Availability",
+                      id: "deploy/deployment-option/cloud/security/cloud-availability",
+                    },
+                    {
+                      type: "doc",
+                      label: "Secrets",
+                      id: "deploy/deployment-option/cloud/security/secrets",
+                    },
+                    {
+                      type: "doc",
+                      label: "Safety and Reliability",
+                      id: "deploy/deployment-option/cloud/security/cloud-safety-reliability",
+                    },
+                    {
+                      type: "doc",
+                      label: "Network Design, Ports, and Flows",
+                      id: "deploy/deployment-option/cloud/security/cloud-security-network",
+                    },
+                  ],
                 },
                 {
                   type: "category",

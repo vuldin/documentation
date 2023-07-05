@@ -10,26 +10,45 @@ pagination_prev: null
     <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/deployment-option/cloud/" />
 </head>
 
-- [Redpanda Cloud Overview](../cloud/dedicated-byoc)
+- [Redpanda Cloud Overview](../cloud/cloud-overview)
 
-    A high-level overview of ways to provision Redpanda clusters in the the cloud: Dedicated Cloud and BYOC.
+   An overview of the Redpanda Cloud, which employs a control plane and data plane
+   architecture to ensure no human has direct access to Redpanda brokers or customer data.
 
-- [Redpanda Cloud Quickstart](../../../get-started/quick-start/?quickstart=cloud#prerequisites)
+- [Redpanda Cloud Quickstart](../../../get-started/quick-start-cloud)
 
-    Spin up a Redpanda cluster, create a basic streaming application, and explore your cluster in Redpanda Console.
+   Learn how to quickly install and run Redpanda Cloud.
 
-- [Redpanda Dedicated Cloud](../cloud/dedicated)
+- [Provision Cloud Clusters](../cloud/cloud-overview#ways-to-provision-clusters)
 
-    Create a Redpanda Dedicated Cloud cluster in AWS and configure a VPC peering connection.
+  - [Create a Dedicated Cloud Cluster on AWS](../cloud/create-dedicated-cloud-cluster-aws)
+  
+    Learn how to create a Dedicated Cloud cluster on AWS.
+  
+  - [VPC Peering](../cloud/vpc-peering)
+   
+    A VPC peering connection allows two VPCs to communicate with each other as if they were within the same network.
 
-- [Redpanda BYOC](../cloud/byoc)
+- [Create a BYOC Cluster on AWS](../cloud/create-byoc-cluster-aws)
 
-    Create a Redpanda BYOC cluster in your own AWS or GCP cloud.
+   Learn how to create a Redpanda cluster in your own AWS cloud.
+
+- [Create a BYOC Cluster on GCP](../cloud/create-byoc-cluster-gcp)
+
+   Learn how to create a Redpanda cluster in your own GCP cloud.
+
+- [Security](../cloud/security)
+
+  Learn about the fundamental building blocks of the Redpanda Cloud security.
+
+- [Networking](../cloud/networking)
+
+  Learn about Redpanda Cloud networking options and fundamentals.
 
 - [Create a Topic](../cloud/create-topic)
 
-    Create a topic for your cluster.
+  Learn how to create a topic for a cluster.
 
-- [Managed Connectors](../cloud/managed-connectors/)
+- [Managed Connectors](../cloud/managed-connectors)
 
-    Create managed connectors to integrate Redpanda data with selected data systems.
+  Create managed connectors to integrate Redpanda data with selected data systems.

@@ -118,7 +118,7 @@
 /docs/cloud/create-byoc-cluster-gcp                                                   /docs/deploy/deployment-option/cloud/create-byoc-cluster-gcp 301!
 /docs/cloud/create-dedicated-cloud-cluster-aws    									  /docs/deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws 301!
 /docs/cloud/create-topic                          									  /docs/deploy/deployment-option/cloud/create-topic 301!
-/docs/cloud/dedicated-byoc                        									  /docs/deploy/deployment-option/cloud/dedicated-byoc 301!
+/docs/cloud/dedicated-byoc                        									  /docs/deploy/deployment-option/cloud/cloud-overview 301!
 /docs/cloud/vpc-peering                           									  /docs/deploy/deployment-option/cloud/vpc-peering 301!
 /docs/cloud/managed-connectors/create-s3-sink-connector   							  /docs/deploy/deployment-option/cloud/managed-connectors/create-s3-sink-connector 301!
 /docs/cloud/managed-connectors/index                      							  /docs/deploy/deployment-option/cloud/managed-connectors/index 301!
@@ -364,7 +364,7 @@
 /docs/home/platform                                                                   /docs/home/index 301!
 /docs/home/cloud/index                                                                /docs/home/index 301!
 /docs/home/cloud                                                                      /docs/home/index 301!
-/docs/cluster-administration/configuration                                            /docs/manage/cluster-maintenance/configuration 301!  
+/docs/cluster-administration/configuration                                            /docs/manage/cluster-maintenance/configuration 301!
 /docs/cluster-administration/cluster-balancing                                        /docs/manage/cluster-maintenance/cluster-balancing 301!
 /docs/introduction/autotune                                                           /docs/reference/rpk/rpk-redpanda/rpk-redpanda-tune/ 301!
 /docs/data-management/rack-awareness/                                                 /docs/manage/rack-awareness/  301!
@@ -514,7 +514,7 @@
 /docs/home/platform                                                                   /docs/home/index 301!
 /docs/home/cloud/index                                                                /docs/home/index 301!
 /docs/home/cloud                                                                      /docs/home/index 301!
-/docs/cluster-administration/configuration                                            /docs/manage/cluster-maintenance/configuration 301!  
+/docs/cluster-administration/configuration                                            /docs/manage/cluster-maintenance/configuration 301!
 /docs/cluster-administration/cluster-balancing                                        /docs/manage/cluster-maintenance/cluster-balancing 301!
 /docs/introduction/autotune                                                           /docs/reference/rpk/rpk-redpanda/rpk-redpanda-tune/ 301!
 /docs/data-management/rack-awareness/                                                 /docs/manage/rack-awareness/  301!
@@ -610,7 +610,7 @@
 
 #Fix for old blog post
 /docs/introduction/consumer-offsets /docs/development/consumer-offsets 301!
- 
+
 
 # From 404 notifier
 /docs/development/guide-nodejs/                                                       /docs/develop/guide-nodejs/ 301!
@@ -623,11 +623,15 @@
 /reference/rpk/rpk-redpanda/rpk-redpanda-config-bootstrap/                            /docs/reference/rpk/rpk-redpanda/rpk-redpanda-config-bootstrap/ 301!
 /docs/reference/reference/rpk/rpk-cluster/                                            /docs/reference/rpk/rpk-cluster/ 301!
 /docs/deployment/performance-storage-tuning/                                          /docs/deploy/deployment-option/self-hosted/manual/ 301!
+
+#New cloud pages
+
+/docs/deploy/deployment-option/cloud/dedicated-byoc                                   /docs/deploy/deployment-option/cloud/cloud-overview 301!
 /docs/beta                                                                            /docs/beta/home 301!
 
 # General version rules
 /docs/23.2/:splat                                                                     /docs/beta/:splat 301!
-/docs/21.1/:splat                                                                     /docs/21.11/:splat 301! 
+/docs/21.1/:splat                                                                     /docs/21.11/:splat 301!
 
 /docs/api                                                                             /docs/reference/api-reference 301!
 

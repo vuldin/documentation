@@ -8,9 +8,81 @@ title: Deploy
     <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/" />
 </head>
 
-Select either a self-hosted deployment or a cloud deployment.
-
   - [Self-Hosted](../deploy/deployment-option/self-hosted)
-    - [Kubernetes](../deploy/deployment-option/self-hosted/kubernetes)
     - [Linux](../deploy/deployment-option/self-hosted/manual)
+    - [Kubernetes](../deploy/deployment-option/self-hosted/kubernetes)
+
+        - [Overview](../deploy/deployment-option/self-hosted/kubernetes/kubernetes-production-deployment)
+
+            Learn about Redpanda in Kubernetes and the tools that are available.
+
+        - [Production Deployment Workflow](../deploy/deployment-option/self-hosted/kubernetes/production-workflow)
+
+            The production deployment tasks involve Kubernetes administrators (admins) as well as Kubernetes users. The admin prepares the cluster with the prerequisites and tunes the worker nodes. The user deploys and configures Redpanda.
+
+        - [Guides](../deploy/deployment-option/self-hosted/kubernetes/get-started-dev)
+
+            Find a guide for setting up a three-broker Redpanda cluster in different Kubernetes platforms.
+
+    - [Manual](../deploy/deployment-option/self-hosted/manual)
+
+      - [Deploy for Production](../deploy/deployment-option/self-hosted/manual/production/production-deployment)
+
+          You can use `rpm` to setup a production cluster of Redpanda using our default deployment or writing a custom deployment script.
+
+      - [Automate Deployment for Production](../deploy/deployment-option/self-hosted/manual/production/production-deployment-automation)
+
+          You can use automation tools in your environment such as Terraform and Ansible to deploy Redpanda for production.
+
+      - [Configure Node Properties](../deploy/deployment-option/self-hosted/manual/node-property-configuration)
+
+          When you install Redpanda, a `redpanda.yaml` file is installed on each node in `/etc/redpanda`. This file contains node configuration properties. A node property is one that can be set differently from node to node, such as `data_directory` or `node_id` (when specified).
+
+      - [High Availability](../deploy/deployment-option/self-hosted/manual/high-availability)
+
+          Redpanda is designed to ensure data integrity and high availability (HA), even at high-throughput levels. This section explains the trade-offs with different configurations.
+
+      - [Sizing Use Cases](../deploy/deployment-option/self-hosted/manual/sizing-use-cases)
+
+          The following scenarios provide estimates and advice for sizing Redpanda clusters for different throughput and retention use cases in your data center and in the cloud.
+
+      - [Sizing Guidelines](../deploy/deployment-option/self-hosted/manual/sizing)
+
+          For best performance, size your Redpanda cluster to handle the volume of data being produced, replicated, and consumed.
+
+
   - [Cloud](../deploy/deployment-option/cloud)
+    - [Redpanda Cloud Overview](../deploy/deployment-option/cloud/cloud-overview)
+
+        A high-level overview about the features that Redpanda Cloud offers.
+
+    - Redpanda Dedicated
+      - [Create Clusters](../deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws)
+
+        To create a Redpanda cluster in the Dedicated cloud, log in to the Redpanda Cloud, add a namespace, then follow the steps for creating a Dedicated cluster.
+
+      - [VPC Peering](../deploy/deployment-option/cloud/vpc-peering)
+
+        A VPC peering connection is a networking connection between two VPCs. This connection allows the VPCs to communicate with each other as if they were within the same network. A route table routes traffic between the two VPCs using private IPv4 addresses.
+
+    - [Create a BYOC Cluster on AWS](../deploy/deployment-option/cloud/create-byoc-cluster-aws)
+
+        To create a Redpanda cluster in your own AWS cloud, log in to the Redpanda Cloud UI and create a namespace, then follow the steps for creating a Bring your own cloud (BYOC) cluster.
+
+    - [Create a BYOC Cluster on GCP](../deploy/deployment-option/cloud/create-byoc-cluster-gcp)
+
+        To create a Redpanda cluster in your own GCP cloud, log in to the Redpanda Cloud UI and create a namespace, then follow the steps for creating a Bring your own cloud (BYOC) cluster.
+
+    - [Create a Topic](../deploy/deployment-option/cloud/create-topic)
+
+        Create a Topic for your cluster.
+
+    - Security
+      - [Redpanda Cloud Security Overview](../deploy/deployment-option/cloud/security)
+
+        Learn about Redpanda Cloud security and the fundamental building blocks of the Redpanda Cloud security architecture.
+
+    - Managed Connectors
+      - [Create a S3 Sink Connector](../deploy/deployment-option/cloud/managed-connectors/create-s3-sink-connector)
+
+        The Amazon S3 Sink connector stores Apache Kafka messages in an AWS S3 bucket.

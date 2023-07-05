@@ -8,7 +8,9 @@ title: Create a BYOC Cluster on AWS
     <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/deployment-option/cloud/create-byoc-cluster-aws/" />
 </head>
 
-To create a Redpanda cluster in your own cloud, log in to the Redpanda Cloud UI and create a namespace, then follow the steps for creating a Bring your own cloud (BYOC) cluster.
+To create a Redpanda cluster in your own cloud, log in to the Redpanda Cloud UI
+and create a namespace, then follow the steps for creating a Bring Your Own Cloud
+(BYOC) cluster.
 
 ## Create a namespace
 
@@ -61,9 +63,12 @@ To deploy the agent, you need to prepare your deployment environment, then copy 
 Before you deploy a BYOC cluster in your VPC, satisfy the following prerequisites:
 * Install the Redpanda CLI (`rpk`) in your deployment environment.
 * Ensure your deployment environment has the necessary AWS environment variables to authenticate to the account you are deploying to. Use either:
-    * `AWS_PROFILE`, or 
+    * `AWS_PROFILE`, or
     * `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
-* Ensure that your role has the necessary permissions to run commands and create clusters.
+* Ensure that your IAM role has the necessary permissions to run commands and create clusters.
+
+As part of agent deployment, Redpanda assigns the permission required to run the
+agent. For details about these permissions, see [AWS IAM Policies](../security/authorization/cloud-iam-policies#aws-iam-policies).
 
 ### Install the BYOC rpk plugin
 

@@ -8,7 +8,9 @@ title: Create a BYOC Cluster on GCP
     <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/deployment-option/cloud/create-byoc-cluster-gcp/" />
 </head>
 
-To create a Redpanda cluster in your own cloud, log in to the Redpanda Cloud UI and create a namespace, then follow the steps for creating a Bring your own cloud (BYOC) cluster.
+To create a Redpanda cluster in your own cloud, log in to the Redpanda Cloud UI
+and create a namespace, then follow the steps for creating a Bring Your Own Cloud
+(BYOC) cluster.
 
 ## Create a namespace
 
@@ -77,19 +79,23 @@ After the network is created, you can deploy the agent.
     Paste the **Client ID** and **Client Secret** in the client credentials boxes.
 * Run the `rpk cloud login` command in your deployment environment:
 
-```shell
-rpk cloud login --save 
-  --client-id='...'
-  --client-secret='...'
-```
+  ```shell
+  rpk cloud login --save
+    --client-id='...'
+    --client-secret='...'
+  ```
 
 ### Deploy agent
 
 * Enter your GCP Project ID.
 * Run the `rpk cloud byoc gcp apply` command in your deployment environment:
 
-```shell
-rpk cloud byoc gcp apply 
-  --redpanda-id='...' 
-  --project-id='...'
-```
+  ```shell
+  rpk cloud byoc gcp apply
+    --redpanda-id='...'
+    --project-id='...'
+  ```
+
+Note that `rpk` configures the permissions required by the agent to provision and
+actively maintain the cluster. For details about these permissions, see
+[GCP IAM Permissions](../security/authorization/cloud-iam-policies#gcp-iam-permissions).
