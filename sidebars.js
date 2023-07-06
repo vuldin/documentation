@@ -1296,13 +1296,5 @@
         },
       ],
     },
-    {
-      type: "category",
-      label: "Labs",
-      link: { type: "doc", id: "labs/index" },
-
-
-      items: ["labs/install-preview", "labs/data-transform"],
-    },
   ],
 };
