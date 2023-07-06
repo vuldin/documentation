@@ -332,7 +332,7 @@
                       type: "doc",
                       label: "Create a BYOC Cluster on GCP",
                       id: "deploy/deployment-option/cloud/create-byoc-cluster-gcp",
-                    },
+                    }
                   ],
                 },
                 {
@@ -403,6 +403,16 @@
                       type: "doc",
                       label: "Add a VPC Peering Connection",
                       id: "deploy/deployment-option/cloud/vpc-peering",
+                    },
+                    {
+                      type: "doc",
+                      label: "VPC peering a GCP BYOC cluster",
+                      id: "deploy/deployment-option/cloud/vpc-peering-gcp",
+                    },
+                    {
+                      type: "doc",
+                      label: "VPC peering an AWS BYOC cluster",
+                      id: "deploy/deployment-option/cloud/vpc-peering-aws",
                     }
                   ],
                 },

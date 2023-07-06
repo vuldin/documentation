@@ -31,7 +31,7 @@ To prepare to deploy a Redpanda cluster in your own cloud, log in to the Redpand
 
 After you create a namespace, create a BYOC cluster in your Virtual Private Cloud (VPC):
 
-1. Scroll to your namespace (namespaces are listed in alphabetical order) and click **+ Add Cluster**.
+1. Scroll to your namespace (namespaces are listed in alphabetical order) and click **Create cluster**.
 2. Click **Create BYOC cluster**.
 3. (Optional) In **Cluster name**, type a name to replace the default name.
 4. Select throughput.
@@ -50,8 +50,8 @@ After you create a namespace, create a BYOC cluster in your Virtual Private Clou
 11. Click **Next**.
 
     The **Networking** page opens.
-12. Under **Choose Connection Type**, select either **Public** or **Private**.
-13. Click **Next**.
+12. Under **Choose Connection Type**, select either **Public** or **Private**. For BYOC clusters, **Private** is best-practice.
+Your network name is used in the Redpanda UI to identify this network. Choose a CIDR range that does not overlap with your existing GCP VPCs or your Redpanda network. 
 
 After the network is created, you can deploy the agent.
 
@@ -90,6 +90,16 @@ After the network is created, you can deploy the agent.
 * Enter your GCP Project ID.
 * Run the `rpk cloud byoc gcp apply` command in your deployment environment:
 
+```shell
+rpk cloud byoc gcp apply 
+  --redpanda-id='...' 
+  --project-id='...'
+```
+
+## Next steps
+
+[Create a VPC Peering Connection to a GCP BYOC Cluster](vpc-peering-gcp.mdx)
+=======
   ```shell
   rpk cloud byoc gcp apply
     --redpanda-id='...'

@@ -31,7 +31,7 @@ To prepare to deploy a Redpanda cluster in your own cloud, log in to the Redpand
 
 After you create a namespace, create a BYOC cluster in your Virtual Private Cloud (VPC):
 
-1. Scroll to your namespace (namespaces are listed in alphabetical order) and click **+ Add Cluster**.
+1. Scroll to your namespace (namespaces are listed in alphabetical order) and click **Create cluster**.
 2. Click **Create BYOC cluster**.
 3. (Optional) In **Cluster name**, type a name to replace the default name.
 4. Select throughput.
@@ -49,8 +49,8 @@ After you create a namespace, create a BYOC cluster in your Virtual Private Clou
 8. Click **Next**.
 
     The **Networking** page opens.
-9. Under **Choose Connection Type**, select either **Public** or **Private**.
-10. Click **Next**.
+9. Under **Choose Connection Type**, select either **Public** or **Private**. For BYOC clusters, **Private** is best-practice. Your network name will be used in the Redpanda UI to identify this network. For a CIDR range, choose one that does not overlap with your existing AWS VPCs or your Redpanda network.
+12. Click **Next**.
 
 After the network is created, you can deploy the agent.
 
@@ -70,6 +70,6 @@ Before you deploy a BYOC cluster in your VPC, satisfy the following prerequisite
 As part of agent deployment, Redpanda assigns the permission required to run the
 agent. For details about these permissions, see [AWS IAM Policies](../security/authorization/cloud-iam-policies#aws-iam-policies).
 
-### Install the BYOC rpk plugin
+## Next steps
 
-To install the BYOC `rpk` plugin in your cloud, copy the command in the text box and paste it into your development environment. This command contains the values you supplied in the settings pages, along with information provided by the system, such as `organization_id` and `redpanda_id`.
+[Create a VPC Peering Connection to an AWS BYOC Cluster](vpc-peering-aws.mdx)
