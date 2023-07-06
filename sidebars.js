@@ -300,28 +300,12 @@
                 },
                 {
                   type: "doc",
-                  label: "Quickstart",
                   id: "get-started/quick-start-cloud",
                 },
                 {
                   type: "category",
-                  label: "Provision a Dedicated Cluster",
-                  items: [
-                    {
-                      type: "doc",
-                      label: "Create a Dedicated Cloud Cluster on AWS",
-                      id: "deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws",
-                    },
-                    {
-                      type: "doc",
-                      label: "Add a VPC Peering Connection",
-                      id: "deploy/deployment-option/cloud/vpc-peering",
-                    },
-                  ],
-                },
-                {
-                  type: "category",
                   label: "Provision a BYOC Cluster",
+                  link: { type: "doc", id: "deploy/deployment-option/cloud/provision-a-byoc-cluster/index" },
                   items: [
                     {
                       type: "doc",
@@ -333,6 +317,18 @@
                       label: "Create a BYOC Cluster on GCP",
                       id: "deploy/deployment-option/cloud/create-byoc-cluster-gcp",
                     }
+                  ],
+                },
+                {
+                  type: "category",
+                  label: "Provision a Dedicated Cloud Cluster",
+                  link: { type: "doc", id: "deploy/deployment-option/cloud/provision-a-dedicated-cluster/index" },
+                  items: [
+                    {
+                      type: "doc",
+                      label: "Create a Dedicated Cloud Cluster on AWS",
+                      id: "deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws",
+                    },
                   ],
                 },
                 {
@@ -396,23 +392,19 @@
                   items: [
                     {
                       type: "doc",
-                      label: "Choosing CIDR ranges",
                       id: "deploy/deployment-option/cloud/cidr-ranges"
                     },
                     {
                       type: "doc",
-                      label: "Add a VPC Peering Connection",
-                      id: "deploy/deployment-option/cloud/vpc-peering",
+                      id: "deploy/deployment-option/cloud/vpc-peering-aws",
                     },
                     {
                       type: "doc",
-                      label: "VPC peering a GCP BYOC cluster",
                       id: "deploy/deployment-option/cloud/vpc-peering-gcp",
                     },
                     {
                       type: "doc",
-                      label: "VPC peering an AWS BYOC cluster",
-                      id: "deploy/deployment-option/cloud/vpc-peering-aws",
+                      id: "deploy/deployment-option/cloud/vpc-peering",
                     }
                   ],
                 },
