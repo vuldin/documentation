@@ -96,7 +96,7 @@ a:hover{
 .versionNumber{
   font-family: Calibre Regular,Inter,sans-serif !important;
   color:black;
-  font-size: 14px;
+  font-size: 14px!important;
 }
 
 [data-theme='dark'] .versionNumber {
@@ -105,4 +105,8 @@ a:hover{
 
 [data-theme='light'] .versionNumber {
   color: black;
+}
+
+.topPanelVersionContainer a{
+  font-size: 14px!important;
 }

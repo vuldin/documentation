@@ -578,7 +578,11 @@ a:active { text-decoration: none !important;  }
 }
 
 .dropdown__link{
-  font-size: 15px;
+  font-size: 16px;
+  text-transform: none;
+  font-family: Calibre;
+  letter-spacing: normal;
+  
 }
 
 .navbar__link{
