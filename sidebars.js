@@ -326,7 +326,6 @@
                   items: [
                     {
                       type: "doc",
-                      label: "Create a Dedicated Cloud Cluster on AWS",
                       id: "deploy/deployment-option/cloud/create-dedicated-cloud-cluster-aws",
                     },
                   ],

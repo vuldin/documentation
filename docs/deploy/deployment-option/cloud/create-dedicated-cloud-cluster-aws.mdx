@@ -1,5 +1,5 @@
 ---
-title: Create a Dedicated Cloud Cluster on AWS
+title: Create a Dedicated Cloud Cluster
 ---
 
 <head>
@@ -10,41 +10,30 @@ title: Create a Dedicated Cloud Cluster on AWS
 
 import CreateNamespace from './shared/dedicated/_create-namespace.mdx'
 
-To create a Redpanda cluster in the Dedicated cloud, log in to the Redpanda Cloud, add a namespace, then follow the steps for creating a Dedicated cluster.
+To create a Dedicated Cloud cluster, log in to Redpanda Cloud, add a namespace, then follow the steps for creating a Dedicated cluster.
 
 ## Create a namespace
-
-To prepare to deploy a Dedicated cluster, log in to the Redpanda Cloud UI and add a namespace:
 
 <CreateNamespace/>
 
 ## Create a Dedicated cluster
 
-Create a dedicated cluster in your namespace by selecting cluster settings, cloud provider settings, and the network connection type:
-
-1. Scroll to your namespace (namespaces are listed in alphabetical order) and click **+ Add Cluster**.
+1. On the Home page, select your namespace (namespaces are listed in alphabetical order), and click **Create cluster**.
 2. Click **Create Dedicated cluster**.
 
-    The **Create dedicated cluster** page opens at the **Cluster settings** step.
-3. (Optional) In **Cluster name**, type a name to replace the default name.
-4. Select throughput.
+   Enter a cluster name, and select the provider (AWS or GCP), region, availability zone type (single AZ or multi AZ) and zones, throughput tier, and Redpanda version. 
+   
+   :::note notes
+   - If you plan to create a private network in your own VPC, select the region where your VPC is located.
+   - Three availability zones provide two backups in case one availability zone goes down.
+   :::
 
-    The choices are 1 MBps, 5 MBps, 10 MBps, and 20 MBps.
-5. Open the **Redpanda version** menu and select a version.
-6. Click **Next**.
+3. Click **Next**.
+   
+4. On the Network page, enter the connection type: **Public** or **Private**. 
+   
+   Private networks require a VPC peering connetion. See [Add a Dedicated VPC Peering Connection](../vpc-peering) to connect your VPC to the Redpanda Cloud VPC.
+    
+5.  Click **Create**.
 
-    The **Cloud settings** page opens.
-7. For **Provider**, select AWS.
-8. Open the **Region** menu and select a region.
-
-    If you plan to create a private network in your own VPC, select the region where your VPC is located.
-9. Open the **Zones** menu and select three availability zones for your region.
-10. Click **Next**.
-
-    The **Networking** page opens.
-11. Under **Connection Type**, select either **Public Network** or **Private - VPC Peering**.
-12. Click **Create**.
-
-After the cluster is created, you can click on the cluster name on the **Home** page to see the **Overview** page for that cluster.
-
-If you chose **Private - VPC Peering** for your connection type, see [Adding a VPC Peering Connection](../vpc-peering) to connect your VPC to the Redpanda Cloud VPC.
+    After the cluster is created, you can click the cluster name on the **Home** page to see the overview for it.
