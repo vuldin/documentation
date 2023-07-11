@@ -1,5 +1,6 @@
 ---
 title: Install Redpanda for Kubernetes on Cloud
+linkRoot: ../../../
 ---
 
 <head>
@@ -11,13 +12,17 @@ title: Install Redpanda for Kubernetes on Cloud
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-:::danger
-This guide uses the Redpanda Operator for installation. To use the latest recommended Redpanda Helm chart, see the [Install Redpanda Guide for Kubernetes](../../../deploy/deployment-option/self-hosted/kubernetes/get-started-dev).
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 This guide helps you set up Redpanda for development and testing purposes on any operating system. Start here to set up Redpanda quickly to try it out or for CI/CD purposes. 
 
-These steps install Redpanda on Amazon EKS, GKE, or DigitalOcean. To run Redpanda with local access, see [Install Redpanda Guide for Kubernetes with kind](../kubernetes-qs-local-access) or [Install Redpanda Guide for Kubernetes with minikube](../kubernetes-qs-minikube). 
+These steps install Redpanda on Amazon EKS, GKE, or DigitalOcean. To run Redpanda with local access, see [Install Redpanda Guide for Kubernetes with kind](../kubernetes-qs-local-access) or [Install Redpanda Guide for Kubernetes with minikube](../kubernetes-qs-minikube).
+
+:::caution
+Do not use DigitalOcean for production workloads.
+:::
 
 To get up and running, you create a cluster, deploy the Redpanda operator on the cluster, and run the client in the same cluster. Because the client is running in the same cluster where you run Redpanda, this simplifies network connectivity. For details on how to access Redpanda outside the Kubernetes network, see [Connecting Remotely to Kubernetes](../kubernetes-external-connect). 
 

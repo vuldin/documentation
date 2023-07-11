@@ -34,6 +34,27 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
 
 1. Update the number of replicas in the Helm chart:
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      statefulset:
+        replicas: <number-of-replicas>
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config" queryString>
   <TabItem value="values" label="--values">
 
@@ -55,6 +76,8 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
     --set statefulset.replicas=<number-of-replicas>
   ```
 
+  </TabItem>
+  </Tabs>
   </TabItem>
   </Tabs>
 

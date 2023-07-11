@@ -72,6 +72,29 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
 
   Replace `<custom-domain>` with your domain.
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      external:
+        enabled: true
+        domain: <custom-domain>
+        type: NodePort
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values" default>
 
@@ -100,10 +123,8 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   ```
   </TabItem>
   </Tabs>
-
-  :::note
-  <ValuesYaml path="external"/>
-  :::
+  </TabItem>
+  </Tabs>
 
 1. [Create a DNS record](#create-dns-records) for each of your broker's FQDNs, relative to the zone.
 
@@ -117,6 +138,30 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
 
   Replace `<custom-domain>` with your domain, and replace `<custom-hostname>` with your hostname.
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      fullnameOverride: <custom-hostname>
+      external:
+        enabled: true
+        type: NodePort
+        domain: <custom-domain>
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values">
 
@@ -147,6 +192,8 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
 
   </TabItem>
   </Tabs>
+  </TabItem>
+  </Tabs>
 
   This configuration renames your Pods to `<hostname>-<pod-ordinal>`. Your Redpanda brokers will advertise the `<hostname>-<pod-ordinal>.<custom-domain>` address.
 
@@ -158,6 +205,33 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
 
   Replace `<custom-domain>` with your domain, and replace the placeholders in the `external.addresses` setting with your own hostname in the order that you want them to be applied to the Redpanda brokers. The hostnames must be given to each Redpanda broker in order of the StatefulSet replicas. For example, the Redpanda broker running inside the `redpanda-0` Pod advertises `<hostname-for-broker-0>.<custom-domain>`.
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      external:
+        enabled: true
+        type: NodePort
+        domain: <custom-domain>
+        addresses:
+        - <hostname-for-broker-0>
+        - <hostname-for-broker-1>
+        - <hostname-for-broker-2>
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values">
 
@@ -189,6 +263,8 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
     --wait
   ```
 
+  </TabItem>
+  </Tabs>
   </TabItem>
   </Tabs>
 
@@ -285,6 +361,30 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
 
 1. Deploy Redpanda with TLS disabled and enable the NodePort Service type:
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      external:
+        enabled: true
+        type: NodePort
+      tls:
+        enabled: false
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values">
 
@@ -314,10 +414,8 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
 
   </TabItem>
   </Tabs>
-
-  :::note
-  <ValuesYaml path="external"/>
-  :::
+  </TabItem>
+  </Tabs>
 
 1. Find out on which worker nodes your Redpanda brokers are running.
 
@@ -335,6 +433,30 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
 
 1. Add the IP addresses of each worker node to the `external.addresses` field in order. For example, the first IP address in the list is assigned to `redpanda-0`, the second is assigned to `redpanda-1`, and so on.
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      external:
+        addresses:
+        - <worker-node-ip-1>
+        - <worker-node-ip-2>
+        - <worker-node-ip-3>
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values">
 
@@ -366,10 +488,8 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
 
   </TabItem>
   </Tabs>
-
-  :::note
-  <ValuesYaml path="external"/>
-  :::
+  </TabItem>
+  </Tabs>
 
   :::warning
   IP addresses can change. If the IP addresses of your worker nodes change, you must reconfigure the Redpanda brokers and all your external clients with the new IP addresses.
@@ -386,4 +506,9 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
 - [Configure security](../../security) for your listeners.
 
 - [Configure listeners](../configure-listeners).
+
+## Suggested reading
+
+- [Redpanda Helm Specification](../../../../reference/redpanda-helm-spec#external)
+- [Redpanda CRD Reference](../../../../reference/crd)
 

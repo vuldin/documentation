@@ -49,7 +49,7 @@ sudo apt install redpanda -y
 </TabItem>
 </Tabs>
 
-## Run the autotuner 
+## Run the autotuner
 
 Run the autotuner on each worker node that runs a Redpanda broker.
 
@@ -71,21 +71,21 @@ Run the autotuner on each worker node that runs a Redpanda broker.
   </summary>
 
   ```
-  TUNER                  APPLIED  ENABLED  SUPPORTED  ERROR                           
-  aio_events             true     true     true                                       
-  ballast_file           true     true     true                                       
-  clocksource            true     true     true                                       
-  coredump               false    false    true                                       
-  cpu                    true     true     true                                       
-  disk_irq               true     true     true                                       
-  disk_nomerges          true     true     true                                       
-  disk_scheduler         true     true     true                                       
-  disk_write_cache       false    true     false      Disk write cache tuner is       
-                                                      only supported in GCP           
-  fstrim                 false    false    true                                       
-  net                    true     true     true                                       
-  swappiness             true     true     true                                       
-  transparent_hugepages  false    false    true                                       
+  TUNER                  APPLIED  ENABLED  SUPPORTED  ERROR
+  aio_events             true     true     true
+  ballast_file           true     true     true
+  clocksource            true     true     true
+  coredump               false    false    true
+  cpu                    true     true     true
+  disk_irq               true     true     true
+  disk_nomerges          true     true     true
+  disk_scheduler         true     true     true
+  disk_write_cache       false    true     false      Disk write cache tuner is
+                                                      only supported in GCP
+  fstrim                 false    false    true
+  net                    true     true     true
+  swappiness             true     true     true
+  transparent_hugepages  false    false    true
   ```
 
   </details>

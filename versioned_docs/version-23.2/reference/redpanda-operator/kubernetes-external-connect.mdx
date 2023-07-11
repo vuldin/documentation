@@ -1,5 +1,6 @@
 ---
 title: Connecting Remotely to Kubernetes
+linkRoot: ../../../
 ---
 
 <head>
@@ -10,10 +11,13 @@ title: Connecting Remotely to Kubernetes
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 This section shows how to set up Kubernetes with the Redpanda operator in
 [Google GKE](https://cloud.google.com/kubernetes-engine), [Amazon EKS](https://aws.amazon.com/eks), or [Digital Ocean](https://cloud.digitalocean.com/),
-so you can work with Redpanda from outside of the Kubernetes network.  
+so you can work with Redpanda from outside of the Kubernetes network.
 
 ## Create a Kubernetes cluster
 

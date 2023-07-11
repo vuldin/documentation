@@ -1,5 +1,6 @@
 ---
 title: "Configuring Redpanda TLS on Kubernetes"
+linkRoot: ../../../
 ---
 
 <head>
@@ -8,9 +9,9 @@ title: "Configuring Redpanda TLS on Kubernetes"
     <link rel="canonical" href="https://docs.redpanda.com/docs/reference/redpanda-operator/tls-kubernetes/" />
 </head>
 
-:::danger
-See [Configuring Redpanda TLS on Kubernetes](../../../manage/kubernetes/security/kubernetes-tls) for the most up-to-date instructions using the Redpanda Helm chart. This page is based on the `redpanda-operator` Helm chart and is preserved only for backward compatibility.
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 This section explains how to enable Transport Layer Security (TLS) on Kubernetes using the Redpanda Operator. Alone, TLS authenticates the server and encrypts communication between the client and the server. To add client authentication, you can combine TLS encryption with SASL authentication, or you can configure mTLS authentication.
 

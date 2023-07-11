@@ -8,9 +8,9 @@ description: A diagnostics bundle is a ZIP file with data that can help debug an
 <head>
     <meta name="title" content="Diagnostics Bundles in Kubernetes | Redpanda Docs"/>
     <meta name="description" content="
-    A diagnostics bundle is a ZIP file with data that can help debug and diagnose issues with a Redpanda cluster, 
+    A diagnostics bundle is a ZIP file with data that can help debug and diagnose issues with a Redpanda cluster,
     a broker, or the machines on which the brokers are running.
-    You can use this file to debug issues yourself, 
+    You can use this file to debug issues yourself,
     or you can send it to the Redpanda support team to help resolve your issue."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/manage/kubernetes/troubleshooting/diagnostics-bundle/" />
 </head>
@@ -33,6 +33,29 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
 
 1. Create a ClusterRole to allow Redpanda to collect information from the Kubernetes API:
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      serviceAccount:
+        create: true
+      rbac:
+        enabled: true
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values">
 
@@ -59,7 +82,9 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
 
   </TabItem>
   </Tabs>
-  
+  </TabItem>
+  </Tabs>
+
   :::tip
 
   If you aren't using the Helm chart, you can create the ClusterRole manually:

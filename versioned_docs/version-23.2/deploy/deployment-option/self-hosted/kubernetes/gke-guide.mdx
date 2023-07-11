@@ -4,12 +4,11 @@ title: Deploy a Redpanda Cluster in Google Kubernetes Engine
 
 <head>
     <meta name="title" content="Deploy a Redpanda Cluster in Google Kubernetes Engine | Redpanda Docs"/>
-    <meta name="description" content="Deploy a secure Redpanda cluster and Redpanda Console in Google Kubernetes Engine (GKE) using the Helm chart."/>
+    <meta name="description" content="Deploy a secure Redpanda cluster and Redpanda Console in Google Kubernetes Engine (GKE)."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/kubernetes/gke-guide/" />
 </head>
 
 import Versions from '../../../../shared/_versions.mdx'
-import OperatorNote from "./shared/guides/_operator-note.mdx"
 import DeployRedpanda from "./shared/guides/_deploy-redpanda.mdx"
 import CreateUser from "./shared/guides/_create-user.mdx"
 import StartStreaming from "./shared/guides/_start-streaming.mdx"
@@ -20,14 +19,12 @@ import DefaultComponents from "./shared/_default-components.mdx"
 import NextSteps from "./shared/guides/_next-steps.mdx"
 import SuggestedReading from "./shared/guides/_suggested-reading.mdx"
 
-Deploy a secure Redpanda cluster and Redpanda Console in Google Kubernetes Engine (GKE) using the Helm chart. Then, use rpk both as an internal client and an external client to interact with your Redpanda cluster from the command line.
+Deploy a secure Redpanda cluster and Redpanda Console in Google Kubernetes Engine (GKE). Then, use rpk both as an internal client and an external client to interact with your Redpanda cluster from the command line.
 
 The Redpanda cluster has the following security features:
 
 - SASL for authenticating users' connections.
 - TLS with self-signed certificates for secure communication between the cluster and clients.
-
-<OperatorNote/>
 
 ## Prerequisites
 

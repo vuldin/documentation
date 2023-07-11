@@ -7,7 +7,7 @@
 {{ if $type.IsAlias -}}_Underlying type:_ `{{ markdownRenderTypeLink $type.UnderlyingType  }}`{{- end }}
 {{ $type.Doc -}}
 {{ if eq $type.Name "RedpandaClusterSpec" -}}These fields are used to configure the Redpanda Helm chart. For descriptions and default values, see [Redpanda Helm Chart Specification
-](../../redpanda-helm-spec).{{- end }}
+](../redpanda-helm-spec).{{- end }}
 
 {{ if $type.GVK -}}
 ```yaml

@@ -1,14 +1,120 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 In this step, you deploy Redpanda with SASL authentication and self-signed TLS certificates. Redpanda Console is included as a subchart in the Redpanda Helm chart.
 
-1. Add the Redpanda Helm chart repository and install cert-manager using Helm:
+<Tabs groupId="kubernetes-tool">
+<TabItem value="operator" label="Helm + Operator">
+
+:::caution Beta restriction
+The Redpanda Operator is currently in beta. As a result, it should be deployed only for managing new Redpanda cluster installations. Do not deploy Redpanda Operator to manage an existing Redpanda cluster.
+:::
+
+1. Install cert-manager using Helm:
+
+  ```bash
+  helm repo add jetstack https://charts.jetstack.io
+  helm repo update
+  helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namespace cert-manager  --create-namespace
+  ```
+
+  TLS is enabled by default. The Redpanda Helm chart uses cert-manager to manage TLS certificates by default.
+
+1. Clone the `redpanda` GitHub repository:
+
+  ```bash
+  git clone https://github.com/redpanda-data/redpanda.git
+  ```
+
+  The Redpanda Operator Helm chart is only available in this repository during the beta period.
+
+1. Build the Helm dependencies:
+
+  ```bash
+  cd redpanda/src/go/k8s/helm-chart/charts
+  (cd redpanda-operator && helm dependency build)
+  ```
+
+1. Deploy the Redpanda Operator:
+
+  ```bash
+  helm upgrade --install  redpanda-controller redpanda-operator -n redpanda --set installCRDs=true --set scope=Namespace --set image.repository=redpandadata/redpanda-operator,image.tag=v23.2.1-rc5 --create-namespace
+  ```
+
+1. Ensure that the Deployment is successfully rolled out:
+
+  ```bash
+  kubectl -n redpanda rollout status -w deployment/redpanda-controller-redpanda-operator
+  ```
+
+  ```text-no-copy
+  deployment "redpanda-controller-redpanda-operator" successfully rolled out
+  ```
+
+1. Install a Redpanda custom resource with SASL enabled:
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      external:
+        domain: customredpandadomain.local
+      auth:
+        sasl:
+          enabled: true
+          users:
+            - name: superuser
+              password: secretpassword
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  Here, you create a superuser called `superuser` that can grant permissions to new users in your cluster using access control lists (ACLs). You also define a custom domain that each broker will advertise externally.
+
+1. Wait for the Redpanda Operator to deploy Redpanda using the Helm chart:
+
+  ```bash
+  kubectl get redpanda -n redpanda -w
+  ```
+
+  ```text-no-copy
+  NAME       READY   STATUS
+  redpanda   True    Redpanda reconciliation succeeded
+  ```
+
+1. Verify that each Redpanda broker is scheduled on only one Kubernetes node:
+
+  ```bash
+  kubectl get pod -n redpanda  \
+  -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
+  app.kubernetes.io/component=redpanda-statefulset
+  ```
+
+  Example output:
+
+  ```text-no-copy
+  example-worker3   redpanda-0
+  example-worker2   redpanda-1
+  example-worker    redpanda-2
+  ```
+
+</TabItem>
+<TabItem value="helm" label="Helm">
+
+1. Add the Redpanda Helm chart repository to your local Helm client and install cert-manager using Helm:
 
   ```bash
   helm repo add redpanda https://charts.redpanda.com && helm repo add jetstack https://charts.jetstack.io && helm repo update && helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namespace cert-manager  --create-namespace
   ```
 
-  The Redpanda Helm chart uses cert-manager to manage TLS certificates.
+  TLS is enabled by default. The Redpanda Helm chart uses cert-manager to manage TLS certificates by default.
 
-1. Install Redpanda with SASL and TLS enabled:
+1. Install Redpanda with SASL enabled:
 
   ```bash
   export DOMAIN=customredpandadomain.local && \
@@ -19,7 +125,7 @@ In this step, you deploy Redpanda with SASL authentication and self-signed TLS c
     --set external.domain=${DOMAIN} --wait
   ```
 
-  Here, you create a superuser called `superuser` that can grant permissions to new users in your cluster using access control lists (ACLs).
+  Here, you create a superuser called `superuser` that can grant permissions to new users in your cluster using access control lists (ACLs). You also define a custom domain that each broker will advertise externally.
 
   The installation displays some tips for getting started.
 
@@ -33,15 +139,13 @@ In this step, you deploy Redpanda with SASL authentication and self-signed TLS c
   app.kubernetes.io/component=redpanda-statefulset
   ```
 
-  <details>
-  <summary>
-  Example output
-  </summary>
-  
-  ```
+  Example output:
+
+  ```text-no-copy
   example-worker3   redpanda-0
   example-worker2   redpanda-1
   example-worker    redpanda-2
   ```
 
-  </details>
+</TabItem>
+</Tabs>

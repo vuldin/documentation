@@ -1,5 +1,6 @@
 ---
 title: Install Redpanda for Kubernetes with minikube
+linkRoot: ../../../
 ---
 
 <head>
@@ -11,13 +12,17 @@ title: Install Redpanda for Kubernetes with minikube
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-:::danger
-This guide uses the Redpanda Operator for installation. To use the latest recommended Redpanda Helm chart, see the [Install Redpanda Guide for Kubernetes](../../../deploy/deployment-option/self-hosted/kubernetes/get-started-dev).
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 This guide helps you set up Redpanda locally for development and testing purposes on macOS, Windows, or Linux. Start here to set up Redpanda quickly to try it out or for CI/CD purposes. 
 
 This guide uses minikube to create a local Kubernetes cluster in which Redpanda is deployed. It also verifies that the Kafka API port is exposed to your local network, so that you can interact with Redpanda from your local machine and not just from inside the Kubernetes cluster.
+
+:::caution Only for development and testing
+Do not use mnikube for production workloads. Instead, [Install Redpanda for Kubernetes on Cloud](../kubernetes-qs-cloud).
+:::
 
 To get up and running, you create a cluster and deploy the Redpanda operator on the cluster. The steps limit the number of nodes to one, because multi-node local clusters are not currently supported. For details on how to access Redpanda outside the Kubernetes network, see [Connecting Remotely to Kubernetes](../kubernetes-external-connect). 
 

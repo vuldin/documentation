@@ -33,6 +33,8 @@ import PartitionHealth from '../../manage/shared/monitoring/_partition-health.md
 import Consumers from '../../manage/shared/monitoring/_consumers.mdx'
 import Services from '../../manage/shared/monitoring/_services.mdx'
 import References from '../../manage/shared/monitoring/_references.mdx'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 <ContextLink frontmatter={frontMatter}
 />
@@ -47,9 +49,51 @@ import References from '../../manage/shared/monitoring/_references.mdx'
 Redpanda recommends creating monitoring dashboards with `/public_metrics`.
 :::
 
-To configure and use Prometheus to monitor Redpanda metrics, you can use the [Prometheus Helm chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus):
+To configure Prometheus to monitor Redpanda metrics, you can use the [Prometheus Helm chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus):
 
 1. Add annotations to your Pods to allow the Prometheus Helm chart to find and scrape the `/public_metrics` endpoint:
+
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      statefulset:
+        annotations:
+          "prometheus.io/scrape": "true"
+          "prometheus.io/path": "public_metrics"
+          "prometheus.io/port": "<admin-api-port>"
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  </TabItem>
+  <TabItem value="helm" label="Helm">
+  <Tabs groupId="helm-config" queryString>
+  <TabItem value="values" label="--values">
+
+  ```yaml title="prometheus-monitoring.yaml"
+  statefulset:
+    annotations:
+      "prometheus.io/scrape": "true"
+      "prometheus.io/path": "public_metrics"
+      "prometheus.io/port": "<admin-api-port>"
+  ```
+
+  ```bash
+  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  --values prometheus-monitoring.yaml --reuse-values
+  ```
+
+  </TabItem>
+  <TabItem value="flags" label="--set">
 
   ```bash
   helm upgrade --install redpanda redpanda/redpanda \
@@ -57,6 +101,11 @@ To configure and use Prometheus to monitor Redpanda metrics, you can use the [Pr
     --create-namespace \
     --set-string statefulset.annotations."prometheus\.io/scrape"="true",statefulset.annotations."prometheus\.io/path"=public_metrics,statefulset.annotations."prometheus\.io/port"="<admin-api-port>"
   ```
+
+  </TabItem>
+  </Tabs>
+  </TabItem>
+  </Tabs>
 
 1. Wait until all Pods are running:
 
@@ -67,7 +116,7 @@ To configure and use Prometheus to monitor Redpanda metrics, you can use the [Pr
 1. Install Prometheus:
 
   ```yaml
-  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts  
+  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
   helm repo update
   helm install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace
   ```
@@ -85,7 +134,7 @@ To configure and use Prometheus to monitor Redpanda metrics, you can use the [Pr
 
 <GenerateGrafanaDashboard frontmatter={frontMatter}/>
 
-## Use Redpanda monitoring examples 
+## Use Redpanda monitoring examples
 
 <MonitoringExamples/>
 

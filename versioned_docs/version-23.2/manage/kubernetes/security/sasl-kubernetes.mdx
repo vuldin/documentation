@@ -54,10 +54,6 @@ You can also set the authentication mechanism for each superuser. Or, you can se
 
 You can define these credentials in [Secrets](#use-secrets) or in [YAML list items](#use-a-yaml-list).
 
-:::note
-<ValuesYaml path="auth.sasl"/>
-:::
-
 ### Use Secrets
 
 To use a Secret to store superuser credentials, do the following:
@@ -82,6 +78,30 @@ To use a Secret to store superuser credentials, do the following:
 
 1. Enable SASL and create the superuser using your Secret:
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    clusterSpec:
+      auth:
+        sasl:
+          enabled: true
+          secretRef: "redpanda-superusers"
+          users: null
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values">
 
@@ -110,6 +130,8 @@ To use a Secret to store superuser credentials, do the following:
 
   </TabItem>
   </Tabs>
+  </TabItem>
+  </Tabs>
 
   :::note
   <ValuesYaml path="auth.sasl"/>
@@ -133,6 +155,33 @@ When you use a YAML list to specify superusers, the Helm chart creates a Secret 
 `Error: UPGRADE FAILED: rendered manifests contain a resource that already exists. Unable to continue with update: Secret`
 :::
 
+<Tabs groupId="kubernetes-tool">
+<TabItem value="operator" label="Helm + Operator">
+
+```yaml title="redpanda-cluster.yaml"
+apiVersion: cluster.redpanda.com/v1alpha1
+kind: Redpanda
+metadata:
+  name: redpanda
+spec:
+  clusterSpec:
+    auth:
+      sasl:
+        enabled: true
+        secretRef: redpanda-superusers
+        users:
+          - name: <superuser-name>
+            password: <superuser-password>
+            mechanism: <superuser-authentication-mechanism>
+```
+
+```bash
+kubectl apply -f redpanda-cluster.yaml -n redpanda
+```
+
+
+</TabItem>
+<TabItem value="helm" label="Helm">
 <Tabs groupId="helm-config">
 <TabItem value="values" label="--values">
 
@@ -166,10 +215,8 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 
 </TabItem>
 </Tabs>
-
-:::note
-<ValuesYaml path="auth.sasl"/>
-:::
+</TabItem>
+</Tabs>
 
 ## Create users
 
@@ -248,7 +295,7 @@ By default, new users don't have any permissions in the cluster. The superuser c
   </Tabs>
 
   :::note
-  A user must be explicitly granted `describe` privileges for topics. Even if a user has `describe` privileges for a cluster, it does not mean that the user is automatically granted `describe` privileges for a specific topic. 
+  A user must be explicitly granted `describe` privileges for topics. Even if a user has `describe` privileges for a cluster, it does not mean that the user is automatically granted `describe` privileges for a specific topic.
   :::
 
 1. Grant the new user permissions for a specific topic. The following command grants `describe` privileges to a topic called `myfirsttopic`:
@@ -359,4 +406,6 @@ kubectl exec -n redpanda -c redpanda redpanda-0 -- \
 ## Suggested reading
 
 - Learn more about [ACLs](../../../security/authorization/#ACLs).
-- See the [`rpk acl`](../../../../reference/rpk/rpk-acl) command reference. 
+- See the [`rpk acl`](../../../../reference/rpk/rpk-acl) command reference.
+- [Redpanda Helm Specification](../../../../reference/redpanda-helm-spec#authsasl)
+- [Redpanda CRD Reference](../../../../reference/crd)

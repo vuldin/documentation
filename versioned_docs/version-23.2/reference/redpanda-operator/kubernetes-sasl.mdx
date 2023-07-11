@@ -1,5 +1,6 @@
 ---
 title: Configuring Redpanda SASL on Kubernetes
+linkRoot: ../../../
 ---
 
 <head>
@@ -8,9 +9,9 @@ title: Configuring Redpanda SASL on Kubernetes
     <link rel="canonical" href="https://docs.redpanda.com/docs/reference/redpanda-operator/kubernetes-sasl/" />
 </head>
 
-:::danger
-See [Configuring Redpanda SASL on Kubernetes](../../../manage/kubernetes/security/sasl-kubernetes) for the most up-to-date instructions using the Redpanda Helm chart. This page is based on the `redpanda-operator` Helm chart and is preserved only for backward compatibility.
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 The Simple Authentication and Security Layer (SASL) is a method for adding authentication support to connection-based protocols. When using the Redpanda Operator, SASL provides authentication between the server and client. To encrypt communication, use TLS encryption. You must use TLS encryption to have secure authentication using SASL.
 
