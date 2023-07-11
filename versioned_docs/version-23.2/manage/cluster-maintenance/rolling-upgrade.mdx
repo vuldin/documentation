@@ -18,6 +18,7 @@ contextLinks:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ImpactOfRestarts from '../../manage/shared/rolling-upgrades/_restart-impact.mdx'
+import ImportantUpgradeNote from '../../manage/shared/rolling-upgrades/_important-upgrade-note.mdx'
 import ContextLink from '@site/src/components/ContextButton.js'
 
 <ContextLink frontmatter={frontMatter}
@@ -27,12 +28,7 @@ To benefit from Redpanda's new features and enhancements, upgrade to the latest 
 
 Redpanda platform version numbers follow the convention AB.C.D, where AB is the two digit year, C is the feature release, and D is the patch release. For example, version 22.3.1 indicates the first patch release on the third feature release of the year 2022. Patch releases include bug fixes and minor improvements, with no change to user-facing behavior. New and enhanced features are documented with each feature release. 
 
-:::important
-- New features are enabled after all brokers (nodes) in the cluster are upgraded. You can stop the upgrade process and roll back to the original version as long as you have not upgraded every broker and restarted the cluster.
-- Redpanda only supports upgrading one sequential feature release at a time. For example, you can upgrade from the 22.2 feature release to 22.3. You cannot skip feature releases. 
-- Redpanda only supports downgrading between sequential patch releases. For example, you can downgrade from the 22.2.2 patch release to 22.2.1, but you cannot downgrade to 22.1.7.
-- With Remote Read Replicas, upgrade the Remote Read Replica cluster before upgrading the origin cluster. The Remote Read Replica cluster must run on the same version of Redpanda as the origin cluster, or just one feature release ahead of the origin cluster. 
-:::
+<ImportantUpgradeNote/>
 
 ## Prerequisites
 

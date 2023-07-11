@@ -25,10 +25,6 @@ import ContextLink from '@site/src/components/ContextButton.js'
 
 <AboutRemoteReadReplicas frontmatter={frontMatter}/>
 
-:::tip
-To create a Remote Read Replica topic in another region, consider using a [multi-region bucket](https://aws.amazon.com/s3/features/multi-region-access-points/) to simplify deployment and optimize performance. 
-:::
-
 ## Create a topic with object storage
 
 Before you can create a Remote Read Replica topic, you must create a topic on the origin cluster and set up a bucket or container for the topic's object storage. 
@@ -77,9 +73,7 @@ To set up a Remote Read Replica topic on a separate remote cluster:
     - For `<bucket_name>`, use the bucket or container specified in the `cloud_storage_bucket` or `cloud_storage_azure_container` property for the origin cluster.
 
     :::info
-    - The Remote Read Replica cluster must run on the same version of Redpanda as the origin cluster, or just one feature release ahead of the origin cluster. For example, if the origin cluster is version 23.1, the Remote Read Replica cluster can be 23.2, but not 23.4. It cannot skip feature releases.
-    - During upgrades, upgrade the Remote Read Replica cluster before upgrading the origin cluster. 
-    - Do not use `redpanda.remote.read` or `redpanda.remote.write` with `redpanda.remote.readreplica`. Redpanda ignores the values for remote read and remote write properties on read replica topics. 
+    Do not use `redpanda.remote.read` or `redpanda.remote.write` with `redpanda.remote.readreplica`. Redpanda ignores the values for remote read and remote write properties on read replica topics. 
     :::
 
 ## Reduce lag in data availability
