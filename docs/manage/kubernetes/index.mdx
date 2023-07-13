@@ -10,7 +10,7 @@ title: Manage Redpanda Self-Hosted in Kubernetes
 
 - [Customize the Helm Chart](../kubernetes/configure-helm-chart)
 
-    You can customize the Redpanda Helm chart to configure the cluster and the Kubernetes components that the chart deploys.
+    Customize the Redpanda Helm chart to configure the cluster and the Kubernetes components that the chart deploys.
 
 - [Cluster Properties](../kubernetes/cluster-property-configuration)
 
@@ -20,13 +20,13 @@ title: Manage Redpanda Self-Hosted in Kubernetes
 
     Store Redpanda data in PersistentVolumes, hostPath volumes, or emptyDir volumes.
 
-- [Tiered Storage](../kubernetes/tiered-storage)
+- [Tiered Storage](../kubernetes/tiered-storage-kubernetes)
     
     Tiered Storage lets you save storage costs by offloading log segments to cloud storage.
 
-- [Networking and Connectivity](../kubernetes/networking/networking-and-connectivity)
+- [Networking and Connectivity](../kubernetes/networking)
 
-    Learn how internal and external connectivity works when Redpanda is running in Kubernetes.
+    Learn networking and connectivity options when Redpanda is running in Kubernetes.
 
 - [Security](../kubernetes/security)
 
@@ -40,17 +40,29 @@ title: Manage Redpanda Self-Hosted in Kubernetes
 
     A Remote Read Replica topic is a read-only topic that mirrors a topic on a different cluster.
     
-- [Pod Resources](../kubernetes/manage-resources)
+- [Manage Pod Resources](../kubernetes/manage-resources)
 
     Configure your Pod resources such as memory, CPU, and storage.
+
+- [Scale](../kubernetes/scale)
+    
+     Scaling a Redpanda cluster involves increasing its resources or the number of nodes to handle more data, traffic, and users. 
 
 - [Decommission Brokers](../kubernetes/decommission-brokers)
 
     Remove a broker so that it is no longer considered part of the cluster.
 
+- [Delete PersistentVolumes](../kubernetes/delete-persistentvolume)
+
+    Delete a PersistentVolume to remove a broker and its data from the cluster or to perform maintenance or upgrades on the PersistentVolume.
+
 - [Upgrade Redpanda](../kubernetes/rolling-upgrade)
 
     Learn how to upgrade Redpanda in Kubernetes.
+
+- [Upgrade Kubernetes](../kubernetes/upgrade-kubernetes)
+
+    Learn how to upgrade Kubernetes on Worker Nodes running Redpanda. 
 
 - [Monitor](../kubernetes/monitor)
 
@@ -60,6 +72,6 @@ title: Manage Redpanda Self-Hosted in Kubernetes
 
     Perform resilience testing by introducing failures and observing how the system behaves under each one.
 
-- [Troubleshooting](../kubernetes/troubleshooting/troubleshoot)
+- [Troubleshooting](../kubernetes/troubleshooting)
 
     Find advice on how to diagnose and troubleshoot problems with Redpanda in Kubernetes.

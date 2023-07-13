@@ -44,20 +44,12 @@
         },
         {
           type: "category",
-          label: "Introduction to rpk",
-          link: { type: "doc", id: "get-started/intro-to-rpk" },
-
+          label: "Redpanda CLI",
+          link: { type: "doc", id: "get-started/rpk/index" },
           items: [
-            {
-              type: "doc",
-              label: "Broker and Admin API Addresses",
-              id: "get-started/broker-admin",
-            },
-            {
-              type: "doc",
-              label: "Install rpk",
-              id: "get-started/rpk-install",
-            },
+          "get-started/intro-to-rpk",
+          "get-started/broker-admin",
+          "get-started/rpk-install"
           ],
         },
       ],
@@ -522,13 +514,13 @@
                   {
                     type: "category",
                     label: "Tiered Storage",
-
-
-                    link: {
-                      type: "doc",
-                      id: "manage/kubernetes/tiered-storage",
-                    },
+                    link: { type: "doc", id: "manage/kubernetes/tiered-storage-kubernetes/index" },
                     items: [
+                      {
+                        type: "doc",
+                        label: "Tiered Storage",
+                        id: "manage/kubernetes/tiered-storage",
+                      },
                       {
                         type: "doc",
                         label: "Data Archiving",
@@ -539,8 +531,9 @@
                   {
                     type: "category",
                     label: "Networking and Connectivity",
-                    link: { type: "doc", id: "manage/kubernetes/networking/networking-and-connectivity" },
+                    link: { type: "doc", id: "manage/kubernetes/networking/index" },
                     items: [
+                      "manage/kubernetes/networking/networking-and-connectivity",
                       {
                         type: "doc",
                         label: "Use a NodePort Service",
@@ -607,7 +600,7 @@
                   },
                   {
                     type: "doc",
-                    label: "Delete a PersistentVolume",
+                    label: "Delete PersistentVolumes",
                     id: "manage/kubernetes/delete-persistentvolume",
                   },
                   {
@@ -633,8 +626,9 @@
                   {
                     type: "category",
                     label: "Troubleshooting",
-                    link: { type: "doc", id: "manage/kubernetes/troubleshooting/troubleshoot" },
+                    link: { type: "doc", id: "manage/kubernetes/troubleshooting/index" },
                     items: [
+                      "manage/kubernetes/troubleshooting/troubleshoot",
                       {
                         type: "doc",
                         label: "Diagnostics Bundle",
@@ -771,9 +765,14 @@
                 label: "Tiered Storage",
                 link: {
                   type: "doc",
-                  id: "manage/tiered-storage",
+                  id: "manage/tiered-storage-linux/index",
                 },
                 items: [
+                  {
+                    type: "doc",
+                    label: "Tiered Storage",
+                    id: "manage/tiered-storage",
+                  },
                   {
                     type: "doc",
                     label: "Data Archiving",
