@@ -38,13 +38,13 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Deploy the Redpanda Operator:
 
   ```bash
-  helm upgrade --install  redpanda-controller redpanda-operator -n redpanda --set installCRDs=true --set scope=Namespace --set image.repository=redpandadata/redpanda-operator,image.tag=v23.2.1-rc5 --create-namespace
+  helm upgrade --install  redpanda-controller redpanda-operator --namespace <namespace> --set installCRDs=true --set scope=Namespace --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator,image.tag=v23.2.1-rc7 --create-namespace
   ```
 
 1. Ensure that the Deployment is successfully rolled out:
 
   ```bash
-  kubectl -n redpanda rollout status -w deployment/redpanda-controller-redpanda-operator
+  kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller-redpanda-operator
   ```
 
   ```text-no-copy
@@ -59,6 +59,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         domain: customredpandadomain.local
@@ -71,7 +72,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   Here, you create a superuser called `superuser` that can grant permissions to new users in your cluster using access control lists (ACLs). You also define a custom domain that each broker will advertise externally.
@@ -79,7 +80,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Wait for the Redpanda Operator to deploy Redpanda using the Helm chart:
 
   ```bash
-  kubectl get redpanda -n redpanda -w
+  kubectl get redpanda --namespace <namespace> --watch
   ```
 
   ```text-no-copy
@@ -90,7 +91,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Verify that each Redpanda broker is scheduled on only one Kubernetes node:
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace>  \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```
@@ -118,7 +119,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 
   ```bash
   export DOMAIN=customredpandadomain.local && \
-  helm install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set auth.sasl.enabled=true \
     --set "auth.sasl.users[0].name=superuser" \
     --set "auth.sasl.users[0].password=secretpassword" \
@@ -134,7 +135,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Verify that each Redpanda broker is scheduled on only one Kubernetes node:
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace>  \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```

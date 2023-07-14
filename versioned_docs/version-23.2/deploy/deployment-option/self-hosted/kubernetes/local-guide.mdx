@@ -97,7 +97,7 @@ In this step, you create one master and three worker nodes (one worker node for 
 1. Create the Kubernetes cluster:
 
   ```bash
-  minikube start --namespace redpanda --nodes 4
+  minikube start --namespace <namespace> --nodes 4
   ```
 
 1. Prevent applications from being scheduled on the Kubernetes control plane node:
@@ -127,7 +127,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
   ```bash
   helm repo add jetstack https://charts.jetstack.io
   helm repo update
-  helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namespace cert-manager  --create-namespace
+  helm install cert-manager jetstack/cert-manager --set installCRDs=true --namespace cert-manager --create-namespace
   ```
 
   TLS is enabled by default. The Redpanda Helm chart uses cert-manager to manage TLS certificates by default.
@@ -150,13 +150,13 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Deploy the Redpanda Operator:
 
   ```bash
-  helm upgrade --install  redpanda-controller redpanda-operator -n redpanda --set installCRDs=true --set scope=Namespace --set image.repository=redpandadata/redpanda-operator,image.tag=v23.2.1-rc5 --create-namespace
+  helm upgrade --install redpanda-controller redpanda-operator --namespace <namespace> --set installCRDs=true --set scope=Namespace --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator,image.tag=v23.2.1-rc7 --create-namespace
   ```
 
 1. Ensure that the Deployment is successfully rolled out:
 
   ```bash
-  kubectl -n redpanda rollout status -w deployment/redpanda-controller-redpanda-operator
+  kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller-redpanda-operator
   ```
 
   ```text-no-copy
@@ -171,6 +171,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         domain: customredpandadomain.local
@@ -181,13 +182,13 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
 1. Wait for the Redpanda Operator to deploy Redpanda using the Helm chart:
 
   ```bash
-  kubectl get redpanda -n redpanda -w
+  kubectl get redpanda --namespace <namespace> --watch
   ```
 
   ```text-no-copy
@@ -216,7 +217,7 @@ helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namesp
   helm repo add redpanda https://charts.redpanda.com/
   helm repo update
   helm install redpanda redpanda/redpanda \
-    --namespace redpanda \
+    --namespace <namespace> \
     --create-namespace \
     --set external.domain=${DOMAIN} \
     --set statefulset.initContainers.setDataDirOwnership.enabled=true
@@ -227,7 +228,7 @@ helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namesp
 1. Wait for the Redpanda cluster to be ready:
 
   ```bash
-  kubectl -n redpanda rollout status statefulset redpanda --watch
+  kubectl --namespace <namespace> rollout status statefulset redpanda --watch
   ```
 
   When the Redpanda cluster is ready, the output should look similar to the following:
@@ -248,7 +249,7 @@ Each Redpanda broker comes with rpk, which is a CLI tool for connecting to and i
 1. Create an alias to simplify the `rpk` commands:
 
   ```bash
-  alias rpk-topic="kubectl -n redpanda exec -i -t redpanda-0 -c redpanda -- rpk topic --brokers redpanda-0.redpanda.redpanda.svc.cluster.local.:9093,redpanda-1.redpanda.redpanda.svc.cluster.local.:9093,redpanda-2.redpanda.redpanda.svc.cluster.local.:9093 --tls-truststore /etc/tls/certs/default/ca.crt --tls-enabled"
+  alias rpk-topic="kubectl --namespace <namespace> exec -i -t redpanda-0 -c redpanda -- rpk topic --brokers redpanda-0.redpanda.redpanda.svc.cluster.local.:9093,redpanda-1.redpanda.redpanda.svc.cluster.local.:9093,redpanda-2.redpanda.redpanda.svc.cluster.local.:9093 --tls-truststore /etc/tls/certs/default/ca.crt --tls-enabled"
   ```
 
 1. Create a topic called `twitch_chat`:
@@ -382,7 +383,7 @@ IP addresses can change. If the IP addresses of your worker nodes change, you mu
 1. Add mappings in your `/etc/hosts` file between your worker nodes' IP addresses and their custom domain names:
 
   ```bash
-  sudo true && kubectl -n redpanda get endpoints,node -A -o go-template='{{ range $_ := .items }}{{ if and (eq .kind "Endpoints") (eq .metadata.name "redpanda-external") }}{{ range $_ := (index .subsets 0).addresses }}{{ $nodeName := .nodeName }}{{ $podName := .targetRef.name }}{{ range $node := $.items }}{{ if and (eq .kind "Node") (eq .metadata.name $nodeName) }}{{ range $_ := .status.addresses }}{{ if eq .type "InternalIP" }}{{ .address }} {{ $podName }}.${DOMAIN}{{ "\n" }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}' | envsubst | sudo tee -a /etc/hosts
+  sudo true && kubectl --namespace <namespace> get endpoints,node -A -o go-template='{{ range $_ := .items }}{{ if and (eq .kind "Endpoints") (eq .metadata.name "redpanda-external") }}{{ range $_ := (index .subsets 0).addresses }}{{ $nodeName := .nodeName }}{{ $podName := .targetRef.name }}{{ range $node := $.items }}{{ if and (eq .kind "Node") (eq .metadata.name $nodeName) }}{{ range $_ := .status.addresses }}{{ if eq .type "InternalIP" }}{{ .address }} {{ $podName }}.${DOMAIN}{{ "\n" }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}{{ end }}' | envsubst | sudo tee -a /etc/hosts
   ```
 
   ```text title="/etc/hosts"
@@ -394,7 +395,7 @@ IP addresses can change. If the IP addresses of your worker nodes change, you mu
 1. Save the root certificate authority (CA) to your local file system outside Kubernetes:
 
   ```bash
-  kubectl -n redpanda get secret redpanda-default-root-certificate -o go-template='{{ index .data "ca.crt" | base64decode }}' > ca.crt
+  kubectl --namespace <namespace> get secret redpanda-default-root-certificate -o go-template='{{ index .data "ca.crt" | base64decode }}' > ca.crt
   ```
 
 1. Install rpk on your local machine, not on a Pod:

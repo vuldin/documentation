@@ -79,6 +79,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       metadata:
         name: redpanda
       spec:
+        chartRef: {}
         clusterSpec:
           storage:
             persistentVolume:
@@ -88,10 +89,9 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      kubectl apply -f redpanda-cluster.yaml -n redpanda
+      kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
       ```
 
-      
       </TabItem>
       <TabItem value="helm" label="Helm">
 
@@ -107,7 +107,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --values storageclass.yaml --reuse-values
       ```
 
@@ -115,7 +115,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       <TabItem value="flags" label="--set">
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --set storage.persistentVolume.enabled=true \
         --set storage.persistentVolume.size=20Gi \
         --set storage.persistentVolume.storageClass=""
@@ -138,6 +138,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       metadata:
         name: redpanda
       spec:
+        chartRef: {}
         clusterSpec:
           storage:
             persistentVolume:
@@ -147,7 +148,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      kubectl apply -f redpanda-cluster.yaml -n redpanda
+      kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
       ```
 
       
@@ -166,7 +167,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --values storageclass.yaml --reuse-values
       ```
 
@@ -174,7 +175,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       <TabItem value="flags" label="--set">
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --set storage.persistentVolume.enabled=true \
         --set storage.persistentVolume.size=20Gi \
         --set storage.persistentVolume.storageClass="<storage-class>"
@@ -202,6 +203,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         persistentVolume:
@@ -210,7 +212,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -228,7 +230,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values storageclass.yaml --reuse-values
   ```
 
@@ -236,7 +238,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.persistentVolume.enabled=true \
     --set storage.persistentVolume.storageClass="-"
   ```
@@ -267,6 +269,7 @@ To resize a PersistentVolume that uses a dynamic provisioner:
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         persistentVolume:
@@ -275,7 +278,7 @@ To resize a PersistentVolume that uses a dynamic provisioner:
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -292,7 +295,7 @@ To resize a PersistentVolume that uses a dynamic provisioner:
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values persistentvolume-size.yaml --reuse-values
   ```
 
@@ -300,7 +303,7 @@ To resize a PersistentVolume that uses a dynamic provisioner:
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.persistentVolume.enabled=true \
     --set storage.persistentVolume.size=<custom-size>Gi
   ```
@@ -317,7 +320,7 @@ It is your responsibility to delete PersistentVolumeClaims when they are no long
 Check the reclaim policy of your PersistentVolumes before deleting a PersistentVolumeClaim.
 
 ```bash
-kubectl get persistentvolume -n redpanda
+kubectl get persistentvolume --namespace <namespace>
 ```
 
 For descriptions of each reclaim policy, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy).
@@ -348,6 +351,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     storage:
       hostPath: "<absolute-path>"
@@ -359,7 +363,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -379,7 +383,7 @@ initContainers:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values hostpath.yaml --reuse-values
 ```
 
@@ -387,7 +391,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set storage.persistentVolume.enabled=false \
   --set storage.hostPath=<absolute-path> \
   --set statefulset.initContainers.setDataDirOwnership.enabled=true
@@ -420,6 +424,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     storage:
       hostPath: ""
@@ -428,7 +433,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -445,7 +450,7 @@ storage:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values emptydir.yaml --reuse-values
 ```
 
@@ -453,7 +458,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set storage.persistentVolume.enabled=false
 ```
 

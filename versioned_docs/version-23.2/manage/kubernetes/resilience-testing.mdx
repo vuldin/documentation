@@ -29,7 +29,7 @@ You can simulate a broker going down for an extended period of time by manually 
 1. Find out on which node each of your brokers is running:
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace>  \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```

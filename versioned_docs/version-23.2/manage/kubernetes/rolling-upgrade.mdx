@@ -46,7 +46,7 @@ Before you perform a rolling upgrade, you must find out which Redpanda version y
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk redpanda admin brokers list \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -57,7 +57,7 @@ Before you perform a rolling upgrade, you must find out which Redpanda version y
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk redpanda admin brokers list \
       --hosts <broker-url>:<admin-api-port> \
   ```
@@ -161,7 +161,7 @@ To deploy an upgraded StatefulSet, you need to delete the existing StatefulSet, 
 1. Delete the existing StatefulSet, but leave the Pods running:
 
   ```bash
-  kubectl delete statefulset redpanda --cascade=orphan -n redpanda
+  kubectl delete statefulset redpanda --cascade=orphan --namespace <namespace>
   ```
   <details>
   <summary>
@@ -178,7 +178,7 @@ To deploy an upgraded StatefulSet, you need to delete the existing StatefulSet, 
 
   ```bash
   helm upgrade --install redpanda redpanda/redpanda \
-    --namespace redpanda \
+    --namespace <namespace> \
     --create-namespace \
     --set image.tag=<new-version> --set statefulset.updateStrategy.type=OnDelete
   ```
@@ -217,7 +217,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster maintenance enable 0 --wait \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -228,7 +228,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster maintenance enable 0 --wait \
       --api-urls <broker-url>:<admin-api-port> \
   ```
@@ -258,7 +258,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster health \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -269,7 +269,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster health \
       --api-urls <broker-url>:<admin-api-port> \
   ```
@@ -306,7 +306,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
 1. Delete the Pod in which the broker was running:
 
   ```bash
-  kubectl delete pod redpanda-0 -n redpanda
+  kubectl delete pod redpanda-0 --namespace <namespace>
   ```
 
   <details>
@@ -326,7 +326,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk redpanda admin brokers list \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -337,7 +337,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk redpanda admin brokers list \
       --hosts <broker-url>:<admin-api-port> \
   ```
@@ -369,7 +369,7 @@ When you've upgraded all brokers, verify that the cluster is healthy. If the clu
 <TabItem value="enabled" label="TLS Enabled">
 
 ```bash
-kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster health \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -380,7 +380,7 @@ kubectl exec redpanda-0 -n redpanda -c redpanda -- \
 <TabItem value="disabled" label="TLS Disabled">
 
 ```bash
-kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster health \
     --api-urls <broker-url>:<admin-api-port> \
 ```
@@ -412,7 +412,7 @@ If something does not go as planned during a rolling upgrade, you can roll back 
 1. Find the previous revision:
 
   ```bash
-  helm history redpanda -n redpanda
+  helm history redpanda --namespace <namespace>
   ```
 
   <details>
@@ -431,7 +431,7 @@ If something does not go as planned during a rolling upgrade, you can roll back 
 1. Roll back to the previous revision:
 
   ```bash
-  helm rollback redpanda <previous-revision> -n redpanda
+  helm rollback redpanda <previous-revision> --namespace <namespace>
   ```
 
   <details>
@@ -454,7 +454,7 @@ If something does not go as planned during a rolling upgrade, you can roll back 
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster health \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -465,7 +465,7 @@ If something does not go as planned during a rolling upgrade, you can roll back 
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster health \
       --api-urls <broker-url>:<admin-api-port> \
   ```

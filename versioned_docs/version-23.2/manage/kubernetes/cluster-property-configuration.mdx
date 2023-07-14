@@ -68,6 +68,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     storage:
       tieredConfig:
@@ -75,7 +76,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -93,7 +94,7 @@ storage:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml --reuse-values
 ```
 
@@ -101,7 +102,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set storage.tieredConfig.cloud_storage_access_key=<access-key>
 ```
 
@@ -120,7 +121,7 @@ In this example, the command is executed on a Pod called `redpanda-0` in the `re
 <TabItem value="enabled" label="TLS Enabled">
 
 ```bash
-kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config get log_compression_type \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -131,7 +132,7 @@ kubectl exec redpanda-0 -n redpanda -c redpanda -- \
 <TabItem value="disabled" label="TLS Disabled">
 
 ```bash
-kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config get log_compression_type \
     --api-urls <broker-url>:<admin-api-port> \
 ```
@@ -161,7 +162,7 @@ To get more detailed information about your Redpanda deployment, generate a [dia
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config export –filename <filename>.yaml \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -172,7 +173,7 @@ To get more detailed information about your Redpanda deployment, generate a [dia
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config export –filename <filename>.yaml \
     --api-urls <broker-url>:<admin-api-port> \
   ```
@@ -210,7 +211,7 @@ To get more detailed information about your Redpanda deployment, generate a [dia
 1. Remove the exported file from the Redpanda container:
 
   ```bash
-  kubectl exec redpanda-0 -c redpanda -n redpanda -- rm <path-to-file>
+  kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rm <path-to-file>
   ```
 
 When you've finished with the file, remove it from your host machine:

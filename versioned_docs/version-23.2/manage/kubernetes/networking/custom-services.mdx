@@ -26,6 +26,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     external:
       enabled: true
@@ -37,7 +38,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -57,7 +58,7 @@ external:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values disable-external-service.yaml --reuse-values
 ```
 
@@ -65,7 +66,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set external.enabled=true
   --set external.type=null
   --set "external.addresses={<subdomain-or-ip-address-for-replica-0>,<subdomain-or-ip-address-for-replica-1>,<subdomain-or-ip-address-for-replica-2>}"

@@ -52,6 +52,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       admin:
@@ -62,7 +63,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -81,7 +82,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values custom-admin-port.yaml --reuse-values
 ```
 
@@ -89,7 +90,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set "listeners.admin.external.default.advertisedPorts={<port>}"
 ```
 
@@ -109,6 +110,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       kafka:
@@ -119,7 +121,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -138,7 +140,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values custom-kafka-port.yaml --reuse-values
 ```
 
@@ -146,7 +148,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set "listeners.kafka.external.default.advertisedPorts={<port>}"
 ```
 
@@ -166,6 +168,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       http:
@@ -176,7 +179,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -195,7 +198,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values custom-pandaproxy-port.yaml --reuse-values
 ```
 
@@ -203,7 +206,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set "listeners.http.external.default.advertisedPorts={<port>}"
 ```
 
@@ -223,6 +226,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       schemaRegistry:
@@ -233,7 +237,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -252,7 +256,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values custom-schema-registry-port.yaml --reuse-values
 ```
 
@@ -260,7 +264,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set "listeners.schemaRegistry.external.default.advertisedPorts={<port>}"
 ```
 
@@ -284,13 +288,14 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     external:
       enabled: false
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -305,7 +310,7 @@ external:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values disable-external-access.yaml --reuse-values
 ```
 
@@ -313,7 +318,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set external.enabled=false
 ```
 
@@ -333,6 +338,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       admin:
@@ -342,7 +348,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -360,7 +366,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values disable-external-admin-api.yaml --reuse-values
 ```
 
@@ -368,7 +374,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set listeners.admin.external.default.enabled=false
 ```
 
@@ -388,6 +394,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       kafka:
@@ -397,7 +404,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -415,7 +422,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values disable-external-kafka-api.yaml --reuse-values
 ```
 
@@ -423,7 +430,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set listeners.kafka.external.default.enabled=false
 ```
 
@@ -443,6 +450,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       http:
@@ -452,7 +460,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -470,7 +478,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values disable-external-pandaproxy.yaml --reuse-values
 ```
 
@@ -478,7 +486,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set listeners.http.external.default.enabled=false
 ```
 
@@ -498,6 +506,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     listeners:
       schemaRegistry:
@@ -507,7 +516,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -525,7 +534,7 @@ listeners:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values disable-external-schema-registry.yaml --reuse-values
 ```
 
@@ -533,7 +542,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set listeners.schemaRegistry.external.default.enabled=false
 ```
 

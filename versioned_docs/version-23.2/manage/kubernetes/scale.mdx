@@ -43,13 +43,14 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       statefulset:
         replicas: <number-of-replicas>
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -64,7 +65,7 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values replicas.yaml --reuse-values
   ```
 
@@ -72,7 +73,7 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set statefulset.replicas=<number-of-replicas>
   ```
 
@@ -84,5 +85,5 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
 1. Verify that your Redpanda cluster has the desired number of replicas:
 
   ```bash
-  kubectl get statefulsets -n redpanda
+  kubectl get statefulsets --namespace <namespace>
   ```

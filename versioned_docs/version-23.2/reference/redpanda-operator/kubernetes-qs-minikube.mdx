@@ -96,7 +96,7 @@ Use the [verification procedure](https://cert-manager.io/docs/installation/verif
 1. To use Helm to add the Redpanda chart repository and update it:
 
 ```bash
-helm repo add redpanda https://charts.vectorized.io/ && \
+helm repo add vectorized https://charts.vectorized.io/ && \
 helm repo update
 ```
 
@@ -138,7 +138,7 @@ Find information about the versions of the operator in the [list of operator rel
 ```bash
 helm install \
   redpanda-operator \
-  redpanda/redpanda-operator \
+  redpandadata/redpanda-operator \
   --namespace redpanda-system \
   --create-namespace \
   --version $VERSION

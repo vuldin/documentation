@@ -81,6 +81,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -89,7 +90,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -106,7 +107,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values custom-domain.yaml --reuse-values --wait
   ```
 
@@ -114,7 +115,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=NodePort \
     --set external.domain=<custom-domain> \
@@ -147,6 +148,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       fullnameOverride: <custom-hostname>
       external:
@@ -156,7 +158,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -174,7 +176,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values custom-hostname-ordinal.yaml --reuse-values --wait
   ```
 
@@ -182,7 +184,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=NodePort \
     --set external.domain=<custom-domain> \
@@ -214,6 +216,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -226,7 +229,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -247,7 +250,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values custom-hostname.yaml --reuse-values --wait
   ```
 
@@ -255,7 +258,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=NodePort \
     --set external.domain=<custom-domain> \
@@ -282,7 +285,7 @@ When your brokers are configured to advertise a custom domain, the next step is 
 1. Find out on which worker nodes your Redpanda brokers are running.
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace>  \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```
@@ -332,7 +335,7 @@ ExternalDNS is a tool for Kubernetes that manages DNS records. Whenever you add,
 1. Identify the headless ClusterIP Service in your Redpanda deployment:
 
   ```bash
-  kubectl get service -n redpanda
+  kubectl get service --namespace <namespace>
   ```
 
   The headless ClusterIP Service has its Cluster-IP set to None.
@@ -340,7 +343,7 @@ ExternalDNS is a tool for Kubernetes that manages DNS records. Whenever you add,
 1. Annotate the headless ClusterIP Service:
 
   ```bash
-  kubectl annotate service <service-name> -n redpanda \
+  kubectl annotate service <service-name> --namespace <namespace> \
   external-dns.alpha.kubernetes.io/hostname=<custom-domain> \
   external-dns.alpha.kubernetes.io/endpoints-type=<HostIP or NodeExternalIP>
   ```
@@ -370,6 +373,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -379,7 +383,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -397,7 +401,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values loadbalancer-tls-disabled.yaml --reuse-values --wait
   ```
 
@@ -405,7 +409,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=NodePort \
     --set tls.enabled=false \
@@ -420,7 +424,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
 1. Find out on which worker nodes your Redpanda brokers are running.
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace>  \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```
@@ -442,6 +446,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         addresses:
@@ -451,7 +456,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -469,7 +474,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values external-access-ip-addresses.yaml --reuse-values --wait
   ```
 
@@ -477,7 +482,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=NodePort \
     --set tls.enabled=false \

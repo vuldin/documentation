@@ -231,7 +231,7 @@ You may have to wait a few minutes for cert-manager to be ready before you conti
 1. Add the Redpanda chart repository and update it:
 
   ```bash
-  helm repo add redpanda https://charts.vectorized.io/ && \
+  helm repo add vectorized https://charts.vectorized.io/ && \
   helm repo update
   ```
 
@@ -275,7 +275,7 @@ You may have to wait a few minutes for cert-manager to be ready before you conti
   ```bash
   helm install \
     redpanda-operator \
-    redpanda/redpanda-operator \
+    redpandadata/redpanda-operator \
     --namespace panda-chat \
     --create-namespace \
     --version $VERSION

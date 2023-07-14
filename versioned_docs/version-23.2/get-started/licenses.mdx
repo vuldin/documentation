@@ -89,7 +89,7 @@ either provide a secret that contains the license, or provide the license string
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values license-key.yaml
   ```
 
@@ -97,7 +97,7 @@ either provide a secret that contains the license, or provide the license string
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set license_secret_ref.secret_name=<name-of-the-secret> \
     --set license_secret_ref.secret_key=<key-where-license-is-stored>
   ```
@@ -119,7 +119,7 @@ either provide a secret that contains the license, or provide the license string
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values license-key.yaml
   ```
 
@@ -127,7 +127,7 @@ either provide a secret that contains the license, or provide the license string
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set license_key=<license-string> 
   ```
 

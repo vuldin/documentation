@@ -48,7 +48,7 @@ You need the following:
 To check if you already have a license key applied to your cluster:
 
 ```bash
-kubectl exec redpanda-0 -c redpanda -n redpanda -- rpk cluster license info
+kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rpk cluster license info
 ```
 
 ## Configure object storage for the remote cluster
@@ -79,6 +79,7 @@ To configure access to an S3 bucket with an IAM role:
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -89,7 +90,7 @@ To configure access to an S3 bucket with an IAM role:
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
@@ -107,7 +108,7 @@ To configure access to an S3 bucket with an IAM role:
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml
   ```
 
@@ -115,7 +116,7 @@ To configure access to an S3 bucket with an IAM role:
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=aws_instance_metadata \
     --set storage.tieredConfig.cloud_storage_region=<region> \
@@ -151,6 +152,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -163,7 +165,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
@@ -183,7 +185,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml
   ```
 
@@ -191,7 +193,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=config_file \
     --set storage.tieredConfig.cloud_storage_access_key=<access-key> \
@@ -222,6 +224,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -232,7 +235,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
@@ -250,7 +253,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml
   ```
 
@@ -258,7 +261,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=aws_instance_metadata \
     --set storage.tieredConfig.cloud_storage_region=<region> \
@@ -287,6 +290,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -300,7 +304,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
@@ -321,7 +325,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml
   ```
 
@@ -329,7 +333,7 @@ You can configure access to Google Cloud Storage with either an IAM role attache
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=config_file \
     --set storage.tieredConfig.cloud_storage_api_endpoint=storage.googleapis.com \
@@ -362,6 +366,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     storage:
       tieredConfig:
@@ -372,7 +377,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -391,7 +396,7 @@ storage:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
 --values cloud-storage.yaml
 ```
 
@@ -399,7 +404,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set storage.tieredConfig.cloud_storage_enabled=true \
   --set storage.tieredConfig.cloud_storage_azure_shared_key=<access_key> \
   --set storage.tieredConfig.cloud_storage_azure_storage_account=<account-name> \

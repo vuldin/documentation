@@ -64,7 +64,7 @@ You also configure your AKS cluster to give each worker node a public IP address
 1. Create an AKS cluster with three worker nodes (one for each Redpanda broker):
 
   ```bash
-  az aks create -g redpandaResourceGroup -n redpanda \
+  az aks create -g redpandaResourceGroup --namespace <namespace> \
     --node-count 3 \
     --generate-ssh-keys \
     --enable-node-public-ip

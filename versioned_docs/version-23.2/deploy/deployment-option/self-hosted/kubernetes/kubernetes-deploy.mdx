@@ -61,13 +61,18 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Deploy the Redpanda Operator:
 
   ```bash
-  helm upgrade --install  redpanda-controller redpanda-operator -n redpanda --set installCRDs=true --set scope=Namespace --set image.repository=redpandadata/redpanda-operator,image.tag=v23.2.1-rc5 --create-namespace
+  helm upgrade --install  redpanda-controller redpanda-operator \
+    --namespace <namespace> \
+    --set installCRDs=true \
+    --set scope=Namespace \
+    --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator,image.tag=v23.2.1-rc7 \
+    --create-namespace
   ```
 
 1. Ensure that the Deployment is successfully rolled out:
 
   ```bash
-  kubectl -n redpanda rollout status -w deployment/redpanda-controller-redpanda-operator
+  kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller-redpanda-operator
   ```
 
   ```text-no-copy
@@ -82,11 +87,12 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec: {}
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   The empty `clusterSpec` field configures the default settings in the Redpanda Helm chart.
@@ -94,7 +100,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Wait for the Redpanda Operator to deploy Redpanda using the Helm chart:
 
   ```bash
-  kubectl get redpanda -n redpanda -w
+  kubectl get redpanda --namespace <namespace> --watch
   ```
 
   ```text-no-copy
@@ -105,7 +111,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Verify that each Redpanda broker is scheduled on only one Kubernetes node:
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace>  \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```
@@ -134,16 +140,16 @@ items:
     metadata:
       name: redpanda
     spec:
+      chartRef: {}
       clusterSpec: {}
 ```
 
 </TabItem>
 <TabItem value="helm" label="Helm">
 
-1. Add the Redpanda Helm chart repository to your local Helm client and install cert-manager using Helm:
+1. Install cert-manager using Helm:
 
   ```bash
-  helm repo add redpanda https://charts.redpanda.com
   helm repo add jetstack https://charts.jetstack.io
   helm repo update
   helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namespace cert-manager  --create-namespace
@@ -155,14 +161,14 @@ items:
 
   ```bash
   helm install redpanda redpanda/redpanda \
-    --namespace redpanda \
+    --namespace <namespace> \
     --create-namespace
   ```
 
 1. Wait for the Redpanda cluster to be ready:
 
   ```bash
-  kubectl -n redpanda rollout status statefulset redpanda --watch
+  kubectl --namespace <namespace> rollout status statefulset redpanda --watch
   ```
 
   When the Redpanda cluster is ready, the output should look similar to the following:
@@ -174,7 +180,7 @@ items:
 1. Verify that each Redpanda broker is scheduled on only one Kubernetes node:
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace> \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```
@@ -222,7 +228,7 @@ redpanda/console 	0.3.3        	v2.0.2     	Helm chart to deploy Redpanda Consol
 To find the versions that are installed on your machine, run the following:
 
 ```bash
-helm list -n redpanda
+helm list --namespace <namespace>
 ```
 
 ## Production considerations

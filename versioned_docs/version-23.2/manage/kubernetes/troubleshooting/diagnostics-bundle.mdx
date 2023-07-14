@@ -42,6 +42,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       serviceAccount:
         create: true
@@ -50,7 +51,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -67,7 +68,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values serviceaccount.yaml --reuse-values
   ```
 
@@ -75,7 +76,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set serviceAccount.create=true \
     --set rbac.enabled=true
   ```
@@ -103,7 +104,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec -it -n redpanda redpanda-0 -c redpanda -- rpk debug bundle \
+  kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
     --admin-api-tls-truststore=<path-to-root-ca> \
     --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644 \
     --admin-api-tls-enabled
@@ -113,8 +114,8 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec -it -n redpanda redpanda-0 -c redpanda -- rpk debug bundle \
-    --namespace redpanda \
+  kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
+    --namespace <namespace> \
     --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
@@ -125,9 +126,9 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   provide it in the `--upload-url` flag to upload your diagnostics bundle to Redpanda.
 
   ```bash
-  kubectl exec -it -n redpanda redpanda-0 -c redpanda -- rpk debug bundle \
+  kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
     --upload-url <url> \
-    --namespace redpanda \
+    --namespace <namespace> \
     --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
@@ -168,7 +169,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
 1. Remove the diagnostics bundle from the Redpanda container:
 
   ```bash
-  kubectl exec redpanda-0 -c redpanda -n redpanda -- rm /var/lib/redpanda/<bundle-name>
+  kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rm /var/lib/redpanda/<bundle-name>
   ```
 
 :::info

@@ -21,17 +21,43 @@ Before troubleshooting Redpanda, make sure that Kubernetes isn't the cause of th
 
 ## Collect all debugging data
 
-If you're unsure of what is wrong, you can generate a diagnostics bundle that contains a wide range of data to help debug and diagnose issues with a Redpanda cluster, a broker, or the machines on which the brokers are running.
+If you're unsure what might be wrong, generate a diagnostics bundle. It contains a wide range of data to help debug and diagnose issues with a Redpanda cluster, a broker, or the machines on which the brokers are running.
 
 See [Diagnostics Bundles in Kubernetes](../diagnostics-bundle).
 
 ## View Helm chart configuration
 
-To check the values that were set in the Redpanda Helm chart:
+To inspect the values set in the Redpanda Helm chart:
 
 ```bash
-helm get values redpanda -n redpanda --all
+helm get values redpanda --namespace <namespace> --all
 ```
+
+## HelmRelease is not ready
+
+If you are using the Redpanda Operator with Helm, you may see the following message while waiting for a Redpanda custom resource to be deployed:
+
+```bash-no-copy
+NAME       READY   STATUS
+redpanda   False   HelmRepository 'redpanda/redpanda-repository' is not ready
+redpanda   False   HelmRelease 'redpanda/redpanda' is not ready
+```
+
+While the deployment process can sometimes take a few minutes, a prolonged 'not ready' status may indicate an issue. Follow the steps below to investigate:
+
+1. Check the status of the HelmRelease:
+
+  ```bash
+  kubectl describe helmrelease redpanda --namespace <namespace>
+  ```
+
+1. Review the Redpanda Operator logs:
+
+  ```bash
+  kubectl logs -l app.kubernetes.io/name=redpanda-operator -c manager --namespace <namespace>
+  ```
+
+Replace `<namespace>` with the namespace in which you deployed the Redpanda Operator.
 
 ## StatefulSet never rolls out
 
@@ -40,7 +66,7 @@ If the StatefulSet Pods remain in a pending state, they are waiting for resource
 To identify the Pods that are pending, use the following command:
 
 ```
-kubectl get pod -n redpanda
+kubectl get pod --namespace <namespace>
 ```
 
 The response includes a list of Pods in the StatefulSet and their status.
@@ -60,7 +86,7 @@ If you see volume mounting errors in the Pod events or in the Redpanda logs, mak
 - If you're using PersistentVolumes, make sure that you have one PersistentVolume available for each Redpanda broker, and that each one has the storage capacity that's set in `storage.persistentVolume.size`:
 
   ```bash
-  kubectl get pv -n redpanda
+  kubectl get pv --namespace <namespace>
   ```
 
 - If you're using StorageClasses with dynamic provisioners (default), make sure they exist:
@@ -110,7 +136,7 @@ unable to request metadata: invalid large response size 352518912 > limit 104857
 If you're using rpk, make sure to add the `--tls-enabled` flag, and any other necessary TLS flags such as the TLS certificate:
 
 ```
-kubectl exec redpanda-0 -c redpanda -n redpanda -- rpk cluster info --brokers <subdomain>.<domain>:<external-port> --tls-enabled
+kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rpk cluster info --brokers <subdomain>.<domain>:<external-port> --tls-enabled
 ```
 
 For all available flags, see the [rpk command reference](../../../../reference/rpk).

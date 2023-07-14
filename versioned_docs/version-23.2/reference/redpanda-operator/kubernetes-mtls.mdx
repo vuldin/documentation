@@ -44,7 +44,7 @@ metadata:
   name: cluster-sample-mtls
   // highlight-end
 spec:
-  image: "vectorized/redpanda"
+  image: "redpandadata/redpanda"
   version: "latest"
   replicas: 1
   resources:
@@ -184,7 +184,7 @@ kafkaApi:
    tls:
      enabled: true
           // highlight-start
-     issuerRef: 
+     issuerRef:
        name: <issuer_name>
        kind: <issuer>
             // highlight-end
@@ -217,12 +217,17 @@ kafkaApi:
      requireClientAuth: true
 ```
 
-The `nodeSecretRef` property contains the following variables: 
+The `nodeSecretRef` property contains the following variables:
 
 | Variable | Description |
 | --- | --- |
 | `secret_name` | Name of the certificate secret. |
 | `secret_namespace` | Kubernetes namespace where the certificate secret is. If the secret is in a different namespace than the Redpanda cluster, the operator copies it to the namespace of the Redpanda cluster. |
+
+:::tip
+To include a `ca.crt` file in the Secret, you must create an Opaque Secret instead of a TLS Secret.
+See [Opaque Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets) in the Kubernetes documentation.
+:::
 
 ## Step 4: Create the Redpanda cluster 
 
@@ -309,7 +314,7 @@ metadata:
 spec:
   containers:
     - name: rpk
-      image: 'vectorized/redpanda:<redpanda-version>'
+      image: 'redpandadata/redpanda:<redpanda-version>'
       command:
         - /bin/bash
         - '-c'

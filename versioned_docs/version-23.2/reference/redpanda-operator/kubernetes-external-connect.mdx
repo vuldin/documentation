@@ -148,13 +148,13 @@ To use Helm to install cert-manager:
 
     ```bash
     kubectl apply -k https://github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=$VERSION && \
-    helm repo add redpanda https://charts.vectorized.io/ && \
+    helm repo add vectorized https://charts.vectorized.io/ && \
     helm repo update && \
     helm install \
       --namespace redpanda-system \
       --create-namespace redpanda-operator \
       --version $VERSION \
-      redpanda/redpanda-operator
+      redpandadata/redpanda-operator
     ```
 
     </TabItem>
@@ -163,13 +163,13 @@ To use Helm to install cert-manager:
 
     ```bash
     noglob kubectl apply -k https://github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=$VERSION && \
-    helm repo add redpanda https://charts.vectorized.io/ && \
+    helm repo add vectorized https://charts.vectorized.io/ && \
     helm repo update && \
     helm install \
       --namespace redpanda-system \
       --create-namespace redpanda-operator \
       --version $VERSION \
-      redpanda/redpanda-operator
+      redpandadata/redpanda-operator
     ```
     </TabItem>
 

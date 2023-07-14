@@ -62,6 +62,7 @@ To configure Prometheus to monitor Redpanda metrics, you can use the [Prometheus
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       statefulset:
         annotations:
@@ -71,7 +72,7 @@ To configure Prometheus to monitor Redpanda metrics, you can use the [Prometheus
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
@@ -88,7 +89,7 @@ To configure Prometheus to monitor Redpanda metrics, you can use the [Prometheus
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values prometheus-monitoring.yaml --reuse-values
   ```
 
@@ -97,7 +98,7 @@ To configure Prometheus to monitor Redpanda metrics, you can use the [Prometheus
 
   ```bash
   helm upgrade --install redpanda redpanda/redpanda \
-    --namespace redpanda \
+    --namespace <namespace> \
     --create-namespace \
     --set-string statefulset.annotations."prometheus\.io/scrape"="true",statefulset.annotations."prometheus\.io/path"=public_metrics,statefulset.annotations."prometheus\.io/port"="<admin-api-port>"
   ```
@@ -110,7 +111,7 @@ To configure Prometheus to monitor Redpanda metrics, you can use the [Prometheus
 1. Wait until all Pods are running:
 
   ```bash
-  kubectl -n redpanda rollout status statefulset redpanda --watch
+  kubectl --namespace <namespace> rollout status statefulset redpanda --watch
   ```
 
 1. Install Prometheus:

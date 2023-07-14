@@ -11,7 +11,7 @@ Redpanda is a stateful application. Each Redpanda broker needs to store its own 
 As a result, the Helm chart deploys a StatefulSet to manage the Pods in which the Redpanda brokers are running.
 
 ```bash
-kubectl get statefulset -n redpanda
+kubectl get statefulset --namespace <namespace>
 ```
 
 <details>
@@ -33,7 +33,7 @@ When a Pod in the StatefulSet is deleted and recreated,
 it is given the same ordinal number and so it mounts the same storage volume as the deleted Pod that it replaced.
 
 ```bash
-kubectl get pod -n redpanda
+kubectl get pod --namespace <namespace>
 ```
 
 <details>
@@ -63,7 +63,7 @@ By default, the Helm chart uses the default StorageClass in the Kubernetes clust
 The default StorageClass in your Kubernetes cluster depends on the Kubernetes platform that you are using.
 
 ```bash
-kubectl get persistentvolumeclaims -n redpanda
+kubectl get persistentvolumeclaims --namespace <namespace>
 ```
 <details>
 <summary>
@@ -89,7 +89,7 @@ To allow internal and external clients to connect to each Pod that hosts a Redpa
 - External using the [NodePort](#nodeport-service)
 
 ```bash
-kubectl get service -n redpanda
+kubectl get service --namespace <namespace>
 ```
 
 <details>
@@ -117,7 +117,7 @@ When each Pod is rolled out,
 its `seed_servers` field is updated with the FQDN of each Pod in the cluster so that they can discover each other.
 
 ```bash
-kubectl -n redpanda exec redpanda-0 -c redpanda -- cat etc/redpanda/redpanda.yaml
+kubectl --namespace <namespace> exec redpanda-0 -c redpanda -- cat etc/redpanda/redpanda.yaml
 ```
 
 ```yaml
@@ -159,7 +159,7 @@ The Helm chart uses [cert-manager](https://cert-manager.io/) to generate two Cer
 - The `redpanda-default-root-certificate` Certificate is the root certificate authority for the TLS certificates.
 
 ```bash
-kubectl get certificate -n redpanda
+kubectl get certificate --namespace <namespace>
 ```
 
 ```

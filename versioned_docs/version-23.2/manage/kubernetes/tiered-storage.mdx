@@ -62,7 +62,7 @@ import ContextLink from '@site/src/components/ContextButton.js'
 To check if you already have a license key applied to your cluster:
 
 ```bash
-kubectl exec redpanda-0 -c redpanda -n redpanda -- rpk cluster license info
+kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rpk cluster license info
 ```
 
 ## Set up Tiered Storage
@@ -102,6 +102,7 @@ To configure access to an S3 bucket with an IAM role:
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -112,7 +113,7 @@ To configure access to an S3 bucket with an IAM role:
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -131,7 +132,7 @@ To configure access to an S3 bucket with an IAM role:
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml --reuse-values
   ```
 
@@ -139,7 +140,7 @@ To configure access to an S3 bucket with an IAM role:
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=aws_instance_metadata \
     --set storage.tieredConfig.cloud_storage_region=<region> \
@@ -182,6 +183,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -194,7 +196,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -215,7 +217,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml --reuse-values
   ```
 
@@ -223,7 +225,7 @@ To configure access to an S3 bucket with access keys instead of an IAM role:
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=config_file \
     --set storage.tieredConfig.cloud_storage_access_key=<access-key> \
@@ -264,6 +266,7 @@ To configure access to Google Cloud Storage with an IAM role:
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -274,7 +277,7 @@ To configure access to Google Cloud Storage with an IAM role:
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -293,7 +296,7 @@ To configure access to Google Cloud Storage with an IAM role:
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml --reuse-values
   ```
 
@@ -301,7 +304,7 @@ To configure access to Google Cloud Storage with an IAM role:
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=aws_instance_metadata \
     --set storage.tieredConfig.cloud_storage_region=<region> \
@@ -339,6 +342,7 @@ To configure access to Google Cloud Storage with access keys instead of an IAM r
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -352,7 +356,7 @@ To configure access to Google Cloud Storage with access keys instead of an IAM r
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -374,7 +378,7 @@ To configure access to Google Cloud Storage with access keys instead of an IAM r
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml --reuse-values
   ```
 
@@ -382,7 +386,7 @@ To configure access to Google Cloud Storage with access keys instead of an IAM r
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_credentials_source=config_file \
     --set storage.tieredConfig.cloud_storage_api_endpoint=storage.googleapis.com \
@@ -424,6 +428,7 @@ To configure access to Azure Blob Storage, use shared keys:
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredConfig:
@@ -434,7 +439,7 @@ To configure access to Azure Blob Storage, use shared keys:
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -453,7 +458,7 @@ To configure access to Azure Blob Storage, use shared keys:
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml --reuse-values
   ```
 
@@ -461,7 +466,7 @@ To configure access to Azure Blob Storage, use shared keys:
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredConfig.cloud_storage_enabled=true \
     --set storage.tieredConfig.cloud_storage_azure_shared_key=<access_key> \
     --set storage.tieredConfig.cloud_storage_azure_storage_account=<account-name> \
@@ -570,6 +575,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       metadata:
         name: redpanda
       spec:
+        chartRef: {}
         clusterSpec:
           storage:
             tieredStoragePersistentVolume:
@@ -581,7 +587,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      kubectl apply -f redpanda-cluster.yaml -n redpanda
+      kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
       ```
 
       
@@ -601,7 +607,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --values storageclass.yaml --reuse-values
       ```
 
@@ -609,7 +615,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       <TabItem value="flags" label="--set">
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --set storage.tieredStoragePersistentVolume.enabled=true \
         --set storage.tieredStoragePersistentVolume.storageClass="" \
         --set storage.tieredConfig.cloud_storage_cache_size=<max-size-for-volume> \
@@ -632,6 +638,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       metadata:
         name: redpanda
       spec:
+        chartRef: {}
         clusterSpec:
           storage:
             tieredStoragePersistentVolume:
@@ -643,7 +650,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      kubectl apply -f redpanda-cluster.yaml -n redpanda
+      kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
       ```
 
       
@@ -663,7 +670,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       ```
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --values storageclass.yaml --reuse-values
       ```
 
@@ -671,7 +678,7 @@ If you are running Kubernetes on-premises, make sure that you have a dynamic pro
       <TabItem value="flags" label="--set">
 
       ```bash
-      helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+      helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
         --set storage.tieredStoragePersistentVolume.enabled=true \
         --set storage.tieredStoragePersistentVolume.storageClass="<storage-class>" \
         --set storage.tieredConfig.cloud_storage_cache_size=<max-size-for-volume> \
@@ -700,6 +707,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       storage:
         tieredStoragePersistentVolume:
@@ -711,7 +719,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -731,7 +739,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values storageclass.yaml --reuse-values
   ```
 
@@ -739,7 +747,7 @@ When you use a static provisioner, an existing PersistentVolume in the cluster i
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set storage.tieredStoragePersistentVolume.enabled=true \
     --set storage.tieredStoragePersistentVolume.storageClass="-" \
     --set storage.tieredConfig.cloud_storage_cache_size=<max-size-for-volume> \
@@ -775,6 +783,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     storage:
       tieredStorageHostPath: "<absolute-path>"
@@ -786,7 +795,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -806,7 +815,7 @@ storage:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values hostpath.yaml --reuse-values
 ```
 
@@ -814,7 +823,7 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set storage.tieredStoragePersistentVolume.enabled=false \
   --set storage.tieredStorageHostPath=<absolute-path>
   --set storage.tieredConfig.cloud_storage_cache_size=<max-size-for-volume> \

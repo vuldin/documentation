@@ -76,6 +76,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -84,7 +85,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
   </TabItem>
   <TabItem value="helm" label="Helm">
@@ -99,7 +100,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values custom-domain.yaml --reuse-values --wait
   ```
 
@@ -107,7 +108,7 @@ By default, the Helm chart gives each broker a hostname that consists of the Hel
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=LoadBalancer \
     --set external.domain=<custom-domain> \
@@ -141,6 +142,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       fullnameOverride: <custom-hostname>
       external:
@@ -150,7 +152,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
   </TabItem>
   <TabItem value="helm" label="Helm">
@@ -166,7 +168,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values custom-hostname-ordinal.yaml --reuse-values --wait
   ```
 
@@ -174,7 +176,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=LoadBalancer \
     --set external.domain=<custom-domain> \
@@ -206,6 +208,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -218,7 +221,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
   </TabItem>
   <TabItem value="helm" label="Helm">
@@ -237,7 +240,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values custom-hostname.yaml --reuse-values --wait
   ```
 
@@ -245,7 +248,7 @@ You can give each Redpanda broker a custom hostname to advertise instead of the 
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=LoadBalancer \
     --set external.domain=<custom-domain> \
@@ -314,6 +317,7 @@ ExternalDNS is a tool for Kubernetes that manages DNS records. Whenever you add,
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         externalDns:
@@ -321,7 +325,7 @@ ExternalDNS is a tool for Kubernetes that manages DNS records. Whenever you add,
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
   </TabItem>
   <TabItem value="helm" label="Helm">
@@ -335,7 +339,7 @@ ExternalDNS is a tool for Kubernetes that manages DNS records. Whenever you add,
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values enable-external-dns.yaml --reuse-values --wait
   ```
 
@@ -343,7 +347,7 @@ ExternalDNS is a tool for Kubernetes that manages DNS records. Whenever you add,
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.externalDns.enabled=true \
     --wait
   ```
@@ -382,6 +386,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -391,7 +396,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
@@ -408,7 +413,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values loadbalancer-tls-disabled.yaml --reuse-values --wait
   ```
 
@@ -416,7 +421,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=LoadBalancer \
     --set tls.enabled=false \
@@ -431,7 +436,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
 1. Make sure that your managed Kubernetes platform assigned external addresses to your LoadBalancer Services:
 
   ```bash
-  kubectl get service -n redpanda
+  kubectl get service --namespace <namespace>
   ```
 
   Example output:
@@ -454,6 +459,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -467,7 +473,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   
@@ -475,7 +481,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   <TabItem value="helm" label="Helm">
 
   ```bash
-  helm upgrade redpanda redpanda/redpanda -n redpanda --set $(kubectl get svc -n redpanda -o jsonpath='{"external.addresses={"}{ range .items[*]}{.status.loadBalancer.ingress[0].ip }{.status.loadBalancer.ingress[0].hostname}{","}{ end }{"}\n"}') --reuse-values --wait
+  helm upgrade redpanda redpanda/redpanda --namespace <namespace> --set $(kubectl get svc --namespace <namespace> -o jsonpath='{"external.addresses={"}{ range .items[*]}{.status.loadBalancer.ingress[0].ip }{.status.loadBalancer.ingress[0].hostname}{","}{ end }{"}\n"}') --reuse-values --wait
   ```
   </TabItem>
   </Tabs>
@@ -499,6 +505,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -508,7 +515,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
@@ -525,7 +532,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values loadbalancer-tls-disabled.yaml --reuse-values --wait
   ```
 
@@ -533,7 +540,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set external.enabled=true \
     --set external.type=LoadBalancer \
     --set tls.enabled=false \
@@ -548,7 +555,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
 1. Find the node ports that each LoadBalancer Service exposes:
 
   ```bash
-  kubectl get service -n redpanda
+  kubectl get service --namespace <namespace>
   ```
 
   Example output:
@@ -573,6 +580,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   metadata:
     name: redpanda
   spec:
+    chartRef: {}
     clusterSpec:
       external:
         enabled: true
@@ -586,14 +594,14 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
   ```
 
   ```bash
-  kubectl apply -f redpanda-cluster.yaml -n redpanda
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
   </TabItem>
   <TabItem value="helm" label="Helm">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set "external.addresses={<load-balancer-for-redpanda-0>,<load-balancer-for-redpanda-1>,<load-balancer-for-redpanda-2>}"
     --reuse-values --wait
   ```

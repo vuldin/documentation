@@ -51,6 +51,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec: {}
 ```
 
@@ -62,6 +63,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     storage:
       persistentVolume:
@@ -69,7 +71,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 The values in your Redpanda custom resource override their counterparts in the Helm chart's `values.yaml` file. Any values that are not overridden maintain their defaults.
@@ -87,7 +89,7 @@ You can pass more than one `--values` option in the same command. For example, i
 
 ```bash
 helm upgrade --install redpanda redpanda/redpanda \
-    --namespace redpanda --create-namespace \
+    --namespace <namespace> --create-namespace \
     --values custom-storage-class.yaml \
     --values enable-tls.yaml
 ```
@@ -110,7 +112,7 @@ The `helm` command to apply this configuration override looks something like the
 
 ```bash
 helm upgrade --install redpanda redpanda/redpanda \
-    --namespace redpanda --create-namespace \
+    --namespace <namespace> --create-namespace \
     --values storage-class.yaml --reuse-values
 ```
 
@@ -126,7 +128,7 @@ For example, you might override the `storage.persistentVolume.storageClass` conf
 
 ```bash
 helm upgrade --install redpanda redpanda/redpanda \
-    --namespace redpanda --create-namespace \
+    --namespace <namespace> --create-namespace \
     --set storage.persistentVolume.storageClass=my-storage-class
 ```
 
@@ -160,6 +162,7 @@ kind: Redpanda
 metadata:
   name: redpanda
 spec:
+  chartRef: {}
   clusterSpec:
     console:
       enabled: true
@@ -173,7 +176,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f redpanda-cluster.yaml -n redpanda
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
 ```
 
 
@@ -198,7 +201,7 @@ console:
 
 ```bash
 helm upgrade --install redpanda redpanda/redpanda \
-    --namespace redpanda --create-namespace \
+    --namespace <namespace> --create-namespace \
     --values console-enable-admin-api.yaml --reuse-values
 ```
 
@@ -207,7 +210,7 @@ helm upgrade --install redpanda redpanda/redpanda \
 
 ```bash
 helm upgrade --install redpanda redpanda/redpanda \
-    --namespace redpanda --create-namespace \
+    --namespace <namespace> --create-namespace \
     --set console.console.config.redpanda.adminApi.enabled=true \
     --set console.console.config.redpanda.adminApi.urls={"http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644"}
 ```
