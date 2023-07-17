@@ -12,7 +12,7 @@ Data becomes eligible for deletion from object storage following `retention.ms` 
 
 #### Compacted topics in Tiered Storage
 
-When you set <Link to={props.frontmatter.linkRoot + 'develop/config-topics/#change-the-cleanup-policy'}>`cleanup.policy=compact`</Link> for a topic, nothing gets deleted from object storage. 
+When you set <Link to={props.frontmatter.linkRoot + 'reference/topic-properties/#cleanuppolicy'}>`cleanup.policy`</Link> for a topic to `compact`, nothing gets deleted from object storage based on retention settings. When set to `compact,delete`, compacted segments are deleted from object storage based on `retention.ms` and `retention.bytes`.
 
 For compacted topics, Redpanda compacts segments after they have been uploaded to object storage. Redpanda initially uploads all uncompacted segments. It then re-uploads the segments with compaction applied. It's likely that some segments in object storage are not compacted, but the Tiered Storage read path can manage this. 
 
