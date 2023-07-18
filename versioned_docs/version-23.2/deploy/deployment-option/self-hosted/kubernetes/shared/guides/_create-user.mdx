@@ -15,7 +15,7 @@ Never delete the superuser. You need the superuser to grant permissions to new u
   -p changethispassword \
   --admin-api-tls-enabled \
   --admin-api-tls-truststore /etc/tls/certs/default/ca.crt \
-  --api-urls redpanda-0.redpanda.redpanda.svc.cluster.local.:9644,redpanda-1.redpanda.redpanda.svc.cluster.local.:9644,redpanda-2.redpanda.redpanda.svc.cluster.local.:9644
+  -X admin.hosts=redpanda-0.redpanda.redpanda.svc.cluster.local.:9644,redpanda-1.redpanda.redpanda.svc.cluster.local.:9644,redpanda-2.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
   <details>
@@ -39,7 +39,7 @@ Never delete the superuser. You need the superuser to grant permissions to new u
     --tls-enabled \
     --tls-truststore /etc/tls/certs/default/ca.crt \
     --user=superuser --password=secretpassword --sasl-mechanism SCRAM-SHA-512 \
-    --brokers redpanda-0.redpanda.redpanda.svc.cluster.local:9093
+    -X brokers=redpanda-0.redpanda.redpanda.svc.cluster.local:9093
   ```
 
   <details>

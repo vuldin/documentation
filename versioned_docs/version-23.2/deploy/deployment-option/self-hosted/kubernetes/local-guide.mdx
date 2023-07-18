@@ -249,7 +249,7 @@ Each Redpanda broker comes with rpk, which is a CLI tool for connecting to and i
 1. Create an alias to simplify the `rpk` commands:
 
   ```bash
-  alias rpk-topic="kubectl --namespace <namespace> exec -i -t redpanda-0 -c redpanda -- rpk topic --brokers redpanda-0.redpanda.redpanda.svc.cluster.local.:9093,redpanda-1.redpanda.redpanda.svc.cluster.local.:9093,redpanda-2.redpanda.redpanda.svc.cluster.local.:9093 --tls-truststore /etc/tls/certs/default/ca.crt --tls-enabled"
+  alias rpk-topic="kubectl --namespace <namespace> exec -i -t redpanda-0 -c redpanda -- rpk topic -X brokers=redpanda-0.redpanda.redpanda.svc.cluster.local.:9093,redpanda-1.redpanda.redpanda.svc.cluster.local.:9093,redpanda-2.redpanda.redpanda.svc.cluster.local.:9093 --tls-truststore /etc/tls/certs/default/ca.crt --tls-enabled"
   ```
 
 1. Create a topic called `twitch_chat`:
@@ -402,10 +402,10 @@ IP addresses can change. If the IP addresses of your worker nodes change, you mu
 
     <InstallRpkLinux/>
 
-1. Set the `REDPANDA_BROKERS` environment variable to the custom domains of your Redpanda brokers:
+1. Set the `RPK_BROKERS` environment variable to the custom domains of your Redpanda brokers:
 
   ```bash
-  export REDPANDA_BROKERS=redpanda-0.customredpandadomain.local:31092,redpanda-1.customredpandadomain.local:31092,redpanda-2.customredpandadomain.local:31092
+  export RPK_BROKERS=redpanda-0.customredpandadomain.local:31092,redpanda-1.customredpandadomain.local:31092,redpanda-2.customredpandadomain.local:31092
   ```
 
   :::note

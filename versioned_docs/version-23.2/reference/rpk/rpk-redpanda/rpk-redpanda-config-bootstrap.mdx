@@ -1,5 +1,6 @@
 ---
 title: rpk redpanda config bootstrap
+rpk_version: (rev )
 ---
 
 <head>
@@ -23,58 +24,73 @@ By default, `redpanda` expects your machine to have one private IP address, and
 `redpanda` will listen on it. If your machine has multiple private IP addresses,
 you must use the `--self` flag to specify which ip `redpanda` should listen on.
 
+## Usage
+
 ```bash
 rpk redpanda config bootstrap [--self <ip>] [--ips <ip1,ip2,...>] [flags]
 ```
 
-### Flags
+## Flags
 
 <table>
   <tbody>
     <tr>
       <td>
-        <strong> Value</strong>
+        <strong>Value</strong>
       </td>
       <td>
-        <strong> Type</strong>
+        <strong>Type</strong>
       </td>
       <td>
-        <strong> Description</strong>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for bootstrap.</td>
+    </tr>
+    <tr>
+      <td>--ips</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of the seed node addresses or hostnames; at least
+        three are recommended.
+      </td>
+    </tr>
+    <tr>
+      <td>--self</td>
+      <td>string</td>
+      <td>
+        Optional IP address for redpanda to listen on; if empty, defaults to a
+        private address.
       </td>
     </tr>
     <tr>
       <td>--config</td>
       <td>string</td>
       <td>
-        Redpanda config file, if not set the file will be searched for in the
-        default location.
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
       </td>
     </tr>
     <tr>
-      <td>-h, --help</td>
-      <td>-</td>
-      <td> Help for bootstrap</td>
-    </tr>
-    <tr>
-      <td>--ips</td>
-      <td>strings</td>
-      <td>Comma-separated list of the seed node addresses or hostnames; at least three
-        are recommended
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
       </td>
     </tr>
     <tr>
-      <td>--self</td>
+      <td>--profile</td>
       <td>string</td>
-      <td>Optional IP address for redpanda to listen on; if empty, defaults to a private
-        address
-      </td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

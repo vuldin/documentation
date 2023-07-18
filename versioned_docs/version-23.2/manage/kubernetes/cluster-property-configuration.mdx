@@ -125,7 +125,7 @@ kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config get log_compression_type \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-    --api-urls <broker-url>:<admin-api-port>
+    -X admin.hosts=<broker-url>:<admin-api-port>
 ```
 
 </TabItem>
@@ -134,7 +134,7 @@ kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
 ```bash
 kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config get log_compression_type \
-    --api-urls <broker-url>:<admin-api-port> \
+    -X admin.hosts=<broker-url>:<admin-api-port> \
 ```
 
 </TabItem>
@@ -166,7 +166,7 @@ To get more detailed information about your Redpanda deployment, generate a [dia
   rpk cluster config export –filename <filename>.yaml \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-    --api-urls <broker-url>:<admin-api-port>
+    -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
@@ -175,7 +175,7 @@ To get more detailed information about your Redpanda deployment, generate a [dia
   ```bash
   kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config export –filename <filename>.yaml \
-    --api-urls <broker-url>:<admin-api-port> \
+    -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>

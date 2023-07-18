@@ -1,6 +1,6 @@
 ---
 title: rpk topic consume
-rpk_version: v23.1.6 (rev cc47e1ad1)
+rpk_version: (rev )
 ---
 
 Consume records from topics.
@@ -230,9 +230,14 @@ until one succeeds:
     9 digits              parsed as a unix second
     YYYY-MM-DD            parsed as a day, UTC
     YYYY-MM-DDTHH:MM:SSZ  parsed as RFC3339, UTC; fractional seconds optional (.MMM)
-    -dur                  duration ago; from now (as t1) or from t1 (as t2)
-    dur                   for t2 in @t1:t2, relative duration from t1
     end                   for t2 in @t1:t2, the current end of the partition
+    -dur                  a negative duration from now or from a timestamp
+    dur                   a positive duration from now or from a timestamp
+
+Durations can be relative to the current time or relative to a timestamp.
+If a duration is used for t1, that duration is relative to now.
+If a duration is used for t2, if t1 is a timestamp, then t2 is relative to t1.
+If a duration is used for t2, if t1 is a duration, then t2 is relative to now.
 
 Durations are parsed simply:
 
@@ -347,6 +352,11 @@ rpk topic consume TOPICS... [flags]
       <td>Opt in to printing control records.</td>
     </tr>
     <tr>
+      <td>--rack</td>
+      <td>string</td>
+      <td>Rack to use for consuming, which opts into follower fetching.</td>
+    </tr>
+    <tr>
       <td>--read-committed</td>
       <td>-</td>
       <td>Opt in to reading only committed offsets.</td>
@@ -359,71 +369,30 @@ rpk topic consume TOPICS... [flags]
       </td>
     </tr>
     <tr>
-      <td>--brokers</td>
-      <td>strings</td>
-      <td>
-        Comma-separated list of broker ip:port pairs (e.g. --brokers
-        '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092').
-        Alternatively, you may set the REDPANDA_BROKERS environment variable
-        with the comma-separated list of broker addresses.
-      </td>
-    </tr>
-    <tr>
       <td>--config</td>
       <td>string</td>
       <td>
-        Redpanda config file, if not set the file will be searched for in the
-        default locations.
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
       </td>
     </tr>
     <tr>
-      <td>--password</td>
-      <td>string</td>
-      <td>SASL password to be used for authentication.</td>
-    </tr>
-    <tr>
-      <td>--sasl-mechanism</td>
-      <td>string</td>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
       <td>
-        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
-        SCRAM-SHA-512.
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
       </td>
     </tr>
     <tr>
-      <td>--tls-cert</td>
+      <td>--profile</td>
       <td>string</td>
-      <td>
-        The certificate to be used for TLS authentication with the broker.
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-enabled</td>
-      <td>-</td>
-      <td>
-        Enable TLS for the Kafka API (not necessary if specifying custom certs).
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-key</td>
-      <td>string</td>
-      <td>
-        The certificate key to be used for TLS authentication with the broker.
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-truststore</td>
-      <td>string</td>
-      <td>The truststore to be used for TLS communication with the broker.</td>
-    </tr>
-    <tr>
-      <td>--user</td>
-      <td>string</td>
-      <td>SASL user to be used for authentication.</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>Enable verbose logging (default: false).</td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

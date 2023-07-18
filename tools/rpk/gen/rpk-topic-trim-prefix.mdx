@@ -1,0 +1,60 @@
+---
+title: rpk topic trim-prefix
+rpk_version: (rev )
+---
+
+Trim records from topics
+
+This command allows you to trim records from topics, to trim the topics Redpanda
+sets the LogStartOffset for partitions to the requested offset. All segments
+whose base offset is less then the requested offset are deleted, and any records
+within the segment before the requested offset can no longer be read.
+
+The --offset/-o flag allows you to indicate which index you want to set the
+partition's low watermark (start offset) to. It can be a single integer value
+denoting the offset or a timestamp if you prefix the offset with an '@'. You may
+select which partition you want to trim the offset from with the --partition/-p
+flag.
+
+The --from-file option allows to trim the offsets specified in a text file with
+the following format:
+[TOPIC] [PARTITION] [OFFSET]
+[TOPIC] [PARTITION] [OFFSET]
+...
+or the equivalent keyed JSON/YAML file.
+
+EXAMPLES
+
+Trim records in 'foo' topic to offset 120 in partition 1
+rpk topic trim-prefix foo --offset 120 --partition 1
+
+Trim records in all partitions of topic foo previous to an specific timestamp
+rpk topic trim-prefix foo -o "@1622505600"
+
+Trim records from a JSON file
+rpk topic trim-prefix --from-file /tmp/to_trim.json
+
+## Usage
+
+```bash
+rpk topic trim-prefix [TOPIC] [flags]
+```
+
+## Aliases
+
+```bash
+trim-prefix, trim
+```
+
+## Flags
+
+<table>
+<tbody>
+<tr>
+<td><strong>Value</strong>
+</td>
+<td><strong>Type</strong>
+</td>
+<td><strong>Description</strong>
+</td>
+</tr><tr><td>-f, --from-file</td><td>string</td><td>File of topic/partition/offset for which to trim offsets for.</td></tr><tr><td>-h, --help</td><td>-</td><td>Help for trim-prefix.</td></tr><tr><td>--no-confirm</td><td>-</td><td>Disable confirmation prompt.</td></tr><tr><td>-o, --offset</td><td>string</td><td>Offset to set the partition's start offset to (end, 47, @<timestamp>).</td></tr><tr><td>-p, --partitions</td><td>int32</td><td>int32Slice   Comma-separated list of partitions to trim records from (default to all) (default []).</td></tr><tr><td>--config</td><td>string</td><td>Redpanda or rpk config file; default search paths are ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.</td></tr><tr><td>-X, --config-opt</td><td>stringArray</td><td>Override rpk configuration settings; '-X help' for detail or '-X list' for terser detail.</td></tr><tr><td>--profile</td><td>string</td><td>rpk profile to use.</td></tr><tr><td>-v, --verbose</td><td>-</td><td>Enable verbose logging.</td></tr></tbody></table>

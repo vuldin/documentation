@@ -68,7 +68,7 @@ rpk acl user create <superuser_username> -p '<superuser_password>'
 
 Now the `admin` user has full access to the cluster and can grant permissions to other users.
 
-The Admin API defaults to `localhost:9644`. If you've configured the Admin API to use a different address/port, use the `--api-urls <address:port>` flag.
+The Admin API defaults to `localhost:9644`. If you've configured the Admin API to use a different address/port, use the `-X admin.hosts=<address:port>` flag.
 
 Creating ACLs for users uses the Kafka protocol (default of `localhost:9092`). Because no ACLs exist at the start, you need a superuser to bypass the requirement of needing ACLs to create ACLs.
 
@@ -77,7 +77,7 @@ To create users and set passwords, run:
 ```bash
 rpk acl user create admin \
 -p '<password>' \
---api-urls localhost:9644
+-X admin.hosts=localhost:9644
 ```
 
 For information about using `rpk` to manage ACL users, see [rpk acl](../../../reference/rpk/rpk-acl).
@@ -347,7 +347,7 @@ rpk topic describe test-topic \
 --user admin \
 --password <password> \
 --sasl-mechanism SCRAM-SHA-256 \
---brokers localhost:9092
+-X brokers=localhost:9092
 ```
 
 ```bash

@@ -106,7 +106,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   ```bash
   kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
     --admin-api-tls-truststore=<path-to-root-ca> \
-    --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644 \
+    -X admin.hosts=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644 \
     --admin-api-tls-enabled
   ```
 
@@ -116,7 +116,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   ```bash
   kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
     --namespace <namespace> \
-    --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
+    -X admin.hosts=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
   </TabItem>
@@ -129,7 +129,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
     --upload-url <url> \
     --namespace <namespace> \
-    --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
+    -X admin.hosts=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
   <details>

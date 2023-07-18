@@ -212,13 +212,13 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
 Create a `panda-chat` topic with five partitions:
 
 ```bash
-rpk topic create panda-chat -p 5 --brokers localhost:30001
+rpk topic create panda-chat -p 5 -X brokers=localhost:30001
 ```
 
 Produce messages to the topic:
 
 ```bash
-rpk topic produce panda-chat --brokers localhost:30001
+rpk topic produce panda-chat -X brokers=localhost:30001
 ```
 
 Type text into the topic, such as `Pandas are fabulous!`. 
@@ -228,7 +228,7 @@ Type text into the topic, such as `Pandas are fabulous!`.
 Consume (or read) the messages in the topic:
 
 ```bash
-rpk topic consume panda-chat --brokers localhost:30001
+rpk topic consume panda-chat -X brokers=localhost:30001
 ```
 
 Each message is shown with its metadata, like this:
@@ -245,7 +245,7 @@ Each message is shown with its metadata, like this:
 List the topics: 
 
 ```bash
-rpk topic list --brokers localhost:30001
+rpk topic list -X brokers=localhost:30001
 ```
 
 ## Delete the cluster

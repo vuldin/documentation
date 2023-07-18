@@ -33,7 +33,7 @@ The next diagram shows how `rpk` communicates with a remote cluster when you ins
 
 ## Specifying command properties
 
-You can specify `rpk` command properties in three ways:
+You can specify `rpk` command properties in the following ways:
 
 * By specifying the appropriate flag on the command line.
 * By defining the corresponding environment variables.
@@ -44,30 +44,64 @@ You can specify `rpk` command properties in three ways:
 
     Configuration file property settings stay the same for each shell session.
 
-Command line flag settings take precedence over the corresponding environment variables, and environment variables take precedence over configuration file settings. If a required flag is not specified on the command line, Redpanda searches the environment variable. If the environment variable is not set, the value in the configuration file is used.
+* By editing the configuration file settings in the `rpk.yaml` file.
+
+    Configuration file property settings stay the same for each shell session.
+
+Command line flag settings take precedence over the corresponding environment variables, and environment variables take precedence over configuration file settings. If a required flag is not specified on the command line, Redpanda searches the environment variable. If the environment variable is not set, the value in the `rpk.yaml` configuration file is used, if that file is available, otherwise the value in the `redpanda.yaml` configuration file is used.
 
 :::tip
-If you specify `rpk` command properties in the configuration file or as environment variables, you don’t need to specify them again on the command line.
+If you specify `rpk` command properties in the configuration files or as environment variables, you don’t need to specify them again on the command line.
 :::
 
-The following table lists command properties and their corresponding command line flags, environment variables, and configuration file settings.
+## Common configuration properties
 
-| Property | Flag | Environment Variable | Configuration File Field |
-| -------- | ------ | ------------------ | ------------------ |
-| Redpanda Brokers | `--brokers` | `REDPANDA_BROKERS` | `rpk.kafka_api.brokers` |
-| Admin API | `--api-urls` | `REDPANDA_API_ADMIN_ADDRS` | `rpk.admin_api.addresses` |
-| Redpanda TLS Key | `--tls-key` | `REDPANDA_TLS_KEY` | `rpk.kafka_api.tls.key_file` |
-| Redpanda TLS Cert | `--tls-cert` | `REDPANDA_TLS_CERT` | `rpk.kafka_api.tls.cert_file` |
-| Redpanda TLS Truststore | `--tls-truststore` | `REDPANDA_TLS_TRUSTSTORE` | `rpk.kafka_api.tls.truststore_file` |
-| Redpanda SASL Mechanism | `--sasl-mechanism` | `REDPANDA_SASL_MECHANISM` | `rpk.kafka_api.sasl.type` |
-| Redpanda SASL Username | `--user` | `REDPANDA_SASL_USERNAME` | `rpk.kafka_api.sasl.user` |
-| Redpanda SASL Password | `--password` | `REDPANDA_SASL_PASSWORD` | `rpk.kafka_api.sasl.password` |
-| Redpanda Admin API TLS Key | `--admin-api-tls-key` | `REDPANDA_ADMIN_TLS_KEY` | `rpk.admin_api.tls.key_file` |
-| Redpanda Admin API TLS Cert | `--admin-api-tls-cert` | `REDPANDA_ADMIN_TLS_CERT` | `rpk.admin_api.tls.cert_file` |
-| Redpanda Admin API TLS Truststore | `--admin-api-tls-truststore` | `REDPANDA_ADMIN_TLS_TRUSTSTORE` | `rpk.admin_api.tls.truststore_file` |
+Every `rpk` command supports a set of common configuration properties. You can set one or more options in an `rpk` command by using the `-X` flag:
+
+```bash
+rpk -X <config-option-1> -X <config-option-2>
+```
+
+Get a list of available options with `-X list`:
+
+```bash
+rpk -X list
+```
+
+Or, get a detailed description about each option with `-X help`:
+
+```bash
+rpk -X help
+```
+
+Some of the common configuration properties apply across all rpk commands as defaults. These default properties have keys with names starting with `defaults`, and they're viewable in `rpk -X list` and `rpk -X help`. For more details, see [`rpk -X options`](../../reference/rpk/rpk-x-options).
+
+<details>
+<summary>Configuration flags deprecated by -X options</summary>
+
+Prior to `rpk` supporting the `-X` flag, each common configuration option was itself a configurable flag. Those flags are deprecated in this version of `rpk`.
+
+The following table lists the deprecated flags and their corresponding properties, environment variables, and configuration file settings.
+
+| Property | Deprecated Flag | Deprecated Configuration File Field | Supported -X Flag |
+| -------- | ------ | ------------------ | --- |
+| Redpanda Brokers | `--brokers` | `rpk.kafka_api.brokers` | [`brokers`](../../reference/rpk/rpk-x-options#brokers) |
+| Admin API | `--api-urls` | `rpk.admin_api.addresses` | [`admin.hosts`](../../reference/rpk/rpk-x-options#adminhosts) |
+| Redpanda TLS Key | `--tls-key` | `rpk.kafka_api.tls.key_file` | [`tls.key`](../../reference/rpk/rpk-x-options#tlskey) |
+| Redpanda TLS Cert | `--tls-cert` | `rpk.kafka_api.tls.cert_file` | [`tls.cert`](../../reference/rpk/rpk-x-options#tlscert) |
+| Redpanda TLS Truststore | `--tls-truststore` | `rpk.kafka_api.tls.truststore_file` | [`tls.ca`](../../reference/rpk/rpk-x-options#tlsca) |
+| Redpanda SASL Mechanism | `--sasl-mechanism` | `rpk.kafka_api.sasl.type` | [`sasl.mechanism`](../../reference/rpk/rpk-x-options#saslmechanism) |
+| Redpanda SASL Username | `--user` | `rpk.kafka_api.sasl.user` | [`user`](../../reference/rpk/rpk-x-options#user) |
+| Redpanda SASL Password | `--password` | `rpk.kafka_api.sasl.password` | [`pass`](../../reference/rpk/rpk-x-options#pass) |
+| Redpanda Admin API TLS Key | `--admin-api-tls-key` | `rpk.admin_api.tls.key_file` | [`admin.tls.key`](../../reference/rpk/rpk-x-options#admintlskey) |
+| Redpanda Admin API TLS Cert | `--admin-api-tls-cert` | `rpk.admin_api.tls.cert_file` | [`admin.tls.cert`](../../reference/rpk/rpk-x-options#admintlscert) |
+| Redpanda Admin API TLS Truststore | `--admin-api-tls-truststore` | `rpk.admin_api.tls.truststore_file` | [`admin.tls.ca`](../../reference/rpk/rpk-x-options#admintlsca) |
+</details>
 
 ---
 ## Next steps
 
+* Learn how to [configure `rpk` profiles](../config-rpk-profile).
 * Learn more about setting [broker and admin API addresses](../broker-admin).
-* For a list of all `rpk` commands and their syntax, see the [rpk documentation](../../reference/rpk).
+* Use [`rpk generate app`](../../reference/rpk/rpk-generate/rpk-generate-app) to generate a sample application to connect with Redpanda. 
+* See the [rpk documentation](../../reference/rpk) for a list of all `rpk` commands and their syntax.

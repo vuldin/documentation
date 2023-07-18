@@ -161,7 +161,7 @@ The `super_user_username` is the superuser that you defined in the cluster speci
 If you changed the Admin API port from the default, you must add the following line to each command that creates a new user, in this step and the next step: 
 
 ```yaml
---api-urls localhost:<port>
+-X admin.hosts=localhost:<port>
 ```
 :::
 
@@ -170,9 +170,9 @@ This command executes the `rpk` command from within a Redpanda cluster container
 ```bash
 kubectl exec -c redpanda <cluster_name>-0 -- rpk acl user create <super_user_username> \
 -p '<superuser_password>' \
---api-urls localhost:<port>
+-X admin.hosts=localhost:<port>
 // highlight-start
---brokers <cluster_name>-0.<cluster_name>.default.svc.cluster.local:<port>
+-X brokers=<cluster_name>-0.<cluster_name>.default.svc.cluster.local:<port>
 // highlight-end
 ```
 

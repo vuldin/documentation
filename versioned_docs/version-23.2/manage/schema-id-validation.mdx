@@ -94,7 +94,7 @@ Create a topic with with `RecordNameStrategy`:
 rpk topic create topic_foo \
   --topic-config redpanda.value.schema.id.validation=true \
   --topic-config redpanda.value.subject.name.strategy=RecordNameStrategy \
-  --brokers <broker-addr>:9092
+  -X brokers=<broker-addr>:9092
 ```
 
 Alter a topic to `RecordNameStrategy`:
@@ -103,5 +103,5 @@ Alter a topic to `RecordNameStrategy`:
 rpk topic alter-config topic_foo \
   --set redpanda.value.schema.id.validation=true \
   --set redpanda.value.subject.name.strategy=RecordNameStrategy \
-  --brokers <broker-addr>:9092
+  -X brokers=<broker-addr>:9092
 ```

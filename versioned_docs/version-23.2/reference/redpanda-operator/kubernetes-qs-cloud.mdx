@@ -315,7 +315,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda:$VERSION \
-  -- rpk --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
+  -- rpk -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
   cluster info
   ```
 
@@ -325,7 +325,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda:$VERSION \
-  -- rpk --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
+  -- rpk -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
   topic create chat-rooms -p 5
   ```
 
@@ -335,7 +335,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda:$VERSION \
-  -- rpk --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
+  -- rpk -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
   topic list
   ```
 
@@ -345,7 +345,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda \
-  -- rpk topic produce chat-rooms --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
+  -- rpk topic produce chat-rooms -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
   ```
 
 1. Type text into the topic, such as `Pandas are fabulous!`.
@@ -359,7 +359,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda \
-  -- rpk topic consume -n 1 chat-rooms --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
+  -- rpk topic consume -n 1 chat-rooms -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
   ```
 
 In the `rpk topic consume command`, `-n 1` specifies the number of messages to print. If you produced more than one message in the previous step, you can change the number of messages to consume based on the number that you produced. 

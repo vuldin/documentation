@@ -238,7 +238,7 @@ kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
   rpk acl user create myuser -p 'changethispassword' \
   --admin-api-tls-enabled \
   --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-  --api-urls <broker-url>:<admin-api-port>
+  -X admin.hosts=<broker-url>:<admin-api-port>
 ```
 
 </TabItem>
@@ -247,7 +247,7 @@ kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
 ```bash
 kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
   rpk acl user create myuser -p 'changethispassword' \
-  --api-urls <broker-url>:<admin-api-port>
+  -X admin.hosts=<broker-url>:<admin-api-port>
 ```
 
 </TabItem>
@@ -276,7 +276,7 @@ By default, new users don't have any permissions in the cluster. The superuser c
     --sasl-mechanism <superuser-authentication-mechanism> \
     --tls-enabled \
     --tls-truststore <path-to-ca-certificate> \
-    --brokers <broker-urls>
+    -X brokers=<broker-urls>
   ```
 
   </TabItem>
@@ -290,7 +290,7 @@ By default, new users don't have any permissions in the cluster. The superuser c
     --user <superuser-name> \
     --password '<superuser-password>' \
     --sasl-mechanism <superuser-authentication-mechanism> \
-    --brokers <broker-urls>
+    -X brokers=<broker-urls>
   ```
 
   </TabItem>
@@ -315,7 +315,7 @@ By default, new users don't have any permissions in the cluster. The superuser c
     --sasl-mechanism <superuser-authentication-mechanism> \
     --tls-enabled \
     --tls-truststore <path-to-ca-certificate> \
-    --brokers <broker-url>:<kafka-api-port>
+    -X brokers=<broker-url>:<kafka-api-port>
   ```
 
   </TabItem>
@@ -329,7 +329,7 @@ By default, new users don't have any permissions in the cluster. The superuser c
     --user <superuser-name> \
     --password '<superuser-password>' \
     --sasl-mechanism <superuser-authentication-mechanism> \
-    --brokers <broker-url>:<kafka-api-port>
+    -X brokers=<broker-url>:<kafka-api-port>
   ```
 
   </TabItem>
@@ -356,7 +356,7 @@ kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
   --sasl-mechanism SCRAM-SHA-256 \
   --tls-enabled \
   --tls-truststore <path-to-ca-certificate> \
-  --brokers <broker-url>:<kafka-api-port>
+  -X brokers=<broker-url>:<kafka-api-port>
 ```
 
 </TabItem>
@@ -368,7 +368,7 @@ kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
   --user myuser \
   --password 'changethispassword' \
   --sasl-mechanism SCRAM-SHA-256 \
-  --brokers <broker-url>:<kafka-api-port>
+  -X brokers=<broker-url>:<kafka-api-port>
 ```
 
 </TabItem>
@@ -387,7 +387,7 @@ kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
   --sasl-mechanism SCRAM-SHA-256 \
   --tls-enabled \
   --tls-truststore <path-to-ca-certificate> \
-  --brokers <broker-url>:<kafka-api-port>
+  -X brokers=<broker-url>:<kafka-api-port>
 ```
 
 </TabItem>
@@ -399,7 +399,7 @@ kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
   --user myuser \
   --password 'changethispassword' \
   --sasl-mechanism SCRAM-SHA-256 \
-  --brokers <broker-url>:<kafka-api-port>
+  -X brokers=<broker-url>:<kafka-api-port>
 ```
 
 </TabItem>

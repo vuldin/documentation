@@ -1,0 +1,121 @@
+---
+title: rpk topic describe-storage
+rpk_version: (rev )
+---
+
+Describe the topic storage status.
+
+This commands prints detailed information about the cloud storage status of a
+given topic, the information is divided in 4 sections:
+
+SUMMARY
+
+The summary section contains general information about the topic, the cloud
+storage mode (one of disabled, write_only, read_only, full, and read_replica),
+and the delta in milliseconds since the last upload of either the partition
+manifest or a segment.
+
+OFFSET
+
+The offset section contains the start and last offsets (inclusive) per
+partition of data available in both the cloud and on local disk.
+
+SIZE
+
+The size section contains the total bytes per partition in the cloud and on
+local disk, the total size of the log of each partition (excluding cloud and
+local overlap), and the number of segments in the cloud and on local disk. The
+cloud segment count does not include segments queued for deletion.
+
+SYNC
+
+The sync section contains the state of cloud synchronization: milliseconds
+since the last upload of the partition manifest, milliseconds since the last
+segment upload, milliseconds since the last manifest sync (for read replicas),
+and whether the remote metadata has a pending update to include all uploaded
+segments.
+
+## Usage
+
+```bash
+rpk topic describe-storage [TOPIC] [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for describe-storage.</td>
+    </tr>
+    <tr>
+      <td>-H, --human-readable</td>
+      <td>-</td>
+      <td>Print the times and bytes in a human-readable form.</td>
+    </tr>
+    <tr>
+      <td>-a, --print-all</td>
+      <td>-</td>
+      <td>Print all cloud storage status.</td>
+    </tr>
+    <tr>
+      <td>-o, --print-offset</td>
+      <td>-</td>
+      <td>Print the offset section.</td>
+    </tr>
+    <tr>
+      <td>-z, --print-size</td>
+      <td>-</td>
+      <td>Print the log size section.</td>
+    </tr>
+    <tr>
+      <td>-s, --print-summary</td>
+      <td>-</td>
+      <td>Print the summary section.</td>
+    </tr>
+    <tr>
+      <td>-y, --print-sync</td>
+      <td>-</td>
+      <td>Print the sync section.</td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
+      </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>Enable verbose logging.</td>
+    </tr>
+  </tbody>
+</table>

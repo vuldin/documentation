@@ -50,7 +50,7 @@ Before you perform a rolling upgrade, you must find out which Redpanda version y
     rpk redpanda admin brokers list \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-      --hosts <broker-url>:<admin-api-port>
+      -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
@@ -59,7 +59,7 @@ Before you perform a rolling upgrade, you must find out which Redpanda version y
   ```bash
   kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk redpanda admin brokers list \
-      --hosts <broker-url>:<admin-api-port> \
+      -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>
@@ -221,7 +221,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
     rpk cluster maintenance enable 0 --wait \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-      --api-urls <broker-url>:<admin-api-port>
+      -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
@@ -230,7 +230,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   ```bash
   kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster maintenance enable 0 --wait \
-      --api-urls <broker-url>:<admin-api-port> \
+      -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>
@@ -262,7 +262,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
     rpk cluster health \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-      --api-urls <broker-url>:<admin-api-port>
+      -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
@@ -271,7 +271,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   ```bash
   kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster health \
-      --api-urls <broker-url>:<admin-api-port> \
+      -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>
@@ -330,7 +330,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
     rpk redpanda admin brokers list \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-      --hosts <broker-url>:<admin-api-port>
+      -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
@@ -339,7 +339,7 @@ Before placing a broker into maintenance mode, you may want to temporarily disab
   ```bash
   kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk redpanda admin brokers list \
-      --hosts <broker-url>:<admin-api-port> \
+      -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>
@@ -373,7 +373,7 @@ kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster health \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-    --api-urls <broker-url>:<admin-api-port>
+    -X admin.hosts=<broker-url>:<admin-api-port>
 ```
 
 </TabItem>
@@ -382,7 +382,7 @@ kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
 ```bash
 kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster health \
-    --api-urls <broker-url>:<admin-api-port> \
+    -X admin.hosts=<broker-url>:<admin-api-port> \
 ```
 
 </TabItem>
@@ -458,7 +458,7 @@ If something does not go as planned during a rolling upgrade, you can roll back 
     rpk cluster health \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-      --api-urls <broker-url>:<admin-api-port>
+      -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
@@ -467,7 +467,7 @@ If something does not go as planned during a rolling upgrade, you can roll back 
   ```bash
   kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
     rpk cluster health \
-      --api-urls <broker-url>:<admin-api-port> \
+      -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>

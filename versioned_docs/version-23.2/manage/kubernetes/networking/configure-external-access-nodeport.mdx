@@ -503,7 +503,7 @@ Although adding entries to the `/etc/hosts` file may work for development purpos
 1. Use the IP addresses to communicate with the Redpanda cluster from outside the Kubernetes cluster:
 
   ```bash
-  rpk cluster info --brokers <worker-node-ip>:31092
+  rpk cluster info -X brokers=<worker-node-ip>:31092
   ```
 
 ## Next steps

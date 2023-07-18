@@ -14,9 +14,10 @@ The `rpk` commands let you configure, manage, and tune Redpanda clusters. They a
 
 The `rpk` commands feature autocompletion, so you that can write the first few letters that uniquely identify a command and then use the tab key to complete it. For more information, see [rpk autocompletion documentation](./rpk-generate/rpk-generate-shell-completion).
 
-This section lists the `rpk` commands in alphabetical order. Each command includes a table of flags and their descriptions. You can also get descriptions for each command flag by running `rpk <command> -–help` in your locally installed Redpanda.
+This section lists the `rpk` commands in alphabetical order. Each command includes a table of flags and their descriptions. You can also get descriptions for each command flag by running `rpk <command> -–help` in your locally installed Redpanda, and descriptions of all rpk-specific options by running [`rpk -X help`](rpk-x-options).
 
 - [rpk](rpk-commands)
+- [rpk -X options](rpk-x-options)
 - [rpk acl](rpk-acl)
   - [rpk acl create](rpk-acl/rpk-acl-create)
   - [rpk acl delete](rpk-acl/rpk-acl-delete)
@@ -24,6 +25,19 @@ This section lists the `rpk` commands in alphabetical order. Each command includ
     - [rpk acl user create](rpk-acl/rpk-acl-user-create)
     - [rpk acl user delete](rpk-acl/rpk-acl-user-delete)
     - [rpk acl user list](rpk-acl/rpk-acl-user-list)
+- [rpk cloud](rpk-cloud)
+  - [rpk cloud auth](rpk-cloud/rpk-cloud-auth)
+    - [rpk cloud auth create](rpk-cloud/rpk-cloud-auth-create)
+    - [rpk cloud auth delete](rpk-cloud/rpk-cloud-auth-delete)
+    - [rpk cloud auth edit](rpk-cloud/rpk-cloud-auth-edit)
+    - [rpk cloud auth list](rpk-cloud/rpk-cloud-auth-list)
+    - [rpk cloud auth rename-to](rpk-cloud/rpk-cloud-auth-rename-to)
+    - [rpk cloud auth use](rpk-cloud/rpk-cloud-auth-use)
+  - [rpk cloud byoc](rpk-cloud/rpk-cloud-byoc)
+    - [rpk cloud byoc install](rpk-cloud/rpk-cloud-byoc-install)
+    - [rpk cloud byoc uninstall](rpk-cloud/rpk-cloud-byoc-uninstall)
+  - [rpk cloud login](rpk-cloud/rpk-cloud-login)
+  - [rpk cloud logout](rpk-cloud/rpk-cloud-logout)
 - [rpk cluster](rpk-cluster)
   - [rpk cluster config](rpk-cluster/rpk-cluster-config)
     - [rpk cluster config edit](rpk-cluster/rpk-cluster-config-edit)
@@ -64,6 +78,7 @@ This section lists the `rpk` commands in alphabetical order. Each command includ
 - [rpk debug](rpk-debug)
   - [rpk debug bundle](rpk-debug/rpk-debug-bundle)
 - [rpk generate](rpk-generate)
+  - [rpk generate app](rpk-generate/rpk-generate-app)
   - [rpk generate grafana-dashboard](rpk-generate/rpk-generate-grafana-dashboard)
   - [rpk generate prometheus-config](rpk-generate/rpk-generate-prometheus-config)
   - [rpk generate shell-completion](rpk-generate/rpk-generate-shell-completion)
@@ -79,6 +94,21 @@ This section lists the `rpk` commands in alphabetical order. Each command includ
   - [rpk plugin list](rpk-plugin/rpk-plugin-list)
   - [rpk plugin uninstall](rpk-plugin/rpk-plugin-uninstall)
   - [rpk plugin install](rpk-plugin/rpk-plugin-install)
+- [rpk profile](rpk-profile)
+  - [rpk profile clear](rpk-profile/rpk-profile-clear)
+  - [rpk profile create](rpk-profile/rpk-profile-create)
+  - [rpk profile current](rpk-profile/rpk-profile-current)
+  - [rpk profile delete](rpk-profile/rpk-profile-delete)
+  - [rpk profile edit](rpk-profile/rpk-profile-edit)
+  - [rpk profile edit-globals](rpk-profile/rpk-profile-edit-globals)
+  - [rpk profile list](rpk-profile/rpk-profile-list)
+  - [rpk profile print](rpk-profile/rpk-profile-print)
+  - [rpk profile print-globals](rpk-profile/rpk-profile-print-globals)
+  - [rpk profile prompt](rpk-profile/rpk-profile-prompt)
+  - [rpk profile rename-to](rpk-profile/rpk-profile-rename-to)
+  - [rpk profile set](rpk-profile/rpk-profile-set)
+  - [rpk profile set-globals](rpk-profile/rpk-profile-set-globals)
+  - [rpk profile use](rpk-profile/rpk-profile-use)
 - [rpk redpanda](rpk-redpanda)
   - [rpk redpanda admin](rpk-redpanda/rpk-redpanda-admin)
     - [rpk redpanda admin brokers](rpk-redpanda/rpk-redpanda-admin-brokers)
@@ -109,11 +139,13 @@ This section lists the `rpk` commands in alphabetical order. Each command includ
   - [rpk topic create](rpk-topic/rpk-topic-create)
   - [rpk topic delete](rpk-topic/rpk-topic-delete)
   - [rpk topic describe](rpk-topic/rpk-topic-describe)
+  - [rpk topic describe-storage](rpk-topic/rpk-topic-describe-storage)
   - [rpk topic list](rpk-topic/rpk-topic-list)
-  - [rpk topic-produce](rpk-topic/rpk-topic-produce)
+  - [rpk topic produce](rpk-topic/rpk-topic-produce)
+  - [rpk topic trim-prefix](rpk-topic/rpk-topic-trim-prefix)
 - [rpk version](rpk-version)
 
 
 ## Related topics
 
-- [Introduction to rpk](../../get-started/rpk-install)
+- [Introduction to rpk](../../get-started/intro-to-rpk)

@@ -64,7 +64,7 @@ To delete a PersistentVolume, follow these steps to ensure that your data is mov
   ```bash
   kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster info \
-      --brokers <broker-url>:<kafka-api-port> \
+      -X brokers=<broker-url>:<kafka-api-port> \
       --tls-enabled \
       --tls-truststore <path-to-kafka-api-ca-certificate>
   ```
@@ -75,7 +75,7 @@ To delete a PersistentVolume, follow these steps to ensure that your data is mov
   ```bash
   kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster info \
-      --brokers <broker-url>:<kafka-api-port>
+      -X brokers=<broker-url>:<kafka-api-port>
   ```
 
   </TabItem>

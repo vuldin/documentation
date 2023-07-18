@@ -21,12 +21,14 @@ would like to set. Nested fields can be accessed through a dot:
 rpk redpanda config set redpanda.developer_mode true
 ```
 
-The default format is to parse the value as yaml. Individual specific fields
-can be set, or full structs:
+All values are parsed as yaml and, since yaml is a superset of json, you can
+also format your input as json. Individual specific fields or full structs can
+be set:
 
 ```
 rpk redpanda config set rpk.tune_disk_irq true
 ```
+
 
 or
 
@@ -59,46 +61,57 @@ The json format can be used to set values as json:
 rpk redpanda config set redpanda.rpc_server '{"address":"0.0.0.0","port":33145}' --format json
 ```
 
-### Usage
+## Usage
 
 ```
 rpk redpanda config set <key> <value> [flags]
 ```
 
-### Flags
+## Flags
 
 <table>
   <tbody>
     <tr>
       <td>
-        <strong> Value</strong>
+        <strong>Value</strong>
       </td>
       <td>
-        <strong> Type</strong>
+        <strong>Type</strong>
       </td>
       <td>
-        <strong> Description</strong>
-      </td>
-    </tr>
-    <tr>
-      <td>--config</td>
-      <td>string</td>
-      <td>
-        Redpanda config file, if not set the file will be searched for in the
-        default location.
+        <strong>Description</strong>
       </td>
     </tr>
     <tr>
       <td>-h, --help</td>
       <td>-</td>
-      <td> Help for set.</td>
+      <td>Help for set.</td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
+      </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

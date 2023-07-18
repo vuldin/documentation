@@ -251,7 +251,7 @@ To use Helm to install cert-manager:
 1. From a remote machine that has `rpk` installed, to get information about the cluster:
 
   ```bash
-  rpk --brokers 34.121.167.159:30249,34.71.125.54:30249,35.184.221.5:30249 \
+  rpk -X brokers=34.121.167.159:30249,34.71.125.54:30249,35.184.221.5:30249 \
   cluster info
   ```
 
@@ -266,14 +266,14 @@ To use Helm to install cert-manager:
 2. To create a topic in your Redpanda cluster:
 
   ```bash
-  rpk --brokers 34.121.167.159:30249,34.71.125.54:30249,35.184.221.5:30249 \
+  rpk -X brokers=34.121.167.159:30249,34.71.125.54:30249,35.184.221.5:30249 \
   topic create chat-rooms -p 5
   ```
 
 3. To show the list of topics: 
 
   ```bash
-  rpk --brokers 34.121.167.159:30249,34.71.125.54:30249,35.184.221.5:30249 \
+  rpk -X brokers=34.121.167.159:30249,34.71.125.54:30249,35.184.221.5:30249 \
   topic list
   ```
 

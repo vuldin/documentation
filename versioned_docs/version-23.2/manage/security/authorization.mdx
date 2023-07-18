@@ -190,7 +190,7 @@ For example, to create a user:
 ```bash
 rpk acl user create Jack \
 --password '<password>' \
---api-urls localhost:9644
+-X admin.hosts localhost:9644
 ```
  
 
@@ -226,7 +226,7 @@ Every `rpk acl` command can use these flags:
 | --admin-api-tls-enabled         | Enable TLS for the Admin API (not necessary if specifying custom certificates). This is assumed as true when passing other --admin-api-tls flags.    |  
 | --admin-api-tls-key         | The certificate key to be used for TLS authentication with the Admin API.    | 
 | --admin-api-tls-truststore         | The truststore to be used for TLS communication with the Admin API.    |  
-| --brokers         | Comma-separated list of broker ip:port pairs (for example, --brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092' ). Alternatively, you can set the REDPANDA_BROKERS environment variable with the comma-separated list of broker addresses.    | 
+| --brokers         | Comma-separated list of broker ip:port pairs (for example, --brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092' ). Alternatively, you can set the RPK_BROKERS environment variable with the comma-separated list of broker addresses.    | 
 | --config         | Redpanda configuration file. If not set, the file is searched in the default locations.    |  
 | -h, --help         | Help.    | 
 | --password         | SASL password to be used for authentication.    |  
@@ -335,7 +335,7 @@ Following are the available global user flags:
 
 | Flag             | Description   | Supported Value    |   
 | --------         | ------    | ------    |   
-| --api-urls         | The comma-separated list of Admin API addresses (IP:port). You must specify one for each broker.    | strings    |   
+| -X admin.hosts         | The comma-separated list of Admin API addresses (IP:port). You must specify one for each broker.    | strings    |   
 | -h, --help         | -h, --help    | Help.    |   
 
 ### User create

@@ -171,7 +171,7 @@ kubectl apply \
 3. Verify that the cluster was created successfully: 
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk cluster metadata --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk cluster metadata -X brokers='localhost:9092'
 ```
 
 ## Start streaming
@@ -181,13 +181,13 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
 Create a `panda-chat` topic with five partitions:
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic create panda-chat -p 5 --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic create panda-chat -p 5 -X brokers='localhost:9092'
 ```
 
 Produce messages to the topic:
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic produce panda-chat --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic produce panda-chat -X brokers='localhost:9092'
 ```
 
 Type text into the topic, such as `Pandas are fabulous!`. 
@@ -197,7 +197,7 @@ Type text into the topic, such as `Pandas are fabulous!`.
 Consume (read) the messages in the topic:
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic consume panda-chat --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic consume panda-chat -X brokers='localhost:9092'
 ```
 
 Each message is shown with its metadata, like this:
@@ -214,7 +214,7 @@ Each message is shown with its metadata, like this:
 List the topics: 
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic list --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic list -X brokers='localhost:9092'
 ```
 
 ## Delete the cluster

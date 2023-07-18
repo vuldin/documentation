@@ -489,7 +489,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
 1. Use the load balancers' addresses to communicate with the Redpanda cluster from outside the Kubernetes cluster:
 
   ```bash
-  rpk cluster info --brokers <load-balancer-address>:31092
+  rpk cluster info -X brokers=<load-balancer-address>:31092
   ```
 
 ### Bare metal
@@ -611,7 +611,7 @@ If you're hosting Redpanda on a managed Kubernetes platform, follow the [Managed
 1. Use the load balancers' addresses to communicate with the Redpanda cluster from outside the Kubernetes cluster:
 
   ```bash
-  rpk cluster info --brokers <lb-redpanda-0>:31092
+  rpk cluster info -X brokers=<lb-redpanda-0>:31092
   ```
 
 ## Next steps

@@ -123,13 +123,13 @@ Here are the basic commands to produce and consume streams:
 1. Create a topic in the source cluster called "twitch_chat":
 
     ```bash
-    rpk topic create twitch_chat --brokers <node IP>:<kafka API port>
+    rpk topic create twitch_chat -X brokers=<node IP>:<kafka API port>
     ```
 
 2. Produce messages to the topic:
 
     ```bash
-    rpk topic produce twitch_chat --brokers <node IP>:<kafka API port>
+    rpk topic produce twitch_chat -X brokers=<node IP>:<kafka API port>
     ```
 
     Type text into the topic and press Ctrl + D to separate between messages.
@@ -139,7 +139,7 @@ Here are the basic commands to produce and consume streams:
 3. Consume (read) the messages from the destination cluster:
 
     ```bash
-    rpk topic consume twitch_chat --brokers <node IP>:<kafka API port>
+    rpk topic consume twitch_chat -X brokers=<node IP>:<kafka API port>
     ```
     
     Each message is shown with its metadata like the following:
