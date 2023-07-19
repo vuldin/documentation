@@ -16,7 +16,14 @@ The following list contains cluster-level configuration properties for Tiered St
 | <ClusterProperty name="cloud_storage_azure_container" frontmatter={props.frontmatter}/> | Azure container name. <br/>Required for ABS. |
 | <ClusterProperty name="cloud_storage_azure_storage_account" frontmatter={props.frontmatter}/> | Azure account name. <br/>Required for ABS. |
 | <ClusterProperty name="cloud_storage_azure_shared_key" frontmatter={props.frontmatter}/> | Azure shared key. <br/>Required for ABS. |
-| <ClusterProperty name="cloud_storage_cache_size" frontmatter={props.frontmatter}/> | Maximum size of the disk cache used by Tiered Storage. Default is 20 GiB. |
+| <ClusterProperty name="cloud_storage_cache_size_percent" frontmatter={props.frontmatter}/> | Maximum size (as a percentage) of the disk cache used by Tiered Storage. <br/>This property overrides `cloud_storage_cache_size`. Default is 10%. |
+| <ClusterProperty name="cloud_storage_cache_size" frontmatter={props.frontmatter}/> | Maximum size (in bytes) of the disk cache used by Tiered Storage. <br/>Default is 20 GiB. |
+| <ClusterProperty name="disk_reservation_percent" frontmatter={props.frontmatter}/> | Amount of disk space (as a percentage) reserved for general system overhead. <br/> Default is 20%. |
+| <ClusterProperty name="retention_local_target_capacity_bytes" frontmatter={props.frontmatter}/> | Target size (in bytes) of the log data. <br/> Default is not set (null).|
+| <ClusterProperty name="retention_local_target_capacity_percent" frontmatter={props.frontmatter}/> | Target size (as a percentage) of the log data. <br/> Default is the amount of remaining disk space after deducting `cloud_storage_cache_size_percent` and `disk_reservation_percent`.|
+| <ClusterProperty name="retention_local_strict" frontmatter={props.frontmatter}/> | Allows the housekeeping process to remove data above the configured consumable retention. This means that data usage is allowed to expand to occupy more of the log data reservation.<br/> Default is false. |
+| <ClusterProperty name="retention_local_trim_interval" frontmatter={props.frontmatter}/> | Period at which disk usage is checked for disk pressure, where data is optionally trimmed to meet the target. <br/> Default is 30 seconds. |
+
 
 In addition, you might want to change the following node property for each broker:
 

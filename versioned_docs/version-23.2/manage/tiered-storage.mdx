@@ -240,7 +240,8 @@ Use the following cluster-level properties to set the maximum cache size, the ca
 | ----------- | ----------- |
 | <TunableClusterProperty name="cloud_storage_cache_check_interval" frontmatter={frontMatter}/> | The time, in milliseconds, between cache checks. The size of the cache can grow quickly, so it’s important to have a small interval between checks. However, if the checks are too frequent, they consume a lot of resources. Default is 30000 ms (30 sec).|
 | <TunableClusterProperty name="cloud_storage_cache_chunk_size" frontmatter={frontMatter}/> | The size of a chunk downloaded into object storage cache. Default is 16 MiB. |
-| <ClusterProperty name="cloud_storage_cache_size" frontmatter={frontMatter}/> | Maximum size of the disk cache used by Tiered Storage. Default is 20 GiB. |
+| <ClusterProperty name="cloud_storage_cache_size_percent" frontmatter={frontMatter}/> | Maximum size (as a percentage) of the disk cache used by Tiered Storage. <br/>This property overrides `cloud_storage_cache_size`. Default is 10%. |
+| <ClusterProperty name="cloud_storage_cache_size" frontmatter={frontMatter}/> | Maximum size (in bytes) of the disk cache used by Tiered Storage. Default is 20 GiB. |
 | <TunableClusterProperty name="cloud_storage_chunk_eviction_strategy" frontmatter={frontMatter}/> | Strategy for evicting unused cache chunks, either `eager` (default), `capped`, or `predictive`. |
 | <TunableClusterProperty name="cloud_storage_disable_chunk_reads" frontmatter={frontMatter}/> | Flag to turn off chunk-based reads and enable full-segment downloads.|
 | <TunableClusterProperty name="cloud_storage_hydrated_chunks_per_segment_ratio" frontmatter={frontMatter}/> | The ratio of hydrated to non-hydrated chunks for each segment, where a current ratio above this value results in unused chunks being evicted. Default is 0.7. |

@@ -1039,6 +1039,24 @@ Raft learner recovery rate limit. Throttles the rate of data communicated to nod
 
 ## Storage properties
 
+### cloud_storage_cache_size_percent
+
+Maximum size of the cloud cache.
+
+The property [`cloud_storage_cache_size`](#cloud_storage_cache_size) controls the same limit expressed as a fixed number of bytes. 
+
+:::note
+`cloud_storage_cache_size_percent` overrides `cloud_storage_cache_size`.
+:::
+
+**Units**: percentage of total disk size
+
+**Default**: 10
+
+**Restart required**: no
+
+---
+
 ### delete_retention_ms
 
 Delete segments that are older than this age.
@@ -1054,6 +1072,18 @@ The `delete_retention_ms` cluster property is different than the `delete.retenti
 **Units**: milliseconds
 
 **Default**: 604800000 (1 week)
+
+**Restart required**: no
+
+---
+
+### disk_reservation_percent
+
+Amount of disk space to reserve for general system overhead.
+
+**Units**: percentage of total disk size
+
+**Default**: 20
 
 **Restart required**: no
 
@@ -1113,6 +1143,52 @@ The topic property [`message.timestamp.type`](../topic-properties#messagetimesta
 
 ---
 
+### retention_local_target_capacity_bytes
+
+The target capacity in bytes that log storage will try to use before additional retention rules will take over to trim data in order to meet the target. When no target is specified, storage usage is unbounded.
+
+:::note
+Redpanda Data recommends setting only one of [`retention_local_target_capacity_bytes`](#retention_local_target_capacity_bytes) or [`retention_local_target_capacity_percent`](#retention_local_target_capacity_percent). If both are set, the minimum of the two is used as the effective target capacity.
+:::
+
+**Units**: percentage of total disk size
+
+**Default**: null
+
+**Restart required**: no
+
+---
+
+### retention_local_target_capacity_percent
+
+The target capacity in percent of unreserved space ([`disk_reservation_percent`](#disk_reservation_percent)) that log storage will try to use before additional retention rules will take over to trim data in order to meet the target. When no target is specified storage usage is unbounded.
+
+:::note
+Redpanda Data recommends setting only one of [`retention_local_target_capacity_bytes`](#retention_local_target_capacity_bytes) or [`retention_local_target_capacity_percent`](#retention_local_target_capacity_percent). If both are set, the minimum of the two is used as the effective target capacity.
+:::
+
+**Units**: percentage of total disk size
+
+**Default**: remaining percentage of disk space after accounting for [`disk_reservation_percent`](#disk_reservation_percent) and [`cloud_storage_cache_size_percent`](#cloud_storage_cache_size_percent)
+
+**Restart required**: no
+
+---
+
+### retention_local_strict
+
+Flag to allow Tiered Storage topics to expand to consumable retention policy limits.
+
+When this flag is enabled, non-local retention settings are used, and local retention settings are used to inform data removal policies in low-disk space scenarios.
+
+**Type**: boolean
+
+**Default**: false
+
+**Restart required**: no
+
+---
+
 ### retention_local_target_bytes_default
 
 Local retention size target for partitions of topics with object storage write enabled. If `null`, the property is disabled.
@@ -1155,9 +1231,35 @@ Both `retention_local_target_bytes_default` and `retention_local_target_ms_defau
 
 ---
 
+### retention_local_trim_interval
+
+The period that disk usage is checked for disk pressure, and data is optionally trimmed to meet the target.
+
+**Units**: seconds
+
+**Default**: 30
+
+**Restart required**: no
+
+---
+
+### space_management_enable
+
+Flag to enable automatic disk space management. 
+
+**Type**: boolean
+
+**Default**: `true` for new clusters, `false` for upgraded clusters
+
+**Restart required**: no
+
+---
+
 ### storage_strict_data_init
 
 Requires that an empty file named `.redpanda_data_dir` be present in the [data directory](../node-properties#data_directory). If set `true`, Redpanda will refuse to start if the file is not found in the data directory.
+
+**Type**: boolean
 
 **Default**: false
 
