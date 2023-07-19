@@ -22,7 +22,7 @@ In a live system, Redpanda metrics are exported only for features that are in us
 To see the available internal metrics in your system, query the `/metrics` endpoint:
 
 ```bash
-curl <node-addr>:9644/metrics | grep "[HELP|TYPE]"
+curl http://<node-addr>:9644/metrics | grep "[HELP|TYPE]"
 ```
 :::
 
