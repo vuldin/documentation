@@ -44,8 +44,7 @@ Preferred TLSv1.3  128 bits  TLS_AES_128_GCM_SHA256        Curve 25519 DHE 253
 Accepted  TLSv1.3  256 bits  TLS_AES_256_GCM_SHA384        Curve 25519 DHE 253
 Accepted  TLSv1.3  256 bits  TLS_CHACHA20_POLY1305_SHA256  Curve 25519 DHE 253
 Accepted  TLSv1.3  128 bits  TLS_AES_128_CCM_SHA256        Curve 25519 DHE 253
-  # highlight-next-line
-Preferred TLSv1.2  256 bits  ECDHE-RSA-AES256-GCM-SHA384   Curve 25519 DHE 253
+Accepted  TLSv1.2  256 bits  ECDHE-RSA-AES256-GCM-SHA384   Curve 25519 DHE 253
 Accepted  TLSv1.2  256 bits  DHE-RSA-AES256-GCM-SHA384     DHE 2048 bits
 Accepted  TLSv1.2  256 bits  ECDHE-RSA-CHACHA20-POLY1305   Curve 25519 DHE 253
 Accepted  TLSv1.2  256 bits  DHE-RSA-CHACHA20-POLY1305     DHE 2048 bits
@@ -59,7 +58,8 @@ Accepted  TLSv1.2  128 bits  ECDHE-RSA-AES128-SHA          Curve 25519 DHE 253
 Accepted  TLSv1.2  128 bits  DHE-RSA-AES128-SHA            DHE 2048 bits
 Accepted  TLSv1.2  256 bits  AES256-GCM-SHA384
 Accepted  TLSv1.2  256 bits  AES256-CCM
-Accepted  TLSv1.2  128 bits  AES128-GCM-SHA256
+  # highlight-next-line
+Preferred TLSv1.2  128 bits  AES128-GCM-SHA256
 Accepted  TLSv1.2  128 bits  AES128-CCM
 Accepted  TLSv1.2  256 bits  AES256-SHA
 Accepted  TLSv1.2  128 bits  AES128-SHA
