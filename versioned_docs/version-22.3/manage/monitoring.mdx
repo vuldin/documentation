@@ -106,7 +106,7 @@ rpk generate grafana-dashboard --datasource <name> --metrics-endpoint <url> > <o
     ```
     rpk generate grafana-dashboard \
     --datasource prometheus \
-    --metrics-endpoint <node-addr>:9644/public_metrics> redpanda-dashboard.json 
+    --metrics-endpoint  http://<node-addr>:9644/public_metrics> redpanda-dashboard.json 
     ```
 
 - For `/metrics`, for example, run the following command: 
