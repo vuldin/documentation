@@ -1,0 +1,171 @@
+---
+title: rpk cluster config force-reset
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk cluster config force-reset | Redpanda Docs" />
+  <meta name="description" content="rpk cluster config force-reset" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-cluster/rpk-cluster-config-force-reset/" />
+</head>
+
+Forcibly clear a cluster configuration property on this node.
+
+This command is not for general changes to cluster configuration: use this only
+when redpanda will not start due to a configuration issue.
+
+If your cluster is working properly and you would like to reset a property
+to its default, you may use the `set` command with an empty string, or
+use the `edit` command and delete the property`s line.
+
+This command erases a named property from an internal cache of the cluster
+configuration on the local node, so that on next startup redpanda will treat
+the setting as if it was set to the default.
+
+
+## Usage
+
+```bash
+rpk cluster config force-reset [PROPERTY...] [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--cache-file</td>
+      <td>string</td>
+      <td>
+        location of configuration cache file (defaults to redpanda data
+        directory).
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for force-reset.</td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Admin API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the Admin
+        API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-truststore</td>
+      <td>string</td>
+      <td>
+        The truststore to be used for TLS communication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--all</td>
+      <td>-</td>
+      <td>Include all properties, including tunables.</td>
+    </tr>
+    <tr>
+      <td>--api-urls</td>
+      <td>string</td>
+      <td> Comma-separated list of admin API addresses (&lt;ip&gt;:&lt;port&gt;).</td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
+        <code>
+          --brokers `192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092`
+        </code>
+        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
+        environment variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
+        SCRAM-SHA-512.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

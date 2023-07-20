@@ -1,0 +1,129 @@
+---
+title: rpk group delete
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk group delete | Redpanda Docs" />
+  <meta name="description" content="rpk group delete" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-group/rpk-group-delete/" />
+</head>
+
+Delete groups from brokers.
+
+Older versions of the Kafka protocol included a retention_millis field in
+offset commit requests. Group commits persisted for this retention and then
+eventually expired. Once all commits for a group expired, the group would be
+considered deleted.
+
+The retention field was removed because it proved problematic for infrequently
+committing consumers: the offsets could be expired for a group that was still
+active. If clients use new enough versions of OffsetCommit (versions that have
+removed the retention field), brokers expire offsets only when the group is
+empty for offset.retention.minutes. Redpanda does not currently support that
+configuration (see #2904), meaning offsets for empty groups expire only when
+they are explicitly deleted.
+
+You may want to delete groups to clean up offsets sooner than when they
+automatically are cleaned up, such as when you create temporary groups for
+quick investigation or testing. This command helps you do that.
+
+## Usage
+
+```bash
+rpk group delete [GROUPS...] [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for delete.</td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
+        <code>
+          --brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092'
+        </code>
+        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
+        environment variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values:
+        <code>SCRAM-SHA-256</code>, <code>SCRAM-SHA-512</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

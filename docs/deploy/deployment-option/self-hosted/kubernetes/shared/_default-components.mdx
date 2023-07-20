@@ -3,7 +3,7 @@ By default, the Redpanda Helm chart deploys the following Kubernetes components:
 * [A StatefulSet](#statefulset) with three Pods.
 * [One PersistentVolumeClaim](#persistentvolumeclaims) for each Pod, each with a capacity of 20Gi.
 * [A headless ClusterIP Service and a NodePort Service](#service) for each Kubernetes node that runs a Redpanda broker.
-* [Self-Signed TLS Certificates](#tls-certificates). 
+* [Self-Signed TLS Certificates](#tls-certificates).
 
 ### StatefulSet
 
@@ -11,7 +11,7 @@ Redpanda is a stateful application. Each Redpanda broker needs to store its own 
 As a result, the Helm chart deploys a StatefulSet to manage the Pods in which the Redpanda brokers are running.
 
 ```bash
-kubectl get statefulset -n redpanda
+kubectl get statefulset --namespace <namespace>
 ```
 
 <details>
@@ -29,11 +29,11 @@ redpanda   3/3     3m11s
 StatefulSets ensure that the state associated with a particular Pod replica is always the same, no matter how often the Pod is recreated.
 Each Pod is also given a unique ordinal number in its name such as `redpanda-0`.
 A Pod with a particular ordinal number is always associated with a PersistentVolumeClaim with the same number.
-When a Pod in the StatefulSet is deleted and recreated, 
+When a Pod in the StatefulSet is deleted and recreated,
 it is given the same ordinal number and so it mounts the same storage volume as the deleted Pod that it replaced.
 
 ```bash
-kubectl get pod -n redpanda
+kubectl get pod --namespace <namespace>
 ```
 
 <details>
@@ -63,7 +63,7 @@ By default, the Helm chart uses the default StorageClass in the Kubernetes clust
 The default StorageClass in your Kubernetes cluster depends on the Kubernetes platform that you are using.
 
 ```bash
-kubectl get persistentvolumeclaims -n redpanda
+kubectl get persistentvolumeclaims --namespace <namespace>
 ```
 <details>
 <summary>
@@ -81,7 +81,7 @@ datadir-redpanda-2   Bound    pvc-45c3555f-43bc-48c2-b209-c284c8091c45   20Gi   
 
 ### Service
 
-The clients writing to or reading from a given partition have to connect directly to the leader broker that hosts the partition. 
+The clients writing to or reading from a given partition have to connect directly to the leader broker that hosts the partition.
 As a result, clients needs to be able to connect directly to each Pod.
 To allow internal and external clients to connect to each Pod that hosts a Redpanda broker, the Helm chart configures two Services:
 
@@ -89,7 +89,7 @@ To allow internal and external clients to connect to each Pod that hosts a Redpa
 - External using the [NodePort](#nodeport-service)
 
 ```bash
-kubectl get service -n redpanda
+kubectl get service --namespace <namespace>
 ```
 
 <details>
@@ -113,18 +113,17 @@ The headless Service associated with a StatefulSet gives the Pods their network 
 :::note
 An important requirement of distributed applications such as Redpanda is peer discovery:
 The ability for each broker to find other brokers in the same cluster.
-When each Pod is rolled out, 
+When each Pod is rolled out,
 its `seed_servers` field is updated with the FQDN of each Pod in the cluster so that they can discover each other.
 
 ```bash
-kubectl -n redpanda exec redpanda-0 -c redpanda -- cat etc/redpanda/redpanda.yaml
+kubectl --namespace <namespace> exec redpanda-0 -c redpanda -- cat etc/redpanda/redpanda.yaml
 ```
 
 ```yaml
 redpanda:
     data_directory: /var/lib/redpanda/data
     empty_seed_starts_cluster: false
-    
     seed_servers:
         - host:
             address: redpanda-0.redpanda.redpanda.svc.cluster.local.
@@ -153,14 +152,14 @@ To learn more, see [Networking and Connectivity in Kubernetes](../../../../../ma
 
 ## TLS Certificates
 
-By default, TLS is enabled in the Redpanda Helm chart. 
+By default, TLS is enabled in the Redpanda Helm chart.
 The Helm chart uses [cert-manager](https://cert-manager.io/) to generate two Certificate resources that provide Redpanda with self-signed certificates:
 
 - The `redpanda-default-cert` Certificate is the TLS certificate that is used by all listeners.
 - The `redpanda-default-root-certificate` Certificate is the root certificate authority for the TLS certificates.
 
 ```bash
-kubectl get certificate -n redpanda
+kubectl get certificate --namespace <namespace>
 ```
 
 ```

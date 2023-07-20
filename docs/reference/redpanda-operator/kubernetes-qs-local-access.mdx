@@ -1,5 +1,6 @@
 ---
 title: Install Redpanda for Kubernetes with kind
+linkRoot: ../../../
 ---
 
 <head>
@@ -11,13 +12,17 @@ title: Install Redpanda for Kubernetes with kind
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-:::danger
-This guide uses the Redpanda Operator for installation. To use the latest recommended Redpanda Helm chart, see the [Install Redpanda Guide for Kubernetes](../../../deploy/deployment-option/self-hosted/kubernetes/get-started-dev).
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
 
-This guide helps you set up Redpanda locally for development and testing purposes on macOS, Windows, or Linux. Start here to set up Redpanda quickly to try it out or for CI/CD purposes. 
+<DeprecationNote frontmatter={frontMatter}/>
+
+This guide helps you set up Redpanda locally for development and testing purposes on macOS, Windows, or Linux. Start here to set up Redpanda quickly to try it out or for CI/CD purposes.
 
 This guide uses kind to create a local Kubernetes cluster in which Redpanda is deployed. It also verifies that the Kafka API port is exposed to your local network so that you can interact with Redpanda from your local machine and not just from inside the Kubernetes cluster.
+
+:::caution Only for development and testing
+Do not use kind for production workloads. Instead, [Install Redpanda for Kubernetes on Cloud](../kubernetes-qs-cloud).
+:::
 
 To get up and running, you create a cluster and deploy the Redpanda operator on the cluster. The steps limit the number of nodes to one, because multi-node local clusters are not currently supported. For details on how to access Redpanda outside the Kubernetes network, see [Connecting Remotely to Kubernetes](../kubernetes-external-connect). 
 
@@ -114,7 +119,7 @@ On Windows, you must compile `rpk` yourself with [Go](https://go.dev/doc/install
 1. Use Helm to add the Redpanda chart repository and update it: 
 
 ```bash
-helm repo add redpanda https://charts.vectorized.io/ && \
+helm repo add vectorized https://charts.vectorized.io/ && \
 helm repo update
 ```
 
@@ -157,7 +162,7 @@ Find information about the versions of the operator in the [list of operator rel
 ```bash
 helm install \
 redpanda-operator \
-redpanda/redpanda-operator \
+vectorized/redpanda-operator \
 --namespace redpanda-system \
 --create-namespace \
 --version $VERSION
@@ -207,13 +212,13 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
 Create a `panda-chat` topic with five partitions:
 
 ```bash
-rpk topic create panda-chat -p 5 --brokers localhost:30001
+rpk topic create panda-chat -p 5 -X brokers=localhost:30001
 ```
 
 Produce messages to the topic:
 
 ```bash
-rpk topic produce panda-chat --brokers localhost:30001
+rpk topic produce panda-chat -X brokers=localhost:30001
 ```
 
 Type text into the topic, such as `Pandas are fabulous!`. 
@@ -223,7 +228,7 @@ Type text into the topic, such as `Pandas are fabulous!`.
 Consume (or read) the messages in the topic:
 
 ```bash
-rpk topic consume panda-chat --brokers localhost:30001
+rpk topic consume panda-chat -X brokers=localhost:30001
 ```
 
 Each message is shown with its metadata, like this:
@@ -240,7 +245,7 @@ Each message is shown with its metadata, like this:
 List the topics: 
 
 ```bash
-rpk topic list --brokers localhost:30001
+rpk topic list -X brokers=localhost:30001
 ```
 
 ## Delete the cluster

@@ -630,7 +630,6 @@
 /docs/beta                                                                            /docs/beta/home 301!
 
 # General version rules
-/docs/23.2/:splat                                                                     /docs/beta/:splat 301!
 /docs/21.1/:splat                                                                     /docs/21.11/:splat 301!
 
 /docs/api                                                                             /docs/reference/api-reference 301!
@@ -663,3 +662,6 @@
 /quick-start                                                                                              /docs/get-started/quick-start 301!
 /manage/schema-registry/                                                                                  /docs/manage/console/schema-registry 301!
 /reference/tunable-properties/                                                                            /docs/reference/tunable-properties 301!
+
+# End of beta redirect
+/docs/beta/*                                                                          /docs/:splat 301!

@@ -1,6 +1,6 @@
 ---
 title: rpk generate grafana-dashboard
-rpk_version: v23.1.6 (rev cc47e1ad1)
+rpk_version: v23.2.1
 ---
 
 <head>
@@ -9,7 +9,149 @@ rpk_version: v23.1.6 (rev cc47e1ad1)
   <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-generate/rpk-generate-grafana-dashboard/" />
 </head>
 
-Generate a Grafana dashboard for Redpanda metrics.
+Generate Grafana dashboards for Redpanda metrics.
+
+Use this command to generate sample Grafana dashboards for Redpanda metrics. 
+These dashboards can be imported into a Grafana or Grafana Cloud instance.
+
+To select a specific dashboard, use the `--dashboard` flag followed by the 
+dashboard name. For example, to generate the operations dashboard, run:
+
+```
+rpk generate grafana-dashboard --dashboard operations
+```
+
+The selected dashboard will be downloaded from Redpanda Data's [observability GitHub repository](https://github.com/redpanda-data/observability).
+
+:::note
+The legacy dashboard is still available as an option (`legacy`), but it isn't downloaded from GitHub. Instead, the generated dashboard is based on which metrics endpoint is used (`--metrics-endpoint`).
+:::
+
+### Available dashboards
+
+You can select one of the following dashboard types:
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Name</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>consumer-metrics</td>
+      <td>
+        Allows for monitoring of Java Kafka consumers, using the 
+        Prometheus JMX Exporter and the Kafka Sample 
+        Configuration. 
+      </td>
+    </tr>
+    <tr>
+      <td>consumer-offsets</td>
+      <td>
+        Metrics and KPIs that provide details of topic consumers 
+        and how far they are lagging behind the end of the log.
+      </td>
+    </tr>
+    <tr>
+      <td>operations [default]</td>
+      <td>
+        Provides an overview of KPIs for a Redpanda cluster with 
+        health indicators. This is suitable for ops or SRE to 
+        monitor on a daily or continuous basis.
+      </td>
+    </tr>
+    <tr>
+      <td>topic-metrics</td>
+      <td>
+        Provides throughput, read/write rates, and on-disk sizes 
+        of each/all topics.
+      </td>
+    </tr>
+    <tr>
+      <td>legacy</td>
+      <td>
+        Generates dashboard based on selected metrics endpoint 
+        (--metrics-endpoint). Modify prometheus datasource and 
+        job-name with --datasource and --job-name flags. 
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Use this command to generate sample Grafana dashboards for Redpanda metrics. 
+These dashboards can be imported into a Grafana or Grafana Cloud instance.
+
+To select a specific dashboard, use the `--dashboard` flag followed by the 
+dashboard name. For example, to generate the operations dashboard, run:
+
+```
+rpk generate grafana-dashboard --dashboard operations
+```
+
+The selected dashboard will be downloaded from Redpanda Data's [observability GitHub repository](https://github.com/redpanda-data/observability).
+
+:::note
+The legacy dashboard is still available as an option (`legacy`), but it isn't downloaded from GitHub. Instead, the generated dashboard is based on which metrics endpoint is used (`--metrics-endpoint`).
+:::
+
+### Available dashboards
+
+You can select one of the following dashboard types:
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Name</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>consumer-metrics</td>
+      <td>
+        Allows for monitoring of Java Kafka consumers, using the 
+        Prometheus JMX Exporter and the Kafka Sample 
+        Configuration. 
+      </td>
+    </tr>
+    <tr>
+      <td>consumer-offsets</td>
+      <td>
+        Metrics and KPIs that provide details of topic consumers 
+        and how far they are lagging behind the end of the log.
+      </td>
+    </tr>
+    <tr>
+      <td>operations [default]</td>
+      <td>
+        Provides an overview of KPIs for a Redpanda cluster with 
+        health indicators. This is suitable for ops or SRE to 
+        monitor on a daily or continuous basis.
+      </td>
+    </tr>
+    <tr>
+      <td>topic-metrics</td>
+      <td>
+        Provides throughput, read/write rates, and on-disk sizes 
+        of each/all topics.
+      </td>
+    </tr>
+    <tr>
+      <td>legacy</td>
+      <td>
+        Generates dashboard based on selected metrics endpoint 
+        (--metrics-endpoint). Modify prometheus datasource and 
+        job-name with --datasource and --job-name flags. 
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Usage
 
@@ -33,11 +175,10 @@ rpk generate grafana-dashboard [flags]
       </td>
     </tr>
     <tr>
-      <td>--datasource</td>
+      <td>--dashboard</td>
       <td>string</td>
       <td>
-        The name of the Prometheus datasource as configured in your Grafana
-        instance.
+        The name of the dashboard you wish to download. Use --dashboard help for more info (default "operations")
       </td>
     </tr>
     <tr>
@@ -46,25 +187,30 @@ rpk generate grafana-dashboard [flags]
       <td>Help for grafana-dashboard.</td>
     </tr>
     <tr>
-      <td>--job-name</td>
+      <td>--config</td>
       <td>string</td>
       <td>
-        The Prometheus job name by which to identify the Redpanda nodes (default
-        "redpanda").
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
       </td>
     </tr>
     <tr>
-      <td>--metrics-endpoint</td>
-      <td>string</td>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
       <td>
-        The Redpanda metrics endpoint from which to get the metrics metadata. For example,
-        `"redpanda_host:9644/metrics"` (default `"http://localhost:9644/metrics"`).
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
       </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>Enable verbose logging (default: false).</td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

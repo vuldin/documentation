@@ -1,0 +1,815 @@
+---
+title: rpk topic
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk topic | Redpanda Docs" />
+  <meta name="description" content="rpk topic" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-topic/" />
+</head>
+
+You can use `rpk topic` to manage your topics, create new messages and consume them. 
+
+## Formatting
+
+Formatting is based on percent escapes and modifiers. Slashes can be
+used for common escapes:
+
+<table>
+  <tbody>
+    <tr>
+      <td>Escape</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>
+        <code> \t </code>
+      </td>
+      <td>Tabs.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>\n</code>
+      </td>
+      <td>Newlines</td>
+    </tr>
+    <tr>
+      <td>
+        <code>\r</code>
+      </td>
+      <td>Carriage returns.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>\\</code>
+      </td>
+      <td>Slashes.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>\xNN</code>
+      </td>
+      <td>Hex encoded characters.</td>
+    </tr>
+  </tbody>
+</table>
+
+The percent encodings are represented like this:
+
+<table>
+<tbody>
+<tr>
+<td>Percent encoding</td>
+<td>Description</td>
+</tr>
+<tr>
+<td><code>%t</code></td>
+<td>Topic.</td>
+</tr>
+<tr>
+<td><code>%T</code></td>
+<td>Topic length.</td>
+</tr>
+<tr>
+<td><code>%k</code></td>
+<td>Key.</td>
+</tr>
+<tr>
+<td><code>%K</code></td>
+<td>Key length.</td>
+</tr>
+<tr>
+<td><code>%v</code></td>
+<td>Value.</td>
+</tr>
+<tr>
+<td><code>%V</code></td>
+<td>Value length.</td>
+</tr>
+<tr>
+<td><code>%h</code></td>
+<td>Begin the header specification.</td>
+</tr>
+<tr>
+<td><code>%H</code></td>
+<td>Number of headers.</td>
+</tr>
+<tr>
+<td><code>%p</code></td>
+<td>Partition.</td>
+</tr>
+<tr><td><code>%o</code></td>
+<td>Offset.</td>
+</tr>
+<tr><td><code>%e</code></td>
+<td>Leader epoch.</td>
+</tr>
+<tr><td><code>%d</code></td><td>Timestamp (formatting described below).</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td><code>%x</code></td>
+<td>Producer id.</td>
+</tr>
+<tr>
+<td><code>%y</code></td>
+<td>
+<p>Producer epoch.</p>
+</td>
+</tr>
+<tr>
+<td><code>%[</code></td>
+<td>Partition log start offset.</td>
+</tr>
+<tr>
+<td><code>%|</code></td>
+<td>Partition last stable offset.</td>
+</tr>
+<tr>
+<td><code>%]</code></td>
+<td>Partition high watermark.</td>
+</tr>
+<tr>
+<td><code>%%</code></td>
+
+<td>Record attributes (formatting described below).</td>
+</tr>
+<tr>
+<td><code>%a</code></td>
+
+<td>Percent sign</td>
+</tr>
+<tr>
+<td><code>%&#123;</code></td>
+<td>Left brace.</td>
+</tr>
+<tr>
+<td><code>%}</code></td>
+<td>Right brace.</td>
+</tr>
+<tr>
+<td><code>%i</code></td>
+<td>The number of records formatted.</td>
+</tr>
+</tbody>
+</table>
+
+### Modifiers
+
+Text and numbers can be formatted in many different ways, and the default
+format can be changed within brace modifiers. `%v` prints a value, while `%v{hex}`
+prints the value hex encoded. `%T` prints the length of a topic in ascii, while
+`%T{big8}` prints the length of the topic as an eight byte big endian.
+
+All modifiers go within braces following a percent-escape.
+
+### Numbers
+
+Formatting number values can have the following modifiers:
+
+<table>
+  <tbody>
+    <tr>
+      <td>Format</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>
+        <code>ascii</code>
+      </td>
+      <td>Print the number as ascii (default).</td>
+    </tr>
+    <tr>
+      <td>
+        <code>hex64</code>
+      </td>
+      <td>Sixteen hex characters.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>hex32</code>
+      </td>
+      <td>Eight hex characters.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>hex16</code>
+      </td>
+      <td>Four hex characters.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>hex8</code>
+      </td>
+      <td>Two hex characters.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>hex4</code>
+      </td>
+      <td>One hex character.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>big64</code>
+      </td>
+      <td>Eight byte big endian number.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>big32</code>
+      </td>
+      <td>Four byte big endian number.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>big16</code>
+      </td>
+      <td>Two byte big endian number.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>big8</code>
+      </td>
+      <td>Alias for byte.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>little64</code>
+      </td>
+      <td>Eight byte little endian number</td>
+    </tr>
+    <tr>
+      <td>
+        <code>little32</code>
+      </td>
+      <td>Four byte little endian number.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>little16</code>
+      </td>
+      <td>Two byte little endian number.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>little8</code>
+      </td>
+      <td>Alias for byte.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>byte</code>
+      </td>
+      <td>One byte number.</td>
+    </tr><tr>
+<td><code>bool</code></td>
+<td><code>true</code> if the number is non-zero, <code>false</code> if the number is zero</td>
+</tr>
+</tbody>
+</table>
+
+All numbers are truncated as necessary per the modifier. Printing `%V{byte}` for
+a length 256 value will print a single null, whereas printing `%V{big8}` would
+print the bytes 1 and 0.
+
+When writing number sizes, the size corresponds to the size of the raw values,
+not the size of encoded values. `%T% t{hex}` for the topic `foo` will print
+`3 666f6f`, not `6 666f6f`.
+
+### Timestamps
+
+By default, the timestamp field is printed as a millisecond number value. In
+addition to the number modifiers above, timestamps can be printed with either
+`Go` formatting:
+
+```go
+%d{go[2006-01-02T15:04:05Z07:00]}
+```
+
+Or `strftime` formatting:
+
+```go
+%d{strftime[%F]}
+```
+
+An arbitrary amount of brackets (or braces, or # symbols) can wrap your date
+formatting:
+
+```go
+%d{strftime### [%F] ###}
+```
+
+The above will print `[YYYY-MM-DD]`, while the surrounding three # on each
+side are used to wrap the formatting.
+
+Further details on Go time formatting can
+be found at [Go's time documentation website](https://pkg.go.dev/time).
+
+Further details on `strftime`
+formatting can be read by running `man strftime`.
+
+## Attributes
+
+Each record (or batch of records) has a set of possible attributes. Internally,
+these are packed into bit flags. Printing an attribute requires first selecting
+which attribute you want to print, and then optionally specifying how you want
+it to be printed:
+
+```bash
+  %a{compression}
+  %a{compression;number}
+  %a{compression;big64}
+  %a{compression;hex8}
+```
+
+Compression is by default printed as text (`none`, `gzip`, ...). Compression
+can be printed as a number with `;number`, where number is any number
+formatting option described above. No compression is `0`, gzip is `1`, etc.
+
+```bash
+  %a{timestamp-type}
+  %a{timestamp-type;big64}
+```
+
+The record's timestamp type is printed as:
+*  `-1` for very old records (before timestamps existed)
+*  `0` for client generated timestamps
+*  `1` for broker generated timestamps. 
+
+:::note
+Number formatting can be controlled with `;number`.
+:::
+
+```bash
+%a{transactional-bit}
+%a{transactional-bit;bool}
+```
+
+Prints `1` if the record a part of a transaction or `0` if it is not.
+
+```bash
+  %a{control-bit}
+  %a{control-bit;bool}
+```
+
+Prints `1` if the record is a commit marker or `0` if it is not.
+
+### Text
+
+Text fields without modifiers default to writing the raw bytes. Alternatively,
+there are the following modifiers:
+
+<table>
+  <tbody>
+    <tr>
+      <td>Modifier</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>
+        <code>%t&#123;hex}</code>
+      </td>
+      <td>Hex encoding</td>
+    </tr>
+    <tr>
+      <td>
+        <code>%k&#123;base64}</code>
+      </td>
+      <td>Base64 encoding</td>
+    </tr>
+    <tr>
+      <td>
+        <code>%k&#123;base64raw}</code>
+      </td>
+      <td>Base64 encoding raw</td>
+    </tr>
+    <tr>
+      <td>
+        <code>%v&#123;unpack[&lt;bBhH&gt;iIqQc.$]}</code>
+      </td>
+      <td>
+        The unpack modifier has a further internal specification, similar to
+        timestamps above.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+The hex modifier hex encodes the text, the `base64` modifier base64 encodes the
+text with standard encoding, and the `base64raw` modifier encodes the text with
+raw standard encoding. The unpack modifier has a further internal
+specification, similar to timestamps above:
+<table>
+  <tbody>
+    <tr>
+      <td>Character</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>
+        <code>x</code>
+      </td>
+      <td>Pad character (does not parse input).</td>
+    </tr>
+    <tr>
+      <td>
+        <code>&lt;</code>
+      </td>
+      <td>Switch what follows to little endian.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>&gt;</code>
+      </td>
+      <td>Switch what follows to big endian.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>b</code>
+      </td>
+      <td>Signed byte.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>B</code>
+      </td>
+      <td>Unsigned byte.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>h</code>
+      </td>
+      <td>int16 ("half word").</td>
+    </tr>
+    <tr>
+      <td>
+        <code>H</code>
+      </td>
+      <td>uint16 ("half word").</td>
+    </tr>
+    <tr>
+      <td>
+        <code>i</code>
+      </td>
+      <td>int32.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>I</code>
+      </td>
+      <td>uint32.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>q</code>
+      </td>
+      <td>int64 ("quad word").</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Q</code>
+      </td>
+      <td>uint64 ("quad word").</td>
+    </tr>
+    <tr>
+      <td>
+        <code>c</code>
+      </td>
+      <td>Any character.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>.</code>
+      </td>
+      <td>Alias for c.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>s</code>
+      </td>
+      <td>Consume the rest of the input as a string</td>
+    </tr>
+    <tr>
+      <td>
+        <code>$</code>
+      </td>
+      <td>
+        Match the end of the line (append error string if anything remains).
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Unpacking text can allow translating binary input into readable output. If a
+value is a big-endian uint32, `%v` will print the raw four bytes, while
+`%v{unpack[>I]}` will print the number in as ascii. If unpacking exhausts the
+input before something is unpacked fully, an error message is appended to the
+output.
+
+### Headers
+
+Headers are formatted with percent encoding inside of the modifier:
+
+```
+%h{%k=%v{hex}}
+```
+
+will print all headers with a space before the key and after the value, an
+equals sign between the key and value, and with the value hex encoded. Header
+formatting actually just parses the internal format as a record format, so all
+of the above rules about `%K`, `%V`, text, and numbers apply.
+
+### Examples
+
+A key and value, separated by a space and ending in newline:
+
+```
+-f '%k %v\n'
+```
+
+A key length as four big endian bytes, and the key as hex:
+
+```
+-f '%K{big32}%k{hex}'
+```
+
+A little endian uint32 and a string unpacked from a value:
+
+```
+-f '%v{unpack[is$]}'
+```
+
+### Offsets
+
+The `--offset` flag allows for specifying where to begin consuming, and
+optionally, where to stop consuming. The literal words `start` and `end`
+specify consuming from the start and the end.
+
+<table>
+  <tbody>
+    <tr>
+      <td>Offset</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>
+        <code>start</code>
+      </td>
+      <td>Consume from the beginning.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>end</code>
+      </td>
+      <td>Consume from the end.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>:end</code>
+      </td>
+      <td>Consume until the current end.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>+oo</code>
+      </td>
+      <td>Consume oo after the current start offset.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>-oo</code>
+      </td>
+      <td>Consume oo before the current end offset.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>oo</code>
+      </td>
+      <td>Consume after an exact offset.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>oo:</code>
+      </td>
+      <td>Alias for oo.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>:oo</code>
+      </td>
+      <td>Consume until an exact offset.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>o1:o2</code>
+      </td>
+      <td>Consume from exact offset o1 until exact offset o2.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>@t</code>
+      </td>
+      <td>Consume starting from a given timestamp.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>@t:</code>
+      </td>
+      <td>alias for @t.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>@:t</code>
+      </td>
+      <td>Consume until a given timestamp.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>@t1:t2</code>
+      </td>
+      <td>Consume from timestamp t1 until timestamp t2.</td>
+    </tr>
+  </tbody>
+</table>
+
+There are a few options for timestamps, with each option being evaluated
+until one succeeds:
+
+<table>
+  <tbody>
+    <tr>
+      <td>Timestamp</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>13 digits</td>
+      <td>Parsed as a unix millisecond.</td>
+    </tr>
+    <tr>
+      <td>9 digits</td>
+      <td>Parsed as a unix second.</td>
+    </tr>
+    <tr>
+      <td>YYYY-MM-DD</td>
+      <td>Parsed as a day, UTC.</td>
+    </tr>
+    <tr>
+      <td>YYYY-MM-DDTHH:MM:SSZ</td>
+      <td>Parsed as RFC3339, UTC; fractional seconds optional (.MMM).</td>
+    </tr>
+    <tr>
+      <td>-dur</td>
+      <td>Duration ago; from now (as t1) or from t1 (as t2).</td>
+    </tr>
+    <tr>
+      <td>dur</td>
+      <td>For t2 in @t1:t2, relative duration from t1.</td>
+    </tr>
+    <tr>
+      <td>end</td>
+      <td>For t2 in @t1:t2, the current end of the partition.</td>
+    </tr>
+  </tbody>
+</table>
+
+Durations are parsed simply:
+
+```
+3ms    three milliseconds
+10s    ten seconds
+9m     nine minutes
+1h     one hour
+1m3ms  one minute and three milliseconds
+```
+
+For example:
+
+```
+-o @2022-02-14:1h   consume 1h of time on Valentine's Day 2022
+-o @-48h:-24h       consume from 2 days ago to 1 day ago
+-o @-1m:end         consume from 1m ago until now
+-o @:-1hr           consume from the start until an hour ago
+```
+
+### Misc
+
+Producing requires a topic to produce to. The topic can be specified either
+directly on as an argument, or in the input text through `%t`. A parsed topic
+takes precedence over the default passed in topic. If no topic is specified
+directly and no topic is parsed, this command will quit with an error.
+
+The input format can parse partitions to produce directly to with `%p`. Doing so
+requires specifying a non-negative `--partition` flag. Any parsed partition
+takes precedence over the `--partition` flag; specifying the flag is the main
+requirement for being able to directly control which partition to produce to.
+
+You can also specify an output format to write when a record is produced
+successfully. The output format follows the same formatting rules as the topic
+consume command. See that command's help text for a detailed description.
+
+## rpk topic
+
+Create, delete, produce to and consume from Redpanda topics.
+
+## Usage
+
+```bash
+rpk topic [command]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
+        <code>
+          --brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092'
+        </code>
+        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
+        environment variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for topic.</td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values:
+        <code>SCRAM-SHA-256</code>, <code>SCRAM-SHA-512</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -19,7 +19,7 @@ The chunks will show up in du, while the actual bytes so far written to the
 file will show up in this command.
 
 The directory returned is the root directory for partitions. Within Redpanda,
-the partition data lives underneath the returned root directory in `kafka/{topic}/{partition}_{revision}/` where revision is a Redpanda internal concept.
+the partition data lives underneath the returned root directory in `kafka/{topic}/{partition}_{revision}/`, where `revision` is a Redpanda internal concept.
 
 ## Usage
 
@@ -61,6 +61,11 @@ rpk cluster logdirs describe [flags]
       <td>Help for describe.</td>
     </tr>
     <tr>
+      <td>-H, --human-readable</td>
+      <td>-</td>
+      <td>Print the logdirs size in a human-readable form.</td>
+    </tr>
+    <tr>
       <td>--sort-by-size</td>
       <td>-</td>
       <td>If true, sort by size.</td>
@@ -71,75 +76,30 @@ rpk cluster logdirs describe [flags]
       <td>Specific topics to describe.</td>
     </tr>
     <tr>
-      <td>--brokers</td>
-      <td>strings</td>
-      <td>
-        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
-        <code>
-          --brokers `192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092`
-        </code>
-        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
-        environment variable with the comma-separated list of broker addresses.
-      </td>
-    </tr>
-    <tr>
       <td>--config</td>
       <td>string</td>
       <td>
-        Redpanda config file, if not set the file will be searched for in the
-        default locations.
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
       </td>
     </tr>
     <tr>
-      <td>--password</td>
-      <td>string</td>
-      <td>SASL password to be used for authentication.</td>
-    </tr>
-    <tr>
-      <td>--sasl-mechanism</td>
-      <td>string</td>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
       <td>
-        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
-        SCRAM-SHA-512.
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
       </td>
     </tr>
     <tr>
-      <td>--tls-cert</td>
+      <td>--profile</td>
       <td>string</td>
-      <td>
-        The certificate to be used for TLS authentication with the broker.
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-enabled</td>
-      <td>-</td>
-      <td>
-        Enable TLS for the Kafka API (not necessary if specifying custom certs).
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-key</td>
-      <td>string</td>
-      <td>
-        The certificate key to be used for TLS authentication with the broker.
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-truststore</td>
-      <td>string</td>
-      <td>The truststore to be used for TLS communication with the broker.</td>
-    </tr>
-    <tr>
-      <td>--user</td>
-      <td>string</td>
-      <td>SASL user to be used for authentication.</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

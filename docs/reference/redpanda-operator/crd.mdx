@@ -1,8 +1,21 @@
-# Redpanda Operator CRD Reference
+---
+title: Operator Custom Resource Definition (CRD)
+linkRoot: ../../../
+---
+
+<head>
+    <meta name="title" content="Operator Custom Resource Definition (CRD)| Redpanda Docs"/>
+    <meta name="description" content="Operator Custom Resource Definition (CRD)."/>
+    <link rel="canonical" href="https://docs.redpanda.com/docs/reference/redpanda-operator/crd/" />
+</head>
+
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 ## Packages
-- [redpanda.vectorized.io/v1alpha1](#redpandavectorizediov1alpha1)
 
+- [redpanda.vectorized.io/v1alpha1](#redpandavectorizediov1alpha1)
 
 ## redpanda.vectorized.io/v1alpha1
 
@@ -14,8 +27,6 @@ Package v1alpha1 contains API Schema definitions for the redpanda v1alpha1 API g
 - [Console](#console)
 - [ConsoleList](#consolelist)
 
-
-
 #### AdminAPI
 AdminAPI configures listener for the Redpanda Admin API
 
@@ -25,7 +36,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `port` _integer_ |  |
-| `external` _[ExternalConnectivityConfig](#externalconnectivityconfig)_ | External enables user to expose Redpanda admin API outside of a Kubernetes cluster. For more information please go to ExternalConnectivityConfig |
+| `external` _[ExternalConnectivityConfig](#externalconnectivityconfig)_ | External enables users to expose the Redpanda Admin API outside of a Kubernetes cluster. For more information go to ExternalConnectivityConfig |
 | `tls` _[AdminAPITLS](#adminapitls)_ | Configuration of TLS for Admin API |
 
 
@@ -62,7 +73,7 @@ _Appears in:_
 
 
 #### CloudConfig
-CloudConfig contains configurations for Redpanda cloud. If you're running a self-hosted installation, you can ignore this
+CloudConfig contains configurations for Redpanda Cloud. If you're running a self-hosted installation, you can ignore this
 
 _Appears in:_
 - [ConsoleSpec](#consolespec)
@@ -943,4 +954,3 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `username` _string_ |  |
-

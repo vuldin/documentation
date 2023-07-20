@@ -1,6 +1,6 @@
 ---
 title: rpk help
-rpk_version: v23.1.6 (rev cc47e1ad1)
+rpk_version: v23.2.1
 ---
 
 <head>
@@ -39,11 +39,30 @@ rpk help [command] [flags]
       <td>help for help.</td>
     </tr>
     <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
+      </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
+    </tr>
+    <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

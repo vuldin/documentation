@@ -1,6 +1,6 @@
 ---
 title: rpk topic produce
-rpk_version: v23.1.6 (rev cc47e1ad1)
+rpk_version: v23.2.1
 ---
 
 <head>
@@ -23,15 +23,17 @@ your specified format.
 
 ## Format input
 
-```
 Slashes can be used for common escapes:
 
+```no-copy
     \t \n \r \\ \xNN
+```
 
 matches tabs, newlines, carriage returns, slashes, and hex encoded characters.
 
 Percent encoding reads into specific values of a record:
 
+```no-copy
     %t    topic
     %T    topic length
     %k    key
@@ -41,15 +43,18 @@ Percent encoding reads into specific values of a record:
     %h    begin the header specification
     %H    number of headers
     %p    partition (if using the --partition flag)
+```
 
 Three escapes exist to parse characters that are used to modify the previous
 escapes:
 
+```no-copy
     %%    percent sign
     %{    left brace
     %}    right brace
+```
 
-MODIFIERS
+### Modifiers
 
 Text and numbers can be read in multiple formats, and the default format can be
 changed within brace modifiers. %v reads a value, while %v{hex} reads a value
@@ -58,10 +63,11 @@ the input, while %T{3} reads exactly three bytes for a topic from the input.
 
 All modifiers go within braces following a percent-escape.
 
-NUMBERS
+### Numbers
 
 Reading number values can have the following modifiers:
 
+```no-copy
      ascii       parse numeric digits until a non-numeric (default)
 
      hex64       sixteen hex characters
@@ -83,45 +89,54 @@ Reading number values can have the following modifiers:
      byte        one byte number
      <digits>    directly specify the length as this many digits
      bool        read "true" as 1, "false" as 0
+```
 
 When reading number sizes, the size corresponds to the size of the encoded
 values, not the decoded values. "%T{6}%t{hex}" will read six hex bytes and
 decode into three.
 
-TEXT
+### Text
 
 Reading text values can have the following modifiers:
 
+```no-copy
     hex       read text then hex decode it
     base64    read text then std-encoding base64 decode it
     re        read text matching a regular expression
+```no-copy
 
-HEADERS
+### Headers
 
 Headers are parsed with an internal key / value specifier format. For example,
 the following will read three headers that begin and end with a space and are
 separated by an equal:
 
+```no-copy
     %H{3}%h{ %k=%v }
+```
 
-EXAMPLES
+### Examples
 
 In the below examples, we can parse many records at once. The produce command
 reads input and tokenizes based on your specified format. Every time the format
 is completely matched, a record is produced and parsing begins anew.
 
-A key and value, separated by a space and ending in newline:
--f '%k %v\n'
-A four byte topic, four byte key, and four byte value:
--f '%T{4}%K{4}%V{4}%t%k%v'
-A value to a specific partition, if using a non-negative --partition flag:
--f '%p %v\n'
-A big-endian uint16 key size, the text " foo ", and then that key:
--f '%K{big16} foo %k'
-A value that can be two or three characters followed by a newline:
--f '%v{re#...?#}\n'
+- A key and value, separated by a space and ending in newline:
+`-f '%k %v\n'`
 
-MISC
+- A four byte topic, four byte key, and four byte value:
+`-f '%T{4}%K{4}%V{4}%t%k%v'`
+
+- A value to a specific partition, if using a non-negative --partition flag:
+`-f '%p %v\n'`
+
+- A big-endian uint16 key size, the text " foo ", and then that key:
+`-f '%K{big16} foo %k'`
+
+- A value that can be two or three characters followed by a newline:
+`-f '%v{re#...?#}\n'`
+
+### Miscellaneous
 
 Producing requires a topic to produce to. The topic can be specified either
 directly on as an argument, or in the input text through %t. A parsed topic
@@ -136,7 +151,7 @@ requirement for being able to directly control which partition to produce to.
 You can also specify an output format to write when a record is produced
 successfully. The output format follows the same formatting rules as the topic
 consume command. See that command's help text for a detailed description.
-```
+
 
 ## Usage
 
@@ -163,8 +178,8 @@ rpk topic produce [TOPIC] [flags]
       <td>--acks</td>
       <td>int</td>
       <td>
-        Number of acks required for producing (<code>-1=all</code>, <code>0=none</code>, <code>1=leader</code>)
-        (default <code>-1</code>)
+        Number of acks required for producing (-1=all, 0=none, 1=leader)
+        (default -1).
       </td>
     </tr>
     <tr>
@@ -240,75 +255,30 @@ rpk topic produce [TOPIC] [flags]
       <td>Produce empty values as tombstones.</td>
     </tr>
     <tr>
-      <td>--brokers</td>
-      <td>strings</td>
-      <td>
-        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
-        <code>
-          --brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092'
-        </code>
-        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
-        environment variable with the comma-separated list of broker addresses.
-      </td>
-    </tr>
-    <tr>
       <td>--config</td>
       <td>string</td>
       <td>
-        Redpanda config file, if not set the file will be searched for in the
-        default locations.
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
       </td>
     </tr>
     <tr>
-      <td>--password</td>
-      <td>string</td>
-      <td>SASL password to be used for authentication.</td>
-    </tr>
-    <tr>
-      <td>--sasl-mechanism</td>
-      <td>string</td>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
       <td>
-        The authentication mechanism to use. Supported values:
-        <code>SCRAM-SHA-256</code>, <code>SCRAM-SHA-512</code>.
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
       </td>
     </tr>
     <tr>
-      <td>--tls-cert</td>
+      <td>--profile</td>
       <td>string</td>
-      <td>
-        The certificate to be used for TLS authentication with the broker.
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-enabled</td>
-      <td>-</td>
-      <td>
-        Enable TLS for the Kafka API (not necessary if specifying custom certs).
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-key</td>
-      <td>string</td>
-      <td>
-        The certificate key to be used for TLS authentication with the broker.
-      </td>
-    </tr>
-    <tr>
-      <td>--tls-truststore</td>
-      <td>string</td>
-      <td>The truststore to be used for TLS communication with the broker.</td>
-    </tr>
-    <tr>
-      <td>--user</td>
-      <td>string</td>
-      <td>SASL user to be used for authentication.</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

@@ -1,0 +1,202 @@
+---
+title: rpk cluster self-test start
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk cluster self-test start | Redpanda Docs" />
+  <meta name="description" content="Reference for the 'rpk cluster self-test start' command. Starts one or more benchmark tests on one or more nodes of the cluster." />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-cluster/rpk-cluster-self-test-start/" />
+</head>
+
+Starts one or more benchmark tests on one or more nodes of the cluster. 
+
+Available tests to run:
+
+- **Disk tests**
+  - Throughput test: 512 KB messages, sequential read/write
+    - Uses a larger request message sizes and deeper I/O queue depth to write/read more bytes in a shorter amount of time, at the cost of IOPS/latency.
+  - Latency test: 4 KB messages, sequential read/write
+    - Uses smaller request message sizes and lower levels of parallelism to achieve higher IOPS and lower latency.
+
+- **Network tests**
+  - Throughput test: 8192-bit messages
+    - Unique pairs of Redpanda nodes each act as a client and a server.
+    - The test pushes as much data over the wire, within the test parameters.
+
+This command immediately returns on success, and the tests run asynchronously. The
+user polls for results with the [rpk cluster self-test status](../../rpk-cluster/rpk-cluster-self-test-status)
+command.
+
+## Usage
+
+```bash
+rpk cluster self-test start [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td> Help for start.</td>
+    </tr>
+    <tr>
+      <td>--disk-duration-ms</td>
+      <td>uint</td>
+      <td>The duration, in milliseconds, of one run of a disk benchmark test (default: 5000).</td>
+    </tr>
+    <tr>
+      <td>--network-duration-ms</td>
+      <td>uint</td>
+      <td>The duration, in milliseconds, of one run of a network benchmark test (default: 5000).</td>
+    </tr>
+    <tr>
+      <td>--no-confirm</td>
+      <td>-</td>
+      <td>Acknowledge warning prompt skipping read from stdin.</td>
+    </tr>
+    <tr>
+      <td>--only-disk-test</td>
+      <td>-</td>
+      <td>Runs only the disk benchmarks.</td>
+    </tr>
+    <tr>
+      <td>--only-network-test</td>
+      <td>-</td>
+      <td>Runs only network benchmarks.</td>
+    </tr>
+    <tr>
+      <td>--participant-node-ids</td>
+      <td>ints</td>
+      <td>IDs of nodes that the benchmark tests will run on. If not set, tests will be run on all nodes.</td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Admin API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the Admin
+        API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-truststore</td>
+      <td>string</td>
+      <td>
+        The truststore to be used for TLS communication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--api-urls</td>
+      <td>string</td>
+      <td>Comma-separated list of Admin API addresses (|IP|:|port|).</td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>Comma-separated list of broker ip:port pairs. For example:
+          <p/><code>--brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092'</code>. 
+          <p/>Alternatively, you may set the <code>REDPANDA_BROKERS</code> environment variable with the comma-separated list of broker addresses.</td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
+        SCRAM-SHA-512.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>Enable verbose logging (default: false).</td>
+    </tr>
+  </tbody>
+</table>
+
+### Example output
+
+```
+$ rpk cluster self-test start
+? Redpanda self-test will run benchmarks of disk and network hardware that will consume significant system resources. Do not start self-test if large workloads are already running on the system. (Y/n)
+Redpanda self-test has started, test identifier: "031be460-246b-46af-98f2-5fc16f03aed3", To check the status run:
+   rpk cluster self-test status    
+```
+
+### Related topics
+
+- [Guide for running self-test for cluster diagnostics](../../../../manage/cluster-maintenance/cluster-diagnostics#disk-and-network-self-test-benchmarks)
+- [rpk cluster self-test](../../rpk-cluster/rpk-cluster-self-test)
+- [rpk cluster self-test status](../../rpk-cluster/rpk-cluster-self-test-status)
+- [rpk cluster self-test stop](../../rpk-cluster/rpk-cluster-self-test-stop)

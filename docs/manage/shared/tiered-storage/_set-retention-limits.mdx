@@ -4,17 +4,20 @@ Redpanda supports retention limits and compaction for topics using Tiered Storag
 
 Starting in Redpanda version 22.3, object storage is the default storage tier for all streaming data, and retention properties work the same for Tiered Storage topics and local storage topics. Data is retained in object storage until it reaches the configured time or size limit. 
 
-:::note
-During upgrade, Redpanda preserves retention settings for existing topics.
+Data becomes eligible for deletion from object storage following `retention.ms` or `retention.bytes`. For example, if `retention.bytes` is set to 10 GiB, then every partition in the topic has a limit of 10 GiB in object storage. When `retention.bytes` is exceeded by data in object storage, the data in object storage is trimmed. If neither `retention.ms` nor `retention.bytes` is specified, then cluster-level defaults are used. 
+
+:::note notes
+- During upgrade, Redpanda preserves retention settings for existing topics.
+- Both size-based and time-based retention policies are applied simultaneously, so it's possible for your size-based property to override your time-based property, or vice versa. For example, if your size-based property requires removing one segment, and your time-based property requires removing three segments, then three segments are removed. Size-based properties reclaim disk space as close as possible to the maximum size, without exceeding the limit.
 :::
 
-Data becomes eligible for deletion from object storage following `retention.ms` or `retention.bytes`. For example, if `retention.bytes` is set to 10 GiB, then every partition in the topic has a limit of 10 GiB in object storage. When `retention.bytes` is exceeded by data in object storage, the data in object storage is trimmed. If neither `retention.ms` nor `retention.bytes` is specified, then cluster-level defaults are used. For more information, see <Link to={props.frontmatter.linkRoot + 'manage/cluster-maintenance/disk-utilization/#configure-message-retention'}>Configure message retention</Link>.
+See also: <Link to={props.frontmatter.linkRoot + 'manage/cluster-maintenance/disk-utilization/#configure-message-retention'}>Configure message retention</Link> and <Link to={props.frontmatter.linkRoot + 'manage/cluster-maintenance/disk-utilization/#local-storage-housekeeping'}>Local storage housekeeping</Link>
 
 #### Compacted topics in Tiered Storage
 
 When you set <Link to={props.frontmatter.linkRoot + 'reference/topic-properties/#cleanuppolicy'}>`cleanup.policy`</Link> for a topic to `compact`, nothing gets deleted from object storage based on retention settings. When set to `compact,delete`, compacted segments are deleted from object storage based on `retention.ms` and `retention.bytes`.
 
-For compacted topics, Redpanda compacts segments after they have been uploaded to object storage. Redpanda initially uploads all uncompacted segments. It then re-uploads the segments with compaction applied. It's likely that some segments in object storage are not compacted, but the Tiered Storage read path can manage this. 
+For compacted topics, Redpanda compacts segments after they have been uploaded to object storage. Redpanda initially uploads all uncompacted segments. It then re-uploads the segments with compaction applied. It's likely that some segments in object storage are not compacted, but the Tiered Storage read path can manage this.
 
 #### Manage local capacity for Tiered Storage topics
 
@@ -32,3 +35,5 @@ At topic creation with Tiered Storage enabled:
   - Upgraded topics retain their historical defaults of infinite retention.
 
 After topic configuration, if Tiered Storage was disabled and must be enabled, or was enabled and must be disabled, Redpanda uses the local retention properties set for the topic.
+
+See also: <Link to={props.frontmatter.linkRoot + 'manage/cluster-maintenance/disk-utilization/#local-storage-housekeeping'}>Local storage housekeeping</Link>

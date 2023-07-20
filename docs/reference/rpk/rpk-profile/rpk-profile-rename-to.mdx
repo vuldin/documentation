@@ -1,0 +1,73 @@
+---
+title: rpk profile rename-to
+rpk_version: v23.2.1
+---
+
+<head>
+  <meta name="title" content="rpk profile rename-to| Redpanda Docs" />
+  <meta name="description" content="rpk profile rename-to" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-profile/rpk-profile-rename-to/" />
+</head>
+
+Rename the current rpk profile to a new name.
+
+## Usage
+
+```bash
+rpk profile rename-to [NAME] [flags]
+```
+
+## Aliases
+
+```bash
+rename-to, rename
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for rename-to.</td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
+      </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>Enable verbose logging.</td>
+    </tr>
+  </tbody>
+</table>

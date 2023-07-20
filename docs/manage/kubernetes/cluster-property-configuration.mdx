@@ -24,35 +24,77 @@ import ContextLink from '@site/src/components/ContextButton.js'
 <ContextLink frontmatter={frontMatter}
 />
 
-When you install Redpanda, it automatically generates a cluster configuration with default settings assigned to each cluster property. 
+When you install Redpanda, it automatically generates a cluster configuration file with default settings assigned to each cluster property.
 You might want to change some of the default settings, particularly if you plan to use features such as rack awareness or Tiered Storage, which are disabled by default.
 
-To configure cluster properties, you must override the defaults in the Redpanda Helm chart's values using the `helm upgrade --install` command. 
-Some cluster configuration properties require a restart. 
-By using the `helm upgrade --install` command, you allow Helm to restart the Pods for you automatically to make the changes take effect. 
-Using Helm to make cluster configuration changes also allows you to replicate, reproduce, and recover your cluster.
+Instead of using rpk to configure cluster properties, you must override the defaults in the Redpanda Helm chart's values. The cluster configuration changes you make using Helm are persisted to ensure that your preferences are maintained across pod restarts and upgrades.
+
+Using Helm to modify your cluster configuration provides the following advantages to using rpk:
+
+- **Automatic pod restarts**: When configuration changes are made, Helm restarts the pods automatically, ensuring the changes are immediately applied.
+- **Cluster reproducibility**: Helm allows you to keep track of your configuration changes, enabling you to reproduce the same configuration easily if you ever need to set up a similar cluster.
+- **Recovery**: In case of issues, Helm makes it possible to revert to a previous state, providing an effective disaster recovery mechanism.
+
+## Find cluster properties
+
+To see what options you can override in the chart, use the `helm show values` command:
+
+```bash
+helm repo add redpanda https://charts.redpanda.com
+helm repo update
+helm show values redpanda/redpanda
+```
+
+This command displays all the values, descriptions, and defaults, which are also documented in the [Redpanda Helm Chart Specification](../../../reference/redpanda-helm-spec).
 
 To view all cluster properties, along with their descriptions and default settings, refer to [Cluster configuration properties](../../../reference/cluster-properties) and [Tunable properties](../../../reference/tunable-properties). Some cluster configuration properties are nested within other objects in the Helm chart's values. For example, `cloud_storage_access_key` is nested inside `storage.tieredStorage`.
 
 :::note
-[Tunable properties](../../../reference/tunable-properties), such as internal buffer sizes, have default settings that you typically do not need to modify during normal operations. You should only change these properties after collecting sufficient data to warrant a change. 
+[Tunable properties](../../../reference/tunable-properties), such as internal buffer sizes, have default settings that you typically do not need to modify during normal operations. You should only change these properties after collecting sufficient data to warrant a change.
 :::
 
 ## Edit cluster properties
 
-To change any property settings, edit the default configuration using the `--values` or `--set` flags in the `helm upgrade --install` command. For example, to set the <ClusterProperty name="cloud_storage_access_key" frontmatter={frontMatter}/> cluster configuration:
+To edit the values of cluster properties, you can either override the defaults in the Redpanda custom resource when using Helm and Redpanda Operator, or override the defaults using the `--values` option or `--set` option in the command line when using only Helm.
+
+For example, to set the <ClusterProperty name="cloud_storage_access_key" frontmatter={frontMatter}/> cluster configuration:
+
+<Tabs groupId="kubernetes-tool">
+<TabItem value="operator" label="Helm + Operator">
+
+```yaml title="redpanda-cluster.yaml"
+apiVersion: cluster.redpanda.com/v1alpha1
+kind: Redpanda
+metadata:
+  name: redpanda
+spec:
+  chartRef: {}
+  clusterSpec:
+    storage:
+      tieredConfig:
+        cloud_storage_access_key: <access-key>
+```
+
+```bash
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
+```
+
+
+
+</TabItem>
+<TabItem value="helm" label="Helm">
 
 <Tabs groupId="helm-config" queryString>
 <TabItem value="values" label="--values">
 
 ```yaml title="cloud-storage.yaml"
 storage:
-tieredConfig:
+  tieredConfig:
     cloud_storage_access_key: <access-key>
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cloud-storage.yaml --reuse-values
 ```
 
@@ -60,16 +102,14 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set storage.tieredConfig.cloud_storage_access_key=<access-key>
 ```
 
 </TabItem>
 </Tabs>
-
-:::note
-<ValuesYaml path="storage.tieredConfig"/>
-:::
+</TabItem>
+</Tabs>
 
 ## View the current value of a property
 
@@ -81,35 +121,30 @@ In this example, the command is executed on a Pod called `redpanda-0` in the `re
 <TabItem value="enabled" label="TLS Enabled">
 
 ```bash
-kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config get log_compression_type \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-    --api-urls <broker-url>:<admin-api-port>
+    -X admin.hosts=<broker-url>:<admin-api-port>
 ```
 
 </TabItem>
 <TabItem value="disabled" label="TLS Disabled">
 
 ```bash
-kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config get log_compression_type \
-    --api-urls <broker-url>:<admin-api-port> \
+    -X admin.hosts=<broker-url>:<admin-api-port> \
 ```
 
 </TabItem>
 </Tabs>
 
-<details>
-<summary>
-Example output
-</summary>
+Example output:
 
 ```
 producer
 ```
-
-</details>
 
 ## Export a Redpanda configuration file
 
@@ -127,20 +162,20 @@ To get more detailed information about your Redpanda deployment, generate a [dia
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config export –filename <filename>.yaml \
     --admin-api-tls-enabled \
     --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-    --api-urls <broker-url>:<admin-api-port>
+    -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec redpanda-0 -n redpanda -c redpanda -- \
+  kubectl exec redpanda-0 --namespace <namespace> -c redpanda -- \
   rpk cluster config export –filename <filename>.yaml \
-    --api-urls <broker-url>:<admin-api-port> \
+    -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>
@@ -176,7 +211,7 @@ To get more detailed information about your Redpanda deployment, generate a [dia
 1. Remove the exported file from the Redpanda container:
 
   ```bash
-  kubectl exec redpanda-0 -c redpanda -n redpanda -- rm <path-to-file>
+  kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rm <path-to-file>
   ```
 
 When you've finished with the file, remove it from your host machine:

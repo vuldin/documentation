@@ -1,6 +1,6 @@
 ---
 title: rpk redpanda admin brokers
-rpk_version: v23.1.6 (rev cc47e1ad1)
+rpk_version: v23.2.1
 ---
 
 <head>
@@ -14,7 +14,7 @@ View and configure Redpanda brokers through the admin listener.
 ## Usage
 
 ```bash
-rpk redpanda admin brokers [command]
+rpk redpanda admin brokers [flags] [command]
 ```
 
 ## Flags
@@ -38,74 +38,30 @@ rpk redpanda admin brokers [command]
       <td>Help for brokers.</td>
     </tr>
     <tr>
-      <td>--admin-api-tls-cert</td>
-      <td>string</td>
-      <td>
-        The certificate to be used for TLS authentication with the Admin API.
-      </td>
-    </tr>
-    <tr>
-      <td>--admin-api-tls-enabled</td>
-      <td>-</td>
-      <td>
-        Enable TLS for the Admin API (not necessary if specifying custom certs).
-      </td>
-    </tr>
-    <tr>
-      <td>--admin-api-tls-key</td>
-      <td>string</td>
-      <td>
-        The certificate key to be used for TLS authentication with the Admin
-        API.
-      </td>
-    </tr>
-    <tr>
-      <td>--admin-api-tls-truststore</td>
-      <td>string</td>
-      <td>
-        The truststore to be used for TLS communication with the Admin API.
-      </td>
-    </tr>
-    <tr>
       <td>--config</td>
       <td>string</td>
       <td>
-        rpk config file, if not set the file will be searched for in the default
-        locations.
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
       </td>
     </tr>
     <tr>
-      <td>--password</td>
-      <td>string</td>
-      <td>SASL password to be used for authentication.</td>
-    </tr>
-    <tr>
-      <td>--sasl-mechanism</td>
-      <td>string</td>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
       <td>
-        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
-        SCRAM-SHA-512.
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
       </td>
     </tr>
     <tr>
-      <td>--hosts</td>
-      <td>strings</td>
-      <td>
-        A comma-separated list of Admin API addresses (&lt;ip&gt;:&lt;port&gt; You must
-        specify one for each node.
-      </td>
-    </tr>
-    <tr>
-      <td>--user</td>
+      <td>--profile</td>
       <td>string</td>
-      <td>SASL user to be used for authentication.</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

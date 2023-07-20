@@ -1,0 +1,265 @@
+---
+title: rpk cluster partitions balancer-status
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk cluster partitions balancer-status | Redpanda Docs" />
+  <meta name="description" content="rpk cluster partitions balancer-status" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-cluster/rpk-cluster-partitions-balancer-status/" />
+</head>
+
+Queries cluster for partition balancer status:
+
+If continuous partition balancing is enabled, redpanda will continuously
+reassign partitions from both unavailable nodes and from nodes using more disk
+space than the configured limit.
+
+This command can be used to monitor the partition balancer status.
+
+### Fields
+
+<table>
+  <tbody>
+    <tr>
+      <td>Field</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Status</code>
+      </td>
+      <td>Either off, ready, starting, in progress, or stalled.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Seconds Since Last Tick</code>
+      </td>
+      <td>The last time the partition balancer ran.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Current Reassignments Count</code>
+      </td>
+      <td>Current number of partition reassignments in progress.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Unavailable Nodes</code>
+      </td>
+      <td>
+        The nodes that have been unavailable after a time set by the
+        <code>partition_autobalancing_node_availability_timeout_sec</code> cluster
+        property.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>Over Disk Limit Nodes</code>
+      </td>
+      <td>
+        The nodes that surpassed the threshold of used disk percentage specified
+        in the <code>partition_autobalancing_max_disk_usage_percent</code>
+        cluster property.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Balancer status
+
+<table>
+  <tbody>
+    <tr>
+      <td>Balancer status</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>
+        <code>off</code>
+      </td>
+      <td>The balancer is disabled.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>ready</code>
+      </td>
+      <td>The balancer is active but there is nothing to do</td>
+    </tr>
+    <tr>
+      <td>
+        <code>starting</code>
+      </td>
+      <td>The balancer is starting but has not run yet.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>in_progress</code>
+      </td>
+      <td>
+        The balancer is active and is in the process of scheduling partition
+        movements.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>stalled</code>
+      </td>
+      <td>
+        Violations have been detected and the balancer cannot correct them.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Stalled Balancer
+
+A stalled balancer can occur for a few reasons and requires a bit of manual
+investigation. A few areas to investigate:
+
+- Are there are enough healthy nodes to which to move partitions? For example,
+  in a three node cluster, no movements are possible for partitions with three
+  replicas. You will see a stall every time there is a violation.
+
+- Does the cluster have sufficient space? If all nodes in the cluster are
+  utilizing more than 80% of their disk space, rebalancing cannot proceed.
+
+- Do all partitions have quorum? If the majority of a partition's replicas are
+  down, the partition cannot be moved.
+
+- Are any nodes in maintenance mode? Partitions are not moved if any node is in
+  maintenance mode.
+
+## Usage
+
+```bash
+rpk cluster partitions balancer-status [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for balancer-status.</td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Admin API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the Admin
+        API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-truststore</td>
+      <td>string</td>
+      <td>
+        The truststore to be used for TLS communication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--api-urls</td>
+      <td>string</td>
+      <td> Comma-separated list of admin API addresses (&lt;ip&gt;:&lt;port&gt;</td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
+        <code>
+          --brokers `192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092`
+        </code>
+        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
+        environment variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
+        SCRAM-SHA-512.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

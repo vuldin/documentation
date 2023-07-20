@@ -1,7 +1,6 @@
 ---
 title: rpk redpanda tune list
-toc_min_heading_level: 3
-toc_max_heading_level: 4
+rpk_version: v23.2.1
 ---
 
 <head>
@@ -24,83 +23,86 @@ tune_swappiness: true
 
 You may use `rpk redpanda config set` to enable or disable a tuner.
 
-### Usage
+## Usage
 
-```
+```bash
 rpk redpanda tune list [flags]
 ```
 
-### Flags
+## Flags
 
 <table>
   <tbody>
     <tr>
       <td>
-        <strong> Value</strong>
+        <strong>Value</strong>
       </td>
       <td>
-        <strong> Type</strong>
+        <strong>Type</strong>
       </td>
       <td>
-        <strong> Description</strong>
-      </td>
-    </tr>
-    <tr>
-      <td>--config</td>
-      <td>string</td>
-      <td>
-        Redpanda config file, if not set the file will be searched for in the
-        default locations.
+        <strong>Description</strong>
       </td>
     </tr>
     <tr>
       <td>-r, --dirs</td>
       <td>strings</td>
       <td>
-        List of *data* directories or places to store data, for example:
-        <code>/var/vectorized/redpanda/</code>, usually your XFS filesystem on an
-        NVMe SSD device.
+        List of *data* directories or places to store data (e.g.
+        /var/vectorized/redpanda/); usually your XFS filesystem on an NVMe SSD
+        device.
       </td>
     </tr>
     <tr>
       <td>-d, --disks</td>
       <td>strings</td>
-      <td>
-        Lists of devices to tune for example <code>sda1</code>.
-      </td>
+      <td>Lists of devices to tune f.e. 'sda1'.</td>
     </tr>
     <tr>
       <td>-h, --help</td>
       <td>-</td>
-      <td> Help for list.</td>
+      <td>Help for list.</td>
     </tr>
     <tr>
       <td>-m, --mode</td>
       <td>string</td>
-      <td>
-        Operation Mode: one of: [<code>sq</code>, <code>sq_split</code>,{" "}
-        <code>mq</code>].
-      </td>
+      <td>Operation Mode: one of: [sq, sq_split, mq].</td>
     </tr>
     <tr>
       <td>-n, --nic</td>
       <td>strings</td>
-      <td> Network Interface Controllers to tune.</td>
+      <td>Network Interface Controllers to tune.</td>
     </tr>
     <tr>
       <td>--reboot-allowed</td>
       <td>-</td>
+      <td>Allow tuners to tune boot parameters and request system reboot.</td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
       <td>
-        If set will allow tuners to tune boot parameters and request system
-        reboot.
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
       </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

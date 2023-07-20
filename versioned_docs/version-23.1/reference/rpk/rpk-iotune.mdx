@@ -1,0 +1,109 @@
+---
+title: rpk iotune
+---
+
+<head>
+  <meta name="title" content="rpk iotune | Redpanda Docs" />
+  <meta name="description" content="rpk iotune" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-iotune/" />
+</head>
+
+`rpk iotune` measures the I/O performance of the hardware used by a Redpanda instance and writes its parameters to an I/O configuration file that Redpanda reads on startup to optimize its I/O performance. Its benchmarks measure read/write IOPS and bandwidth.
+
+By default `rpk iotune` writes its output parameters to `/etc/redpanda/io-config.yaml`.
+
+### Usage
+
+```
+rpk iotune [flags]
+```
+
+### Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong> Value</strong>
+      </td>
+      <td>
+        <strong> Type</strong>
+      </td>
+      <td>
+        <strong> Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--directories</td>
+      <td>strings</td>
+      <td> List of directories to evaluate.</td>
+    </tr>
+    <tr>
+      <td>--duration</td>
+      <td>duration</td>
+      <td>
+        Duration of tests.The value passed is a sequence of decimal numbers,
+        each with optional fraction and a unit suffix, such as{" "}
+        <code>300ms</code>, <code>1.5s</code> or <code>2h45m</code>. Valid time
+        units are <code>ns</code>, <code>us</code> (or <code>µs</code>),{" "}
+        <code>ms</code>, <code>s</code>, <code>m</code>, <code>h</code> (default
+        10m0s).
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td> Help for iotune</td>
+    </tr>
+    <tr>
+      <td>--no-confirm</td>
+      <td>-</td>
+      <td> Disable confirmation prompt if the iotune file already exists</td>
+    </tr>
+    <tr>
+      <td>--timeout</td>
+      <td>duration</td>
+      <td>
+        The maximum time after -- to wait for iotune to complete. The value
+        passed is a sequence of decimal numbers, each with optional fraction and
+        a unit suffix, such as <code>300ms</code>, <code>1.5s</code> or{" "}
+        <code>2h45m</code>. Valid time units are <code>ns</code>,{" "}
+        <code>us</code> (or <code>µs</code>), <code>ms</code>, <code>s</code>,{" "}
+        <code>m</code>, <code>h</code> (default 1h0m0s).
+      </td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Example output
+
+Running `rpk iotune` produces an output file that by default is saved in `/etc/redpanda/io-config.yaml`.
+
+The contents of an example `io-config.yaml`:
+
+```yaml
+disks:
+- mountpoint: /var/lib/redpanda/data
+  read_iops: 40952
+  read_bandwidth: 5638210048
+  write_iops: 6685
+  write_bandwidth: 1491679488
+```
+
+### Related topics
+- [Optimize I/O](../../../manage/io-optimization) 

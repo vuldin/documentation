@@ -1,23 +1,57 @@
 ---
 title: rpk generate prometheus-config
-rpk_version: v23.1.6 (rev cc47e1ad1)
+rpk_version: v23.2.1
 ---
 
-<head>
-  <meta name="title" content="rpk generate prometheus-config | Redpanda Docs" />
-  <meta name="description" content="rpk generate prometheus-config" />
-  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-generate/rpk-generate-prometheus-config/" />
-</head>
+Generate the Prometheus configuration to scrape Redpanda nodes.
 
-Generate the Prometheus configuration to scrape Redpanda nodes. This command's output should be added to the `scrape_configs` array in your Prometheus instance's YAML config file.
+The output of this command should be included in the 'scrape_configs' array
+within the YAML configuration file of your Prometheus instance.
 
-If `--seed-addr` is passed, it will be used to discover the rest of the cluster
-hosts via Redpanda's Kafka API. If `--node-addrs` is passed, they will be used directly. Otherwise, `rpk generate prometheus-conf` will read the Redpanda
-config file and use the node IP configured there. `--config` may be passed to
-specify an arbitrary config file.
+There are different options you can use when generating the configuration:
 
-You can include tls_config to the job by using the flags `--ca-file`, `--cert-file`
-and `--key-file`.
+- If you provide the --seed-addr flag, the command will use the address to
+  discover the rest of the cluster hosts using Redpanda's Kafka API.
+- If you provide the --node-addrs flag, the command will directly use the
+  provided addresses.
+- If neither --seed-addr nor --node-addrs are passed, the command will read the
+  redpanda config file and use the node IP configured there.
+
+If the node you want to scrape uses TLS, you can provide the TLS flags
+(--tls-key, --tls-cert, and --tls-truststore). The command will generate the
+required tls_config section in the scrape configuration.
+
+Additionally, you have the option to define labels for the target in the
+static-config section by using the --labels flag. You can specify the desired
+metric that the label should target, either internal (/metrics) or public
+(/public_metrics).
+
+For example:
+
+```bash
+--job-name test --labels "public:group=one,internal:group=two"
+```
+
+This will result in two separate configs for the test job, each with a
+different label:
+
+```yaml
+- job_name: test
+  static_configs:
+  - targets: [<targets>]
+    labels:
+    group: one
+    metrics_path: /public_metrics
+- job_name: test
+  static_configs:
+  - targets: [<targets>]
+    labels:
+    group: two
+    metrics_path: /metrics
+```
+
+You can only provide one label per job. By default, if no metric target is
+specified, the label will be shared across the jobs.
 
 ## Usage
 
@@ -41,14 +75,9 @@ rpk generate prometheus-config [flags]
       </td>
     </tr>
     <tr>
-      <td>--config</td>
-      <td>string</td>
-      <td> The path to the Redpanda config file.</td>
-    </tr>
-    <tr>
       <td>-h, --help</td>
       <td>-</td>
-      <td> Help for prometheus-config.</td>
+      <td>Help for prometheus-config.</td>
     </tr>
     <tr>
       <td>--internal-metrics</td>
@@ -59,23 +88,27 @@ rpk generate prometheus-config [flags]
       <td>--job-name</td>
       <td>string</td>
       <td>
-        The Prometheus job name by which to identify the Redpanda nodes (default
-        `"redpanda"`).
+        The prometheus job name by which to identify the Redpanda nodes (default
+        "redpanda").
+      </td>
+    </tr>
+    <tr>
+      <td>--labels</td>
+      <td>strings</td>
+      <td>
+        Comma-separated labels and their target metric (int or pub):
+        [metric|labelName:labelValue, ...].
       </td>
     </tr>
     <tr>
       <td>--node-addrs</td>
       <td>strings</td>
-      <td>
-        A comma-delimited list of the addresses (&lt;host&gt;:&lt;port&gt;) of all the
-        Redpanda nodes in a cluster. The port must be the one configured for the
-        nodes' admin API (9644 by default).
-      </td>
+      <td>Comma-separated list of admin API host:ports.</td>
     </tr>
     <tr>
       <td>--seed-addr</td>
       <td>string</td>
-      <td> The URL of a Redpanda node with which to discover the rest.</td>
+      <td>The URL of a Redpanda node with which to discover the rest.</td>
     </tr>
     <tr>
       <td>--tls-cert</td>
@@ -101,12 +134,35 @@ rpk generate prometheus-config [flags]
     <tr>
       <td>--tls-truststore</td>
       <td>string</td>
-      <td>The truststore to be used for TLS communication with the broker.</td>
+      <td>
+        The CA certificate to be used for TLS communication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
+      </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>Enable verbose logging (default: false).</td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

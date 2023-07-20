@@ -240,9 +240,9 @@ This example should help you understand how many brokers you can scale down to. 
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster info \
-      --brokers <broker-url>:<kafka-api-port> \
+      -X brokers=<broker-url>:<kafka-api-port> \
       --tls-enabled \
       --tls-truststore <path-to-kafka-api-ca-certificate>
   ```
@@ -251,9 +251,9 @@ This example should help you understand how many brokers you can scale down to. 
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster info \
-      --brokers <broker-url>:<kafka-api-port>
+      -X brokers=<broker-url>:<kafka-api-port>
   ```
 
   </TabItem>
@@ -296,20 +296,20 @@ When decommissioning brokers, you may want to selectively decommission brokers (
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk redpanda admin brokers decommission <broker-id> \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-      --hosts <broker-url>:<admin-api-port> \
+      -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk redpanda admin brokers decommission <broker-id> \
-      --hosts <broker-url>:<admin-api-port> \
+      -X admin.hosts=<broker-url>:<admin-api-port> \
   ```
 
   </TabItem>
@@ -333,20 +333,20 @@ When decommissioning brokers, you may want to selectively decommission brokers (
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk redpanda admin brokers decommission-status <broker-id> \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
-      --api-urls <broker-url>:<admin-api-port>
+      -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk redpanda admin brokers decommission-status <broker-id> \
-      --api-urls <broker-url>:<admin-api-port>
+      -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   </TabItem>
@@ -357,14 +357,14 @@ When decommissioning brokers, you may want to selectively decommission brokers (
   ```
 
   The output uses cached cluster health data that is refreshed every 10 seconds. When the completion column for all rows is 100%, the broker is decommissioned.
-  
+
   Another way to verify decommission is complete is by running the following command:
 
   <Tabs groupId="tls" queryString>
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster health \
       --admin-api-tls-enabled \
       --admin-api-tls-truststore <path-to-admin-api-ca-certificate> \
@@ -375,7 +375,7 @@ When decommissioning brokers, you may want to selectively decommission brokers (
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster health \
       --api-urls <broker-url>:<admin-api-port>
   ```
@@ -416,7 +416,7 @@ When decommissioning brokers, you may want to selectively decommission brokers (
   The last step is to update the statefulset replica value to reflect the new broker count. In this example the count was updated to five. If you deployed with the Helm chart, then run following command:
 
   ```bash
-  helm upgrade redpanda redpanda/redpanda -n redpanda --wait --reuse-values --set statefulset.replicas=5
+  helm upgrade redpanda redpanda/redpanda --namespace <namespace> --wait --reuse-values --set statefulset.replicas=5
   ```
 
   This will trigger a rolling restart of each pod, which is required because each broker has its configuration (`seed_servers`) updated to reflect the new broker list.

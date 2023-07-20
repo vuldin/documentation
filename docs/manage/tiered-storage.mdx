@@ -37,6 +37,9 @@ import CloudStorageHousekeeping from './shared/tiered-storage/_cloud-storage-hou
 import AdjacentSegmentMerging from './shared/tiered-storage/_adjacent-segment-merging.mdx';
 import ConfigurationProperties from './shared/tiered-storage/_configuration-properties.mdx';
 import ResetPropertyInfo from './shared/tiered-storage/_reset-property-info.mdx';
+import Caching from './shared/tiered-storage/_caching.mdx';
+import SpaceUsage from './shared/tiered-storage/_space-usage.mdx';
+import ArchivedMetadata from './shared/tiered-storage/_archived-metadata.mdx';
 import AzureBlobLimitations from '../manage/shared/tiered-storage/_azure-blob-limitations.mdx'
 
 
@@ -66,6 +69,10 @@ Redpanda natively supports Tiered Storage with Amazon Simple Storage Service (S3
 
 <Tabs>
     <TabItem value="S3" label="Amazon S3" default>
+
+:::tip
+If deploying Redpanda on an AWS Auto-Scaling group (ASG), keep in mind that the ASG controller terminates nodes and spins up replacements if the nodes saturate and are unable to heartbeat the controller (based on the EC2 health check). For more information, see the [AWS documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html#types-of-instance-status-checks). Redpanda recommends deploying on Linux or Kubernetes. For more information, see [Deploy Redpanda](../../deploy/deployment-option/self-hosted).
+:::
 
 Configure access to Amazon S3 with either an IAM role attached to the instance or with access keys.
 
@@ -195,6 +202,10 @@ To configure access to Azure Blob Storage with shared keys:
 
 <SetRetentionLimits frontmatter={frontMatter}/>
 
+### View space usage
+
+<SpaceUsage frontmatter={frontMatter}/>
+
 ## Remote write
 
 <RemoteWrite frontmatter={frontMatter}/>
@@ -207,7 +218,7 @@ To configure access to Azure Blob Storage with shared keys:
 
 <Reconciliation frontmatter={frontMatter}/>
 
-### Upload controller
+### Upload backlog controller
 
 <UploadController frontmatter={frontMatter}/>
 
@@ -217,20 +228,28 @@ To configure access to Azure Blob Storage with shared keys:
 
 ### Caching 
 
-When the Kafka client fetches an offset range that isn’t available locally in the Redpanda data directory, Redpanda downloads remote segments from object storage. These downloaded segments are stored in the object storage cache directory. The cache directory is created in the Redpanda `data` directory by default, but it can be placed anywhere in the system. For example, you might want to put the cache directory to a dedicated drive with cheaper storage. 
+When a client fetches an offset range that isn’t available locally in the Redpanda data directory, Redpanda downloads remote segments from object storage. These downloaded segments are stored in the object storage cache directory. 
 
-If you don’t specify a cache location in the `redpanda.yaml` file, the cache directory is created in `<redpanda_data_directory>/cloud_storage_cache`. 
-
-Use the <NodeProperty name="cloud_storage_cache_directory" frontmatter={frontMatter}/>  property on each broker to specify a different location for the cache directory. You must specify the full path. 
+The cache directory is created in the Redpanda `data` directory by default, but it can be placed anywhere in the system. For example, you might want to put the cache directory on a dedicated drive with cheaper storage. If you don’t specify a cache location in the `redpanda.yaml` file, the cache directory is created in `<redpanda_data_directory>/cloud_storage_cache`. Use the <NodeProperty name="cloud_storage_cache_directory" frontmatter={frontMatter}/> property on each broker to specify a different location for the cache directory. You must specify the full path. 
 
 Redpanda checks the cache periodically, and if the size of the stored data is larger than the configured limit, the eviction process starts. The eviction process removes segments that haven’t been accessed recently, until the size of the cache drops 20%. 
 
-Use the following cluster-level properties to set the maximum cache size and cache check interval. Edit them with the `rpk cluster config edit` command.
+<Caching frontmatter={frontMatter}/>
+
+#### Caching and chunking properties
+
+Use the following cluster-level properties to set the maximum cache size, the cache check interval, and chunking qualities. Edit them with the `rpk cluster config edit` command.
 
 | Property      | Description |
 | ----------- | ----------- |
-| <ClusterProperty name="cloud_storage_cache_size" frontmatter={frontMatter}/> | Maximum size of the disk cache used by Tiered Storage. Default is 20 GiB. |
-| <TunableClusterProperty name="cloud_storage_cache_check_interval" frontmatter={frontMatter}/> | The time, in milliseconds, between cache checks. The size of the cache can grow quickly, so it’s important to have a small interval between checks. However, if the checks are too frequent, they consume a lot of resources. Default is 30000 ms. |
+| <TunableClusterProperty name="cloud_storage_cache_check_interval" frontmatter={frontMatter}/> | The time, in milliseconds, between cache checks. The size of the cache can grow quickly, so it’s important to have a small interval between checks. However, if the checks are too frequent, they consume a lot of resources. Default is 30000 ms (30 sec).|
+| <TunableClusterProperty name="cloud_storage_cache_chunk_size" frontmatter={frontMatter}/> | The size of a chunk downloaded into object storage cache. Default is 16 MiB. |
+| <ClusterProperty name="cloud_storage_cache_size_percent" frontmatter={frontMatter}/> | Maximum size (as a percentage) of the disk cache used by Tiered Storage. <br/>This property overrides `cloud_storage_cache_size`. Default is 10%. |
+| <ClusterProperty name="cloud_storage_cache_size" frontmatter={frontMatter}/> | Maximum size (in bytes) of the disk cache used by Tiered Storage. Default is 20 GiB. |
+| <TunableClusterProperty name="cloud_storage_chunk_eviction_strategy" frontmatter={frontMatter}/> | Strategy for evicting unused cache chunks, either `eager` (default), `capped`, or `predictive`. |
+| <TunableClusterProperty name="cloud_storage_disable_chunk_reads" frontmatter={frontMatter}/> | Flag to turn off chunk-based reads and enable full-segment downloads.|
+| <TunableClusterProperty name="cloud_storage_hydrated_chunks_per_segment_ratio" frontmatter={frontMatter}/> | The ratio of hydrated to non-hydrated chunks for each segment, where a current ratio above this value results in unused chunks being evicted. Default is 0.7. |
+| <TunableClusterProperty name="cloud_storage_min_chunks_per_segment_threshold" frontmatter={frontMatter}/> | The threshold below which all chunks of a segment can be hydrated without eviction. If the number of chunks in a segment is below this threshold, the segment is small enough that all chunks in it can be hydrated at any given time. Default is 5. |
 
 ## Disaster recovery 
 
@@ -251,6 +270,10 @@ Use the following cluster-level properties to set the maximum cache size and cac
 ### Adjacent segment merging
 
 <AdjacentSegmentMerging frontmatter={frontMatter}/>
+
+## Archived metadata
+
+<ArchivedMetadata frontmatter={frontMatter}/>
 
 ## Tiered Storage configuration properties
 

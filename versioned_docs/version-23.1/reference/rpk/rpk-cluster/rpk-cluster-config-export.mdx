@@ -1,0 +1,165 @@
+---
+title: rpk cluster config export
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk cluster config export | Redpanda Docs" />
+  <meta name="description" content="rpk cluster config export" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-cluster/rpk-cluster-config-export/" />
+</head>
+
+Export cluster configuration.
+
+Writes out a YAML representation of the cluster configuration to a file,
+suitable for editing and later applying with the corresponding `import`
+command.
+
+By default, low level tunables are excluded: use the `--all` flag
+to include all properties including these low level tunables.
+
+### Usage
+
+```
+rpk cluster config export [flags]
+```
+
+### Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong> Value</strong>
+      </td>
+      <td>
+        <strong> Type</strong>
+      </td>
+      <td>
+        <strong> Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-f, --filename</td>
+      <td>string</td>
+      <td>
+        path to file to export to, for example <code> ./config.yml</code>
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td> Help for export.</td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Admin API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the Admin
+        API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-truststore</td>
+      <td>string</td>
+      <td>
+        The truststore to be used for TLS communication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--all</td>
+      <td>-</td>
+      <td> Include all properties, including tunables.</td>
+    </tr>
+    <tr>
+      <td>--api-urls</td>
+      <td>string</td>
+      <td> Comma-separated list of admin API addresses (&lt;ip&gt;:&lt;port&gt;).</td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
+        <code>
+          --brokers `192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092`
+        </code>
+        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
+        environment variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td> SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
+        SCRAM-SHA-512.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td> The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td> SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

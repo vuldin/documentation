@@ -8,7 +8,7 @@ import sidebarv21_11 from "../../versioned_sidebars/version-21.11-sidebars.json"
 import sidebarv22_1 from "../../versioned_sidebars/version-22.1-sidebars.json"
 import sidebarv22_2 from "../../versioned_sidebars/version-22.2-sidebars.json"
 import sidebarv22_3 from "../../versioned_sidebars/version-22.3-sidebars.json"
-import sidebarv23_2 from "../../versioned_sidebars/version-23.2-sidebars.json"
+import sidebarv23_1 from "../../versioned_sidebars/version-23.1-sidebars.json"
 
 let hasSmartRedirected = false;
 let smartRedirectPath;
@@ -82,7 +82,7 @@ function findCloseURL (url,versionNumber){
     ["22.1", sidebarv22_1],
     ["22.2", sidebarv22_2],
     ["22.3", sidebarv22_3],
-    ["23.2", sidebarv23_2],
+    ["23.1", sidebarv23_1],
   ]);
   //if it has a version number, extract the sidebar file of that version. If it can't find, throw version not found.
   if(versionNumber){

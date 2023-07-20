@@ -1,0 +1,154 @@
+---
+title: rpk topic create
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk topic create | Redpanda Docs" />
+  <meta name="description" content="rpk topic create" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-topic/rpk-topic-create/" />
+</head>
+
+Create topics.
+
+All topics created with this command will have the same number of partitions,
+replication factor, and key/value configs.
+
+For example,
+
+```
+rpk topic create -c cleanup.policy=compact -r 3 -p 20 foo bar
+```
+
+will create two topics, `foo` and `bar`, each with 20 partitions, 3 replicas, and the `cleanup.policy=compact` config option set.
+
+## Usage
+
+```bash
+rpk topic create [TOPICS...] [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-d, --dry</td>
+      <td>-</td>
+      <td>
+        Dry run: validate the topic creation request; do not create topics.
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for create.</td>
+    </tr>
+    <tr>
+      <td>-p, --partitions</td>
+      <td>int32</td>
+      <td>
+        Number of partitions to create per topic; -1 defaults to the cluster's
+        default_topic_partitions (default -1).
+      </td>
+    </tr>
+    <tr>
+      <td>-r, --replicas</td>
+      <td>int16</td>
+      <td>
+        Replication factor (must be odd); -1 defaults to the cluster's
+        default_topic_replications (default -1).
+      </td>
+    </tr>
+    <tr>
+      <td>-c, --topic-config</td>
+      <td>stringArray</td>
+      <td>
+        key=value; Config parameters (repeatable; for example
+        <code>-c cleanup.policy=compact)</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,
+        <code>
+          --brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092'
+        </code>
+        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code>
+        environment variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values:
+        <code>SCRAM-SHA-256</code>, <code>SCRAM-SHA-512</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

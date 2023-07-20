@@ -16,7 +16,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ValuesYaml from './shared/_values-yaml.mdx'
 
-The Redpanda Helm chart allows you to define resource requirements for CPU, memory, and storage. Redpanda recommends that you determine and set these values before deploying the cluster, but you can also update the values on a running cluster.
+You can define requirements for Pod resources such as CPU, memory, and storage. Redpanda Data recommends that you determine and set these values before deploying the cluster, but you can also update the values on a running cluster.
 
 :::info
 In a running Redpanda cluster, you cannot decrease the number of CPU cores. You can only increase the number of CPU cores.
@@ -36,8 +36,33 @@ Make sure that your physical or virtual machines have enough resources to give t
 
 ## Configure CPU resources
 
-By default, Redpanda pins its threads to all cores that you allocate to it. The more cores that are allocate to Redpanda, the more throughput it can support. You can configure the CPU resources allocated to each Redpanda broker by overriding the default values in the Helm chart. For a description of CPU resource units, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu).
+By default, Redpanda pins its threads to all cores that you allocate to it. The more cores that are allocate to Redpanda, the more throughput it can support. You can configure the CPU resources allocated to each Redpanda broker by overriding the default values. For a description of CPU resource units, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu).
 
+For production clusters, you should never set `resources.cpu.cores` to anything less than full cores.
+
+<Tabs groupId="kubernetes-tool">
+<TabItem value="operator" label="Helm + Operator">
+
+```yaml title="redpanda-cluster.yaml"
+apiVersion: cluster.redpanda.com/v1alpha1
+kind: Redpanda
+metadata:
+  name: redpanda
+spec:
+  chartRef: {}
+  clusterSpec:
+    resources:
+      cpu:
+        cores: <number-of-cpu-cores>
+```
+
+```bash
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
+```
+
+
+</TabItem>
+<TabItem value="helm" label="Helm">
 <Tabs groupId="helm-config" queryString>
 <TabItem value="values" label="--values">
 
@@ -48,7 +73,7 @@ resources:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cpu-cores.yaml --reuse-values
 ```
 
@@ -56,10 +81,12 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set resources.cpu.cores=<number-of-cpu-cores>
 ```
 
+</TabItem>
+</Tabs>
 </TabItem>
 </Tabs>
 
@@ -88,6 +115,30 @@ On a dedicated worker node, CPU pinning allows maximum throughput, but in a deve
 In production environments, you must run Redpanda brokers on dedicated worker nodes. See [Kubernetes Cluster Requirements](../../../deploy/deployment-option/self-hosted/kubernetes/kubernetes-cluster-requirements).
 :::
 
+<Tabs groupId="kubernetes-tool">
+<TabItem value="operator" label="Helm + Operator">
+
+```yaml title="redpanda-cluster.yaml"
+apiVersion: cluster.redpanda.com/v1alpha1
+kind: Redpanda
+metadata:
+  name: redpanda
+spec:
+  chartRef: {}
+  clusterSpec:
+    resources:
+      cpu:
+        cores: <number-of-cpu-cores>
+        overprovisioned: true
+```
+
+```bash
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
+```
+
+
+</TabItem>
+<TabItem value="helm" label="Helm">
 <Tabs groupId="helm-config" queryString>
 <TabItem value="values" label="--values">
 
@@ -99,7 +150,7 @@ resources:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values cpu-cores-overprovisioned.yaml --reuse-values
 ```
 
@@ -107,21 +158,19 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set resources.cpu.cores=<number-of-cpu-cores> \
   --set resources.cpu.overprovisioned=true
 ```
 
 </TabItem>
 </Tabs>
-
-:::note
-<ValuesYaml path="resources.cpu"/>
-:::
+</TabItem>
+</Tabs>
 
 ## Configure memory resources
 
-On a worker node, Kubernetes processes and Redpanda processes are running at the same time, including the Seastar subsystem that is built into the Redpanda binary. Each of these processes consumes memory. You can configure the memory resources that are allocated to these processes.
+On a worker node, Kubernetes and Redpanda processes are running at the same time, including the Seastar subsystem that is built into the Redpanda binary. Each of these processes consumes memory. You can configure the memory resources that are allocated to these processes.
 
 By default, the Helm chart allocates 80% of the configured memory to Redpanda, leaving the rest for the Seastar subsystem and other container processes. Redpanda recommends this default setting.
 
@@ -131,6 +180,32 @@ Although you can also allocate the exact amount of memory for Redpanda and the S
 
 Redpanda supports the following memory resource units: B, K, M, G, Ki, Mi, and Gi. Memory units are converted to the nearest whole MiB. For a description of memory resource units, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory).
 
+<Tabs groupId="kubernetes-tool">
+<TabItem value="operator" label="Helm + Operator">
+
+```yaml title="redpanda-cluster.yaml"
+apiVersion: cluster.redpanda.com/v1alpha1
+kind: Redpanda
+metadata:
+  name: redpanda
+spec:
+  chartRef: {}
+  clusterSpec:
+    resources:
+      memory:
+        container:
+          # Omit min to set it to the same value as max.
+          # min:
+          max: <number><unit>
+```
+
+```bash
+kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
+```
+
+
+</TabItem>
+<TabItem value="helm" label="Helm">
 <Tabs groupId="helm-config" queryString>
 <TabItem value="values" label="--values">
 
@@ -144,7 +219,7 @@ resources:
 ```
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values memory.yaml --reuse-values
 ```
 
@@ -152,21 +227,22 @@ helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace
 <TabItem value="flags" label="--set">
 
 ```bash
-helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --set resources.memory.container.max=<number><unit>
 ```
 
 </TabItem>
 </Tabs>
-
-:::note
-<ValuesYaml path="resources.memory"/>
-:::
+</TabItem>
+</Tabs>
 
 ## Configure storage capacity
 
 Make sure to provision enough disk storage for your streaming workloads.
 
-If you use PersistentVolumes, you can set the storage capacity for each volume in the Helm chart's values.
+If you use PersistentVolumes, you can set the storage capacity for each volume. For instructions, see [Configure Storage](../configure-storage).
 
-For instructions, see [Configure Storage](../configure-storage).
+## Suggested reading
+
+- [Redpanda Helm Specification](../../../reference/redpanda-helm-spec#resources)
+- [Redpanda CRD Reference](../../../reference/crd)

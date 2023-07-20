@@ -8,7 +8,7 @@ title: Cluster Balancing
     <link rel="canonical" href="https://docs.redpanda.com/docs/manage/cluster-maintenance/cluster-balancing/" />
 </head>
 
-When a topic is created, Redpanda evenly distributes its partitions by sequentially allocating them to the cluster broker (node) with the least number of partitions. By default, Redpanda provides leadership balancing and partition rebalancing when brokers are added or decommissioned. 
+When a topic is created, Redpanda evenly distributes its partitions by sequentially allocating them to the cluster broker with the least number of partitions. For existing topics, Redpanda automatically provides leadership balancing and partition rebalancing when brokers are added or decommissioned. 
 
 With an Enterprise license, you can additionally enable *Continuous Data Balancing* to continuously monitor broker and rack availability and disk usage. This enables self-healing clusters that dynamically balance partitions. It also continuously maintains adherence to rack-aware replica placement policy and self heals after rack (or availability zone) failure or replacement. See [Configure Continuous Data Balancing](../continuous-data-balancing).
 
@@ -18,10 +18,14 @@ Cluster balancing protects you from unbalanced systems that saturate resources o
 
 Every Redpanda topic-partition forms a Raft group with a single elected leader. All reads and writes are handled by the partition leader. Raft uses a heartbeat mechanism to maintain leadership authority and to trigger leader elections. The partition leader sends a periodic heartbeat ([`raft_heartbeat_interval_ms`](../../../reference/tunable-properties/#raft_heartbeat_interval_ms)) to all followers to assert its leadership. If a follower does not receive a heartbeat within a timeout duration ([`raft_heartbeat_timeout_ms`](../../../reference/tunable-properties/#raft_heartbeat_timeout_ms)), then it triggers an election to choose a new partition leader. For more information, see [Raft consensus algorithm](../../../get-started/architecture/#raft-consensus-algorithm) and [partition leadership elections](../../../get-started/architecture/#partition-leadership-elections).
 
-Leadership balancing is enabled by default with the [`enable_leader_balancer`](../../../reference/cluster-properties/#enable_leader_balancer) property. Redpanda tries to distribute the entire set of leaders evenly across all shard/broker pairs. Automatic partition leadership balancing improves cluster performance by transferring the leadership of a broker's partitions to other replicas. It changes where data is read from and written to first, but leadership transfer does not involve any data transfer. 
+Leadership balancing is enabled by default with the [`enable_leader_balancer`](../../../reference/cluster-properties/#enable_leader_balancer) property. Automatic partition leadership balancing improves cluster performance by transferring the leadership of a broker's partitions to other replicas. It changes where data is read from and written to first, but leadership transfer does not involve any data transfer. 
+
+The [`leader_balancer_mode`](../../../reference/cluster-properties/#leader_balancer_mode) property ensures that each shard in a cluster has an equal number of partitions. It determines the movement of leadership for the replica set of a partition. It supports two modes:
+- `random_hill_climbing`: This mode randomly searches for potential leadership movements. If one is found that better balances the number of leaders per shard and the leaders of a given topic per broker, then the movement is applied to the cluster. This is the default.
+- `greedy_balanced_shards`: This mode uses a heuristic to search for leadership movements that better balance leaders per shard. It applies any movement it finds.
 
 :::note
-In addition to the periodic heartbeat, leadership balancing can also occur when a [broker restarts](../../../manage/cluster-maintenance/rolling-upgrade/#impact-of-broker-restarts) or when the controller leader changes (such as when a controller partition changes leader). The controller leader manages the entire cluster. For example, when a broker is decommissioned, the *controller leader* creates a reallocation plan for all partition replicas allocated to that broker. The *partition leader* then handles the reconfiguration for its Raft group.
+In addition to the periodic heartbeat, leadership balancing can also occur when a [broker restarts](../../../manage/cluster-maintenance/rolling-upgrade/#impact-of-broker-restarts) or when the controller leader changes (such as when a controller partition changes leader). The *controller leader* manages the entire cluster. For example, when a broker is decommissioned, the controller leader creates a reallocation plan for all partition replicas allocated to that broker. The *partition leader* then handles the reconfiguration for its Raft group.
 :::
 
 ### Manually change leadership
@@ -46,9 +50,13 @@ In Kubernetes, run the `transfer_leadership` request on the Pod that is running 
 
 ## Redpanda partition balancing
 
-While leadership balancing doesn't move any data, partition balancing does move partition replicas to alleviate disk pressure and to honor the configured replication factor across nodes and the additional redundancy across failure domains (such as racks). Depending on the amount of data being transferred, this may take some time. Partition balancing is invoked periodically, determined by the [`partition_autobalancing_tick_interval_ms`](../../../reference/tunable-properties/#partition_autobalancing_tick_interval_ms) property. 
+While leadership balancing doesn't move any data, partition balancing does move partition replicas to alleviate disk pressure and to honor the configured replication factor across brokers and the additional redundancy across failure domains (such as racks). Depending on the amount of data being transferred, this may take some time. Partition balancing is invoked periodically, determined by the [`partition_autobalancing_tick_interval_ms`](../../../reference/tunable-properties/#partition_autobalancing_tick_interval_ms) property. 
 
-Redpanda's default partition balancing ensures predictable and stable performance across all brokers in a cluster. It includes the following: 
+For predictable and stable performance, Redpanda ensures that a topic's partitions are evenly distributed across all brokers in a cluster. It allocates partitions to random healthy brokers, to avoid topic hotspots, without needing to wait for a batch of moves to finish before it schedules the next batch.
+
+Redpanda supports flexible use of network bandwidth for replicating under-replicated partitions. For example, if only one partition is moving, it can use the entire bandwidth for the broker. Redpanda detects which shards are idle, so other shards can essentially steal bandwidth from them. Total bandwidth is controlled by the [`raft_learner_recovery_rate`](../../../reference/cluster-properties/#raft_learner_recovery_rate) property. 
+
+Redpanda's default partition balancing includes the following: 
 
 - When a broker is added to the cluster, some replicas are moved from other brokers to the new broker to take advantage of the additional capacity.
 - When a broker is down for a configured timeout, existing online replicas are used to construct a replacement replica on a new broker.
@@ -62,7 +70,7 @@ Select your partition balancing setting with the [`partition_autobalancing_mode`
 
 | Setting      | Description |
 | ----------- | ----------- |
-| `node_add`      | Partition balancing happens when brokers (nodes) are added.  <br /><br />This is the default setting.|
+| `node_add`      | Partition balancing happens when brokers (nodes) are added. To avoid hotspots, Redpanda allocates brokers to random healthy brokers. <br /><br />This is the default setting.|
 | `continuous`   | In this mode, Redpanda continuously monitors the cluster for broker failures and high disk usage. It uses this information to automatically redistribute partitions across the cluster to maintain optimal performance and availability. It also monitors rack availability after failures, and for a given partition, it tries to move excess replicas from racks that have more than one replica to racks where there are none. See [Configure Continuous Data Balancing](../continuous-data-balancing).<br /><br />This option requires an Enterprise license.     |
 | `off`     | All partition balancing from Redpanda is turned off. <br /><br />This mode is not recommended for production clusters. Only set to `off` if you need to move partitions manually.   |
 
@@ -111,7 +119,7 @@ To reassign partitions with the Kafka API:
   }
   ```
 
-4. Execute partition reassignments with the `kafka-reassign-partitions.sh` script. This example uses `example.json` as the name of the JSON file:
+4. Reassign partitions with the `kafka-reassign-partitions.sh` script. This example uses `example.json` as the name of the JSON file:
 
   ```bash
   kafka-reassign-partitions.sh --bootstrap-server localhost:9092,localhost:9093,localhost:9094,localhost:9095 --reassignment-json-file example.json --execute

@@ -10,12 +10,12 @@ Never delete the superuser. You need the superuser to grant permissions to new u
 1. Create a new user called `redpanda-twitch-account` with the password `changethispassword`:
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
   rpk acl user create redpanda-twitch-account \
   -p changethispassword \
   --admin-api-tls-enabled \
   --admin-api-tls-truststore /etc/tls/certs/default/ca.crt \
-  --api-urls redpanda-0.redpanda.redpanda.svc.cluster.local.:9644,redpanda-1.redpanda.redpanda.svc.cluster.local.:9644,redpanda-2.redpanda.redpanda.svc.cluster.local.:9644
+  -X admin.hosts=redpanda-0.redpanda.redpanda.svc.cluster.local.:9644,redpanda-1.redpanda.redpanda.svc.cluster.local.:9644,redpanda-2.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
   <details>
@@ -32,14 +32,14 @@ Never delete the superuser. You need the superuser to grant permissions to new u
 1. Use the superuser to grant the `redpanda-twitch-account` user permission to execute all operations only for a topic called `twitch_chat`.
 
   ```bash
-  kubectl exec -n redpanda -c redpanda redpanda-0 -- \
+  kubectl exec --namespace <namespace> -c redpanda redpanda-0 -- \
     rpk acl create --allow-principal User:redpanda-twitch-account \
     --operation all \
     --topic twitch_chat \
     --tls-enabled \
     --tls-truststore /etc/tls/certs/default/ca.crt \
     --user=superuser --password=secretpassword --sasl-mechanism SCRAM-SHA-512 \
-    --brokers redpanda-0.redpanda.redpanda.svc.cluster.local:9093
+    -X brokers=redpanda-0.redpanda.redpanda.svc.cluster.local:9093
   ```
 
   <details>

@@ -1,5 +1,6 @@
 ---
 title: Configuring Redpanda SASL on Kubernetes
+linkRoot: ../../../
 ---
 
 <head>
@@ -8,9 +9,9 @@ title: Configuring Redpanda SASL on Kubernetes
     <link rel="canonical" href="https://docs.redpanda.com/docs/reference/redpanda-operator/kubernetes-sasl/" />
 </head>
 
-:::danger
-See [Configuring Redpanda SASL on Kubernetes](../../../manage/kubernetes/security/sasl-kubernetes) for the most up-to-date instructions using the Redpanda Helm chart. This page is based on the `redpanda-operator` Helm chart and is preserved only for backward compatibility.
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 The Simple Authentication and Security Layer (SASL) is a method for adding authentication support to connection-based protocols. When using the Redpanda Operator, SASL provides authentication between the server and client. To encrypt communication, use TLS encryption. You must use TLS encryption to have secure authentication using SASL.
 
@@ -42,7 +43,7 @@ metadata:
   name: cluster-sample-sasl
   // highlight-end
 spec:
-  image: "vectorized/redpanda"
+  image: "redpandadata/redpanda"
   version: "latest"
   replicas: 1
   // highlight-start
@@ -160,7 +161,7 @@ The `super_user_username` is the superuser that you defined in the cluster speci
 If you changed the Admin API port from the default, you must add the following line to each command that creates a new user, in this step and the next step: 
 
 ```yaml
---api-urls localhost:<port>
+-X admin.hosts=localhost:<port>
 ```
 :::
 
@@ -169,9 +170,9 @@ This command executes the `rpk` command from within a Redpanda cluster container
 ```bash
 kubectl exec -c redpanda <cluster_name>-0 -- rpk acl user create <super_user_username> \
 -p '<superuser_password>' \
---api-urls localhost:<port>
+-X admin.hosts=localhost:<port>
 // highlight-start
---brokers <cluster_name>-0.<cluster_name>.default.svc.cluster.local:<port>
+-X brokers=<cluster_name>-0.<cluster_name>.default.svc.cluster.local:<port>
 // highlight-end
 ```
 

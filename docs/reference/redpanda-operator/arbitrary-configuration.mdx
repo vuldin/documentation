@@ -1,5 +1,6 @@
 ---
 title: Using Additional Configuration Parameters for the Redpanda Operator
+linkRoot: ../../../
 ---
 
 <head>
@@ -7,6 +8,10 @@ title: Using Additional Configuration Parameters for the Redpanda Operator
     <meta name="description" content="Additional configuration parameters for the Redpanda operator."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/reference/redpanda-operator/arbitrary-configuration/" />
 </head>
+
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 After the Redpanda operator is installed, you can create a Redpanda cluster by applying a cluster Custom Resource (CR) that contains the specification of the desired Redpanda cluster. The CR includes the Redpanda cluster name, namespace, and configuration for the Admin API, Kafka API, HTTP Proxy API, and others.
 
@@ -23,7 +28,7 @@ kind: Cluster
 metadata:
   name: one-node-cluster
 spec:
-  image: "vectorized/redpanda"
+  image: "redpandadata/redpanda"
   version: "latest"
   replicas: 1
   resources:

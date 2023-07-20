@@ -115,18 +115,13 @@ module.exports = async () => {
             lastVersion: 'current',
             versions: {
               current: {
-                label: '23.1',
+                label: '23.2',
               },
               "21.11": {
                 banner:'unmaintained'
               },
               "22.1": {
                 banner:'unmaintained'
-              },
-              "23.2": {
-                label: '23.2 Beta',
-                banner: 'unreleased',
-                path: "/beta"
               },
             },
             beforeDefaultRemarkPlugins: [

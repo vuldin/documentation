@@ -1,5 +1,6 @@
 ---
 title: Install Redpanda for Kubernetes on Cloud
+linkRoot: ../../../
 ---
 
 <head>
@@ -11,13 +12,17 @@ title: Install Redpanda for Kubernetes on Cloud
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-:::danger
-This guide uses the Redpanda Operator for installation. To use the latest recommended Redpanda Helm chart, see the [Install Redpanda Guide for Kubernetes](../../../deploy/deployment-option/self-hosted/kubernetes/get-started-dev).
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 This guide helps you set up Redpanda for development and testing purposes on any operating system. Start here to set up Redpanda quickly to try it out or for CI/CD purposes. 
 
-These steps install Redpanda on Amazon EKS, GKE, or DigitalOcean. To run Redpanda with local access, see [Install Redpanda Guide for Kubernetes with kind](../kubernetes-qs-local-access) or [Install Redpanda Guide for Kubernetes with minikube](../kubernetes-qs-minikube). 
+These steps install Redpanda on Amazon EKS, GKE, or DigitalOcean. To run Redpanda with local access, see [Install Redpanda Guide for Kubernetes with kind](../kubernetes-qs-local-access) or [Install Redpanda Guide for Kubernetes with minikube](../kubernetes-qs-minikube).
+
+:::caution
+Do not use DigitalOcean for production workloads.
+:::
 
 To get up and running, you create a cluster, deploy the Redpanda operator on the cluster, and run the client in the same cluster. Because the client is running in the same cluster where you run Redpanda, this simplifies network connectivity. For details on how to access Redpanda outside the Kubernetes network, see [Connecting Remotely to Kubernetes](../kubernetes-external-connect). 
 
@@ -226,7 +231,7 @@ You may have to wait a few minutes for cert-manager to be ready before you conti
 1. Add the Redpanda chart repository and update it:
 
   ```bash
-  helm repo add redpanda https://charts.vectorized.io/ && \
+  helm repo add vectorized https://charts.vectorized.io/ && \
   helm repo update
   ```
 
@@ -270,7 +275,7 @@ You may have to wait a few minutes for cert-manager to be ready before you conti
   ```bash
   helm install \
     redpanda-operator \
-    redpanda/redpanda-operator \
+    vectorized/redpanda-operator \
     --namespace panda-chat \
     --create-namespace \
     --version $VERSION
@@ -310,7 +315,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda:$VERSION \
-  -- rpk --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
+  -- rpk -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
   cluster info
   ```
 
@@ -320,7 +325,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda:$VERSION \
-  -- rpk --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
+  -- rpk -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
   topic create chat-rooms -p 5
   ```
 
@@ -330,7 +335,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda:$VERSION \
-  -- rpk --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
+  -- rpk -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092 \
   topic list
   ```
 
@@ -340,7 +345,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda \
-  -- rpk topic produce chat-rooms --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
+  -- rpk topic produce chat-rooms -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
   ```
 
 1. Type text into the topic, such as `Pandas are fabulous!`.
@@ -354,7 +359,7 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
   kubectl -n panda-chat run -ti --rm \
   --restart=Never \
   --image docker.redpanda.com/redpandadata/redpanda \
-  -- rpk topic consume -n 1 chat-rooms --brokers one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
+  -- rpk topic consume -n 1 chat-rooms -X brokers=one-node-cluster-0.one-node-cluster.panda-chat.svc.cluster.local:9092
   ```
 
 In the `rpk topic consume command`, `-n 1` specifies the number of messages to print. If you produced more than one message in the previous step, you can change the number of messages to consume based on the number that you produced. 

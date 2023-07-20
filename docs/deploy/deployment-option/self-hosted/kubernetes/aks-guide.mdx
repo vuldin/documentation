@@ -4,12 +4,11 @@ title: Deploy a Redpanda Cluster in Azure Kubernetes Service
 
 <head>
     <meta name="title" content="Deploy a Redpanda Cluster in Google Kubernetes Engine | Redpanda Docs"/>
-    <meta name="description" content="Deploy a secure Redpanda cluster and Redpanda Console in Azure Kubernetes Service (AKS) using the Helm chart."/>
+    <meta name="description" content="Deploy a secure Redpanda cluster and Redpanda Console in Azure Kubernetes Service (AKS)."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/kubernetes/aks-guide/" />
 </head>
 
 import Versions from '../../../../shared/_versions.mdx'
-import OperatorNote from "./shared/guides/_operator-note.mdx"
 import DeployRedpanda from "./shared/guides/_deploy-redpanda.mdx"
 import CreateUser from "./shared/guides/_create-user.mdx"
 import StartStreaming from "./shared/guides/_start-streaming.mdx"
@@ -20,14 +19,12 @@ import DefaultComponents from "./shared/_default-components.mdx"
 import NextSteps from "./shared/guides/_next-steps.mdx"
 import SuggestedReading from "./shared/guides/_suggested-reading.mdx"
 
-Deploy a secure Redpanda cluster and Redpanda Console in Azure Kubernetes Service (AKS) using the Helm chart. After you deploy, use rpk both as an internal client and an external client to interact with your Redpanda cluster from the command line.
+Deploy a secure Redpanda cluster and Redpanda Console in Azure Kubernetes Service (AKS). After you deploy, use rpk both as an internal client and an external client to interact with your Redpanda cluster from the command line.
 
 The Redpanda cluster has the following security features:
 
 - SASL for authenticating users' connections.
 - TLS with self-signed certificates for secure communication between the cluster and clients.
-
-<OperatorNote/>
 
 ## Prerequisites
 
@@ -67,7 +64,7 @@ You also configure your AKS cluster to give each worker node a public IP address
 1. Create an AKS cluster with three worker nodes (one for each Redpanda broker):
 
   ```bash
-  az aks create -g redpandaResourceGroup -n redpanda \
+  az aks create -g redpandaResourceGroup --namespace <namespace> \
     --node-count 3 \
     --generate-ssh-keys \
     --enable-node-public-ip

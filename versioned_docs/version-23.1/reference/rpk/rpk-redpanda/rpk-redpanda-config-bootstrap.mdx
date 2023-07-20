@@ -1,0 +1,80 @@
+---
+title: rpk redpanda config bootstrap
+---
+
+<head>
+  <meta name="title" content="rpk redpanda config bootstrap | Redpanda Docs" />
+  <meta name="description" content="rpk redpanda config bootstrap" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-redpanda/rpk-redpanda-config-bootstrap/" />
+</head>
+
+Initialize the configuration to bootstrap a cluster.
+
+This command generates a `redpanda.yaml` configuration file to bootstrap a
+cluster. If you are modifying the configuration file further, it is recommended
+to first bootstrap and then modify. If the file already exists, this command
+will set fields as requested by flags, and this may undo some of your earlier
+edits.
+
+The `--ips` flag specifies seed servers (ips, ip:ports, or hostnames) that this
+broker will use to form a cluster.
+
+By default, `redpanda` expects your machine to have one private IP address, and
+`redpanda` will listen on it. If your machine has multiple private IP addresses,
+you must use the `--self` flag to specify which ip `redpanda` should listen on.
+
+```bash
+rpk redpanda config bootstrap [--self <ip>] [--ips <ip1,ip2,...>] [flags]
+```
+
+### Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong> Value</strong>
+      </td>
+      <td>
+        <strong> Type</strong>
+      </td>
+      <td>
+        <strong> Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default location.
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td> Help for bootstrap</td>
+    </tr>
+    <tr>
+      <td>--ips</td>
+      <td>strings</td>
+      <td>Comma-separated list of the seed node addresses or hostnames; at least three
+        are recommended
+      </td>
+    </tr>
+    <tr>
+      <td>--self</td>
+      <td>string</td>
+      <td>Optional IP address for redpanda to listen on; if empty, defaults to a private
+        address
+      </td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

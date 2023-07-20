@@ -1,5 +1,6 @@
 ---
 title: Install Redpanda for Kubernetes with minikube
+linkRoot: ../../../
 ---
 
 <head>
@@ -11,13 +12,17 @@ title: Install Redpanda for Kubernetes with minikube
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-:::danger
-This guide uses the Redpanda Operator for installation. To use the latest recommended Redpanda Helm chart, see the [Install Redpanda Guide for Kubernetes](../../../deploy/deployment-option/self-hosted/kubernetes/get-started-dev).
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 This guide helps you set up Redpanda locally for development and testing purposes on macOS, Windows, or Linux. Start here to set up Redpanda quickly to try it out or for CI/CD purposes. 
 
 This guide uses minikube to create a local Kubernetes cluster in which Redpanda is deployed. It also verifies that the Kafka API port is exposed to your local network, so that you can interact with Redpanda from your local machine and not just from inside the Kubernetes cluster.
+
+:::caution Only for development and testing
+Do not use mnikube for production workloads. Instead, [Install Redpanda for Kubernetes on Cloud](../kubernetes-qs-cloud).
+:::
 
 To get up and running, you create a cluster and deploy the Redpanda operator on the cluster. The steps limit the number of nodes to one, because multi-node local clusters are not currently supported. For details on how to access Redpanda outside the Kubernetes network, see [Connecting Remotely to Kubernetes](../kubernetes-external-connect). 
 
@@ -78,7 +83,7 @@ helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.12.2 \
+  --version v1.7.0 \
   --set installCRDs=true
 ```
 
@@ -91,7 +96,7 @@ Use the [verification procedure](https://cert-manager.io/docs/installation/verif
 1. To use Helm to add the Redpanda chart repository and update it:
 
 ```bash
-helm repo add redpanda https://charts.vectorized.io/ && \
+helm repo add vectorized https://charts.vectorized.io/ && \
 helm repo update
 ```
 
@@ -133,7 +138,7 @@ Find information about the versions of the operator in the [list of operator rel
 ```bash
 helm install \
   redpanda-operator \
-  redpanda/redpanda-operator \
+  vectorized/redpanda-operator \
   --namespace redpanda-system \
   --create-namespace \
   --version $VERSION
@@ -166,7 +171,7 @@ kubectl apply \
 3. Verify that the cluster was created successfully: 
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk cluster metadata --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk cluster metadata -X brokers='localhost:9092'
 ```
 
 ## Start streaming
@@ -176,13 +181,13 @@ Use `rpk` to run commands. `rpk` is a CLI tool you can use to work with your Red
 Create a `panda-chat` topic with five partitions:
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic create panda-chat -p 5 --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic create panda-chat -p 5 -X brokers='localhost:9092'
 ```
 
 Produce messages to the topic:
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic produce panda-chat --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic produce panda-chat -X brokers='localhost:9092'
 ```
 
 Type text into the topic, such as `Pandas are fabulous!`. 
@@ -192,7 +197,7 @@ Type text into the topic, such as `Pandas are fabulous!`.
 Consume (read) the messages in the topic:
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic consume panda-chat --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic consume panda-chat -X brokers='localhost:9092'
 ```
 
 Each message is shown with its metadata, like this:
@@ -209,7 +214,7 @@ Each message is shown with its metadata, like this:
 List the topics: 
 
 ```bash
-kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic list --brokers='localhost:9092'
+kubectl exec -it -n panda-ns one-node-cluster-0 -- rpk topic list -X brokers='localhost:9092'
 ```
 
 ## Delete the cluster

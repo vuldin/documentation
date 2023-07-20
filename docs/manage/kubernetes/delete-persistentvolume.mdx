@@ -39,7 +39,7 @@ To delete a PersistentVolume, follow these steps to ensure that your data is mov
 1. Delete the PVC that is bound to your PV:
 
   ```bash
-  kubectl delete persistentvolumeclaim <pvc-name> -n redpanda
+  kubectl delete persistentvolumeclaim <pvc-name> --namespace <namespace>
   ```
 
 1. If the `reclaimPolicy` of your PV is not `Delete`, delete the PV:
@@ -62,9 +62,9 @@ To delete a PersistentVolume, follow these steps to ensure that your data is mov
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster info \
-      --brokers <broker-url>:<kafka-api-port> \
+      -X brokers=<broker-url>:<kafka-api-port> \
       --tls-enabled \
       --tls-truststore <path-to-kafka-api-ca-certificate>
   ```
@@ -73,9 +73,9 @@ To delete a PersistentVolume, follow these steps to ensure that your data is mov
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl -n redpanda exec -ti redpanda-0 -c redpanda -- \
+  kubectl --namespace <namespace> exec -ti redpanda-0 -c redpanda -- \
     rpk cluster info \
-      --brokers <broker-url>:<kafka-api-port>
+      -X brokers=<broker-url>:<kafka-api-port>
   ```
 
   </TabItem>

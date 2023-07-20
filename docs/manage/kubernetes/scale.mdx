@@ -34,6 +34,28 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
 
 1. Update the number of replicas in the Helm chart:
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    chartRef: {}
+    clusterSpec:
+      statefulset:
+        replicas: <number-of-replicas>
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config" queryString>
   <TabItem value="values" label="--values">
 
@@ -43,7 +65,7 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values replicas.yaml --reuse-values
   ```
 
@@ -51,15 +73,17 @@ Horizontal scaling (also known as scaling out/in) means adding more brokers to t
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set statefulset.replicas=<number-of-replicas>
   ```
 
+  </TabItem>
+  </Tabs>
   </TabItem>
   </Tabs>
 
 1. Verify that your Redpanda cluster has the desired number of replicas:
 
   ```bash
-  kubectl get statefulsets -n redpanda
+  kubectl get statefulsets --namespace <namespace>
   ```

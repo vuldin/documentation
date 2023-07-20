@@ -1,0 +1,87 @@
+---
+title: rpk cloud auth create
+rpk_version: v23.2.1
+---
+
+<head>
+  <meta name="title" content="rpk cloud auth create| Redpanda Docs" />
+  <meta name="description" content="rpk cloud auth create" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-cloud/rpk-cloud-auth/rpk-cloud-auth-create" />
+</head>
+
+Create an rpk cloud authentication (auth).
+
+This command creates a new rpk cloud auth. The default SSO login does not need
+any additional auth values (the token is populated on login) so you can just
+create an empty auth. You can also use `--set` to set key=value pairs for client
+credentials.
+
+The `--set` flag supports autocompletion, suggesting the `-X` key format. If you
+begin writing a YAML path, the flag will suggest the rest of the path.
+
+rpk always switches the current cloud auth to the newly created auth.
+
+## Usage
+
+```bash
+rpk cloud auth create [NAME] [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--description</td>
+      <td>string</td>
+      <td>Optional description of the auth.</td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for create.</td>
+    </tr>
+    <tr>
+      <td>-s, --set</td>
+      <td>strings</td>
+      <td>A key=value pair to set in the cloud auth.</td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
+      </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>Enable verbose logging.</td>
+    </tr>
+  </tbody>
+</table>

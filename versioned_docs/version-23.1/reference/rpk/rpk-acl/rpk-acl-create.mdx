@@ -1,0 +1,214 @@
+---
+title: rpk acl create
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk acl create | Redpanda Docs" />
+  <meta name="description" content="rpk acl create" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-acl/rpk-acl-create/" />
+</head>
+
+Create ACLs.
+
+Following the multiplying effect of combining flags, the create command works on a
+straightforward basis: every ACL combination is a created ACL.
+
+As mentioned in the `rpk acl` help text, if no host is specified, an allowed
+principal is allowed access from all hosts. The wildcard principal `*` allows
+all principals. At least one principal, one host, one resource, and one
+operation is required to create a single ACL.
+
+Allow all permissions to user bar on topic `foo` and group `g`:
+
+`rpk acl create --allow-principal bar --operation all --topic foo --group g`
+
+Allow read permissions to all users on topics biz and baz:
+
+`rpk acl create --allow-principal * --operation read --topic biz,baz`
+
+Allow write permissions to user buzz to transactional id `txn`:
+
+`rpk acl create --allow-principal User:buzz --operation write --transactional-id txn`
+
+## Usage
+
+```bash
+rpk acl create [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--allow-host</td>
+      <td>strings</td>
+      <td>Hosts from which access will be granted (repeatable).</td>
+    </tr>
+    <tr>
+      <td>--allow-principal</td>
+      <td>strings</td>
+      <td>
+        Principals for which these permissions will be granted (repeatable).
+      </td>
+    </tr>
+    <tr>
+      <td>--cluster</td>
+      <td>-</td>
+      <td>Whether to grant ACLs to the cluster.</td>
+    </tr>
+    <tr>
+      <td>--deny-host</td>
+      <td>strings</td>
+      <td>Hosts from from access will be denied (repeatable).</td>
+    </tr>
+    <tr>
+      <td>--deny-principal</td>
+      <td>strings</td>
+      <td>
+        Principal for which these permissions will be denied (repeatable).
+      </td>
+    </tr>
+    <tr>
+      <td>--group</td>
+      <td>strings</td>
+      <td>Group to grant ACLs for (repeatable).</td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for create.</td>
+    </tr>
+    <tr>
+      <td>--operation</td>
+      <td>strings</td>
+      <td>Operation to grant (repeatable).</td>
+    </tr>
+    <tr>
+      <td>--resource-pattern-type</td>
+      <td>string</td>
+      <td>
+        Pattern to use when matching resource names (literal or prefixed)
+        (default "literal").
+      </td>
+    </tr>
+    <tr>
+      <td>--topic</td>
+      <td>strings</td>
+      <td>Topic to grant ACLs for (repeatable).</td>
+    </tr>
+    <tr>
+      <td>--transactional-id</td>
+      <td>strings</td>
+      <td>Transactional IDs to grant ACLs for (repeatable).</td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Admin API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the Admin
+        API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-truststore</td>
+      <td>string</td>
+      <td>
+        The truststore to be used for TLS communication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker ip:port pairs (e.g. --brokers
+        '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092').
+        Alternatively, you may set the REDPANDA_BROKERS environment variable
+        with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values: SCRAM-SHA-256,
+        SCRAM-SHA-512.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>Enable verbose logging (default: false).</td>
+    </tr>
+  </tbody>
+</table>

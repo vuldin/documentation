@@ -1,0 +1,313 @@
+---
+title: rpk acl
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk acl | Redpanda Docs" />
+  <meta name="description" content="rpk acl" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-acl/" />
+</head>
+
+Manage ACLs and SASL users.
+
+This command space creates, lists, and deletes ACLs, as well as creates SASL
+users. The help text below is specific to ACLs. To learn about SASL users,
+check the help text under the `user` command.
+
+When using SASL, ACLs allow or deny you access to certain requests. The
+`create`, `delete`, and `list` commands help you manage your ACLs.
+
+An ACL is made up of five components:
+
+- a principal (the user)
+- a host the principal is allowed or denied requests from
+- what resource to access (topic name, group ID, etc.)
+- the operation (read, write, etc.)
+- the permission (whether to allow or deny the above)
+
+ACL commands work on a multiplicative basis. If creating, specifying two
+principals and two permissions creates four ACLs: both permissions for the
+first principal, as well as both permissions for the second principal. Adding
+two resources further doubles the ACLs created.
+
+It is recommended to be as specific as possible when granting ACLs. Granting
+more ACLs than necessary per principal may inadvertently allow clients to do
+things they should not, such as deleting topics or joining the wrong consumer
+group.
+
+### Principals
+
+All ACLs require a principal. A principal is composed of two parts: the type
+and the name. Within Redpanda, only one type is supported, `User`. The reason
+for the prefix is that a potential future authorizer may add support for
+authorizing by Group or anything else.
+
+When you create a user, you need to add ACLs for it before it can be used. You
+can create/delete/list ACLs for that user with either `User:bar` or `bar`
+in the `--allow-principal` and `--deny-principal` flags. This command will add the
+`User:` prefix for you if it is missing. The wildcard `*` matches any user.
+Creating an ACL with user `*` grants or denies the permission for all users.
+
+### Hosts
+
+Hosts can be seen as an extension of the principal, and effectively gate where
+the principal can connect from. When creating ACLs, unless otherwise specified,
+the default host is the wildcard `*` which allows or denies the principal from
+all hosts (where allow & deny are based on whether `--allow-principal` or
+`--deny-principal` is used). If specifying hosts, you must pair the `--allow-host`
+flag with the `--allow-principal` flag, and the `--deny-host` flag with the
+`--deny-principal` flag.
+
+### Resources
+
+A resource is what an ACL allows or denies access to. There are four resources
+within Redpanda: topics, groups, the cluster itself, and transactional IDs.
+Names for each of these resources can be specified with their respective flags.
+
+Resources combine with the operation that is allowed or denied on that
+resource. The next section describes which operations are required for which
+requests, and further fleshes out the concept of a resource.
+
+By default, resources are specified on an exact name match (a `literal` match).
+The --resource-pattern-type flag can be used to specify that a resource name is
+`prefixed`, meaning to allow anything with the given prefix. A literal name of
+`foo` will match only the topic `foo`, while the prefixed name of `foo-` will
+match both `foo-bar` and `foo-baz`. The special wildcard resource name `*`
+matches any name of the given resource type (--topic `*` matches all topics).
+
+### Operations
+
+Pairing with resources, operations are the actions that are allowed or denied.
+Redpanda has the following operations:
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Operation</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>all</code>
+      </td>
+      <td>Allows all operations below.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>read</code>
+      </td>
+      <td>Allows reading a given resource.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>write</code>
+      </td>
+      <td>Allows writing to a given resource.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>create</code>
+      </td>
+      <td>Allows creating a given resource.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>delete</code>
+      </td>
+      <td>Allows deleting a given resource.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>alter</code>
+      </td>
+      <td>Allows altering non-configurations.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>describe</code>
+      </td>
+      <td>Allows querying non-configurations.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>describe_configs</code>
+      </td>
+      <td>Allows describing configurations.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>alter_configs</code>
+      </td>
+      <td>Allows altering configurations.</td>
+    </tr>
+  </tbody>
+</table>
+
+You can run `rpk acl --help-operations` to see which operations are required for which
+requests. In flag form to set up a general producing/consuming client, you can
+invoke `rpk acl create` three times with the following (including your
+`--allow-principal`):
+
+`rpk acl create --operation write,read,describe --topic [topics] `
+
+`rpk acl create --operation describe,read --group [group.id]`
+
+`rpk acl create --operation describe,write --transactional-id [transactional.id]`
+
+### Permissions
+
+A client can be allowed access or denied access. By default, all permissions
+are denied. You only need to specifically deny a permission if you allow a wide
+set of permissions and then want to deny a specific permission in that set.
+You could allow all operations, and then specifically deny writing to topics.
+
+### Management
+
+Creating ACLs works on a specific ACL basis, but listing and deleting ACLs
+works on filters. Filters allow matching many ACLs to be printed listed and
+deleted at once. Because this can be risky for deleting, the delete command
+prompts for confirmation by default. More details and examples for creating,
+listing, and deleting can be seen in each of the commands.
+
+Using SASL requires setting `enable_sasl: true` in the redpanda section of your
+`redpanda.yaml`. User management is a separate, simpler concept that is
+described in the user command.
+
+## Usage
+
+```bash
+rpk acl [command] [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Admin API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the Admin
+        API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-truststore</td>
+      <td>string</td>
+      <td>
+        The truststore to be used for TLS communication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker &lt;ip&gt;:&lt;port&gt; pairs (for example,{" "}
+        <code>
+          --brokers '192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092'
+        </code>
+        ). Alternatively, you may set the <code>REDPANDA_BROKERS</code> environment
+        variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for acl.</td>
+    </tr>
+    <tr>
+      <td>--help-operations</td>
+      <td>-</td>
+      <td>Print more help about ACL operations.</td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td>SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values:{" "}
+        <code>SCRAM-SHA-256</code>, <code>SCRAM-SHA-512</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

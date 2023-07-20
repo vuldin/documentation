@@ -63,12 +63,14 @@ jobs:
 
       - name: Set output path
         run: |
-          if [[ "${{ env.formatted_tag }}" == "${{ env.BRANCH }}" ]]; then
-            echo "OUTPUT_PATH=./docs-repo/docs/reference" >> $GITHUB_ENV
-          else
-            # extract major.minor version
-            version=$(echo "${{ env.BRANCH }}" | grep -oP '[0-9]+\.[0-9]+')
+          # extract major.minor version
+          version=$(echo "${{ env.BRANCH }}" | grep -oP '[0-9]+\.[0-9]+')
+          major=$(echo "$version" | cut -d. -f1)
+          minor=$(echo "$version" | cut -d. -f2)
+          if [ $major -lt 23 ] || ([ $major -eq 23 ] && [ $minor -lt 2 ]); then
             echo "OUTPUT_PATH=./docs-repo/versioned_docs/version-$version/reference/redpanda-operator" >> $GITHUB_ENV
+          else
+            echo "OUTPUT_PATH=./docs-repo/docs/reference" >> $GITHUB_ENV
           fi
 
       - name: Download crd-ref-docs

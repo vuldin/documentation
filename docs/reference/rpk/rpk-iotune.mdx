@@ -1,5 +1,6 @@
 ---
 title: rpk iotune
+rpk_version: v23.2.1
 ---
 
 <head>
@@ -12,39 +13,31 @@ title: rpk iotune
 
 By default `rpk iotune` writes its output parameters to `/etc/redpanda/io-config.yaml`.
 
-### Usage
+## Usage
 
-```
+```bash
 rpk iotune [flags]
 ```
 
-### Flags
+## Flags
 
 <table>
   <tbody>
     <tr>
       <td>
-        <strong> Value</strong>
+        <strong>Value</strong>
       </td>
       <td>
-        <strong> Type</strong>
+        <strong>Type</strong>
       </td>
       <td>
-        <strong> Description</strong>
-      </td>
-    </tr>
-    <tr>
-      <td>--config</td>
-      <td>string</td>
-      <td>
-        Redpanda config file, if not set the file will be searched for in the
-        default locations.
+        <strong>Description</strong>
       </td>
     </tr>
     <tr>
       <td>--directories</td>
       <td>strings</td>
-      <td> List of directories to evaluate.</td>
+      <td>List of directories to evaluate.</td>
     </tr>
     <tr>
       <td>--duration</td>
@@ -61,31 +54,54 @@ rpk iotune [flags]
     <tr>
       <td>-h, --help</td>
       <td>-</td>
-      <td> Help for iotune</td>
+      <td>Help for iotune.</td>
     </tr>
     <tr>
       <td>--no-confirm</td>
       <td>-</td>
-      <td> Disable confirmation prompt if the iotune file already exists</td>
+      <td>Disable confirmation prompt if the iotune file already exists.</td>
+    </tr>
+    <tr>
+      <td>--out</td>
+      <td>string</td>
+      <td>
+        The file path where the IO config will be written (default
+        "/etc/redpanda/io-config.yaml").
+      </td>
     </tr>
     <tr>
       <td>--timeout</td>
       <td>duration</td>
       <td>
-        The maximum time after -- to wait for iotune to complete. The value
-        passed is a sequence of decimal numbers, each with optional fraction and
-        a unit suffix, such as <code>300ms</code>, <code>1.5s</code> or{" "}
-        <code>2h45m</code>. Valid time units are <code>ns</code>,{" "}
-        <code>us</code> (or <code>µs</code>), <code>ms</code>, <code>s</code>,{" "}
-        <code>m</code>, <code>h</code> (default 1h0m0s).
+        The maximum time after -- to wait for iotune to complete (e.g. 300ms,
+        1.5s, 2h45m) (default 1h0m0s).
       </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda or rpk config file; default search paths are
+        ~/.config/rpk/rpk.yaml, $PWD, and /etc/redpanda/`redpanda.yaml`.
+      </td>
+    </tr>
+    <tr>
+      <td>-X, --config-opt</td>
+      <td>stringArray</td>
+      <td>
+        Override rpk configuration settings; '-X help' for detail or '-X list'
+        for terser detail.
+      </td>
+    </tr>
+    <tr>
+      <td>--profile</td>
+      <td>string</td>
+      <td>rpk profile to use.</td>
     </tr>
     <tr>
       <td>-v, --verbose</td>
       <td>-</td>
-      <td>
-        Enable verbose logging (default <code>false</code>).
-      </td>
+      <td>Enable verbose logging.</td>
     </tr>
   </tbody>
 </table>

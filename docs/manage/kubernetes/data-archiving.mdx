@@ -39,7 +39,7 @@ import ContextLink from '@site/src/components/ContextButton.js'
 To check if you already have a license key applied to your cluster:
 
 ```bash
-kubectl exec redpanda-0 -c redpanda -n redpanda -- rpk cluster license info
+kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rpk cluster license info
 ```
 
 ## Configure data archiving
@@ -47,5 +47,5 @@ kubectl exec redpanda-0 -c redpanda -n redpanda -- rpk cluster license info
 <Configure/>
 
 ## Stop data archiving
-   
+
 <Stop/>

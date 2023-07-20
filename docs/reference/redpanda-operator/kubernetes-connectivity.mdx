@@ -1,5 +1,6 @@
 ---
 title: Configuring the Kubernetes Operator for Connectivity
+linkRoot: ../../../
 ---
 
 <head>
@@ -7,6 +8,10 @@ title: Configuring the Kubernetes Operator for Connectivity
     <meta name="description" content="Configuring the Kubernetes operator for connectivity."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/reference/redpanda-operator/kubernetes-connectivity/" />
 </head>
+
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 The Redpanda operator supports configuration for internal and external connectivity.
 This section covers the corresponding configuration settings, the main actions the operator takes, the resources created, and the expected outputs.
@@ -116,7 +121,7 @@ three-node-cluster-2.three-node-cluster.default.svc.cluster.local.
 To check the cluster info:
 
 ```bash
-rpk --brokers $BROKERS cluster info
+rpk -X brokers=$BROKERS cluster info
 ```
 
 This example focuses on the Kafka API. Similar information is available for the Admin API and the HTTP Proxy API. Regardless of the API, the internal addresses can only be used by clients within the internal network.
@@ -246,7 +251,7 @@ $ echo $BROKERS
 
 Given the list of addresses, you can use `rpk` (or a Kafka client) to test the connection:
 ```bash
-rpk --brokers $BROKERS cluster info
+rpk -X brokers=$BROKERS cluster info
 ```
 
 You can use the same steps to configure external access for the Admin API and the HTTP Proxy API.

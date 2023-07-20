@@ -20,10 +20,10 @@ To self-host Redpanda platform, select either the Community Edition or the Enter
 
 ## Redpanda Community Edition
 
-Redpanda Community Edition is licensed with the Redpanda [Business Source License](https://github.com/redpanda-data/redpanda/blob/dev/licenses/bsl.md) (BSL). These core features are free and source-available.
+Redpanda Community Edition is licensed with the Redpanda [Business Source License](https://github.com/redpanda-data/redpanda/blob/dev/licenses/bsl.md) (BSL). These core features are free and source-available. 
 
 :::note
-* Users cannot provide Redpanda as a commercial streaming or queuing service to others.
+* Users cannot provide Redpanda as a commercial streaming or queuing service to others. 
 * The BSL code converts to Apache 2.0 licensing four years after each code merge.
 :::
 
@@ -38,8 +38,9 @@ Redpanda Enterprise Edition is licensed with the [Redpanda Community License](ht
 * [Kerberos authentication](../../manage/security/authentication/#enable-kerberos)
 * [Redpanda Console single sign-on authentication](../../manage/security/console/authentication)
 * [Redpanda Console role-based access control](../../manage/security/console/authorization)
+* [Server-side schema ID validation](../../manage/schema-id-validation)
 
-Enterprise features require a license key. You can evaluate enterprise features with a free 30-day trial. Contact [Redpanda Sales](https://redpanda.com/try-redpanda?section=enterprise-trial) to request a trial license, to extend your trial period, or to purchase an Enterprise Edition license. If you access a Redpanda Enterprise feature without a valid license, you get the following message:
+Enterprise features require a license key. You can evaluate enterprise features with a free 30-day trial. Contact [Redpanda Sales](https://redpanda.com/try-redpanda?section=enterprise-trial) to request a trial license, to extend your trial period, or to purchase an Enterprise Edition license. If you access a Redpanda Enterprise feature without a valid license, you get the following message: 
 
 ```
 Looks like you’ve enabled a Redpanda Enterprise feature without a valid license. Please enter an active Redpanda license key (for example, rpk cluster license set <key>). If you don’t have one, please request a new/trial license at https://redpanda.com/license-request.
@@ -54,12 +55,12 @@ A license key unlocks Redpanda Enterprise Edition features.
 
 To apply the license key to your cluster, run:
 
-`rpk cluster license set`
+`rpk cluster license set` 
 
 Either provide a path to a file containing the license, or provide the license string inline. For example, assuming you use the default admin host/port of `0.0.0.0:9644`, run:
 
 ```bash
-rpk cluster license set --path <path-to-license-file> --api-urls 0.0.0.0:9644
+rpk cluster license set --path <path-to-license-file> -X admin.hosts=0.0.0.0:9644
 ```
 
 Or:
@@ -73,7 +74,7 @@ If neither the path nor the license string are provided, `rpk` looks for the lic
 </TabItem>
 <TabItem value="kubernetes" label="Kubernetes">
 
-To apply the license key to your cluster using the Helm chart,
+To apply the license key to your cluster using the Helm chart, 
 either provide a secret that contains the license, or provide the license string inline:
 
 - Use a secret:
@@ -88,7 +89,7 @@ either provide a secret that contains the license, or provide the license string
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values license-key.yaml
   ```
 
@@ -96,7 +97,7 @@ either provide a secret that contains the license, or provide the license string
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set license_secret_ref.secret_name=<name-of-the-secret> \
     --set license_secret_ref.secret_key=<key-where-license-is-stored>
   ```
@@ -118,7 +119,7 @@ either provide a secret that contains the license, or provide the license string
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
   --values license-key.yaml
   ```
 
@@ -126,8 +127,8 @@ either provide a secret that contains the license, or provide the license string
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
-    --set license_key=<license-string>
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
+    --set license_key=<license-string> 
   ```
 
   </TabItem>
@@ -146,7 +147,7 @@ If neither the path nor the license string are provided, Redpanda looks for the 
 
 To check the status of your current license, run:
 
-`rpk cluster license info --api-urls 0.0.0.0:9644`
+`rpk cluster license info -X admin.hosts=0.0.0.0:9644`
 
 Redpanda sends warning messages in the cluster logs if you enable enterprise features without a valid license key.
 

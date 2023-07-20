@@ -1,0 +1,57 @@
+---
+title: rpk cloud logout
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk cloud logout| Redpanda Docs" />
+  <meta name="description" content="rpk cloud logout" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-cloud/rpk-cloud-logout/" />
+</head>
+
+Log out from Redpanda cloud.
+
+This command deletes your cloud auth token. If you want to log out entirely and
+switch to a different organization, you can use the --clear-credentials flag to
+additionally clear your client ID and client secret.
+
+## Usage
+
+```bash
+rpk cloud logout [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>-c, --clear-credentials</td>
+      <td>-</td>
+      <td>
+        Clear the client ID and client secret in addition to the auth token.
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td>Help for logout.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>Enable verbose logging (default: false).</td>
+    </tr>
+  </tbody>
+</table>

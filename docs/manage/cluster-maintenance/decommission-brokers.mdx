@@ -229,7 +229,7 @@ So the primary limitation consideration is the replication factor of five, meani
 
   ```bash
   rpk cluster info \
-    --brokers <broker-url>:<kafka-api-port>
+    -X brokers=<broker-url>:<kafka-api-port>
   ```
 
 1. Decommission the broker with your selected broker ID:
@@ -250,7 +250,7 @@ So the primary limitation consideration is the replication factor of five, meani
 
   ```bash
   rpk redpanda admin brokers decommission-status <broker-id> \
-    --api-urls <broker-url>:<admin-api-port>
+    -X admin.hosts=<broker-url>:<admin-api-port>
   ```
 
   The output uses cached cluster health data that is refreshed every 10 seconds.

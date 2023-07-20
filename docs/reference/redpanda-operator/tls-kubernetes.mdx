@@ -1,5 +1,6 @@
 ---
-title: "Configuring Redpanda TLS on Kubernetes"
+title: Configuring Redpanda TLS on Kubernetes
+linkRoot: ../../../
 ---
 
 <head>
@@ -8,9 +9,9 @@ title: "Configuring Redpanda TLS on Kubernetes"
     <link rel="canonical" href="https://docs.redpanda.com/docs/reference/redpanda-operator/tls-kubernetes/" />
 </head>
 
-:::danger
-See [Configuring Redpanda TLS on Kubernetes](../../../manage/kubernetes/security/kubernetes-tls) for the most up-to-date instructions using the Redpanda Helm chart. This page is based on the `redpanda-operator` Helm chart and is preserved only for backward compatibility.
-:::
+import DeprecationNote from '../../shared/_operator-deprecation-notice.mdx'
+
+<DeprecationNote frontmatter={frontMatter}/>
 
 This section explains how to enable Transport Layer Security (TLS) on Kubernetes using the Redpanda Operator. Alone, TLS authenticates the server and encrypts communication between the client and the server. To add client authentication, you can combine TLS encryption with SASL authentication, or you can configure mTLS authentication.
 
@@ -42,7 +43,7 @@ metadata:
   name: cluster-sample-tls
   // highlight-end
 spec:
-  image: "vectorized/redpanda"
+  image: "redpandadata/redpanda"
   version: "latest"
   replicas: 1
   resources:
@@ -204,6 +205,11 @@ The `nodeSecretRef` property contains the following variables:
 | `secret_name` | Name of the certificate secret. |
 | `secret_namespace` | Kubernetes namespace where the certificate secret is. If the secret is in a different namespace than the Redpanda cluster, the operator copies it to the namespace of the Redpanda cluster. |
 
+:::tip
+To include a `ca.crt` file in the Secret, you must create an Opaque Secret instead of a TLS Secret.
+See [Opaque Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets) in the Kubernetes documentation.
+:::
+
 ## Step 4: Create the Redpanda cluster
 
 After you configure the cluster specification file, run `kubectl apply` to create the cluster. You can run the command using a path to the cluster specification file on your local machine, or you can use the URL to the sample `tls.yaml` file.
@@ -286,7 +292,7 @@ metadata:
 spec:
   containers:
     - name: rpk
-      image: 'vectorized/redpanda:<redpanda-version>'
+      image: 'redpandadata/redpanda:<redpanda-version>'
       command:
         - /bin/bash
         - '-c'

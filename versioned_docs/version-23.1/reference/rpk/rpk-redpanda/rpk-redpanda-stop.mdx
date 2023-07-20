@@ -1,0 +1,75 @@
+---
+title: rpk redpanda stop
+---
+
+<head>
+  <meta name="title" content="rpk redpanda stop | Redpanda Docs" />
+  <meta name="description" content="rpk redpanda stop" />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-redpanda/rpk-redpanda-stop/" />
+</head>
+
+Stop a local Redpanda process. `rpk stop` first sends `SIGINT`, and waits for the specified timeout.
+
+Then, if Redpanda hasn't stopped, it sends `SIGTERM`.
+
+Lastly, it sends `SIGKILL` if it's still running.
+
+### Usage
+
+```
+rpk redpanda stop [flags]
+```
+
+### Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong> Value</strong>
+      </td>
+      <td>
+        <strong> Type</strong>
+      </td>
+      <td>
+        <strong> Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda config file, if not set the file will be searched for in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td> Help for stop.</td>
+    </tr>
+    <tr>
+      <td>--timeout</td>
+      <td>duration</td>
+      <td>
+        The maximum amount of time to wait for redpanda to stop,after each
+        signal is sent. The value passed is asequence of decimal numbers, each
+        with optional fraction and a unit suffix, such as <code>300ms</code>,{" "}
+        <code>1.5s</code> or
+        <code>2h45m</code>. Valid time units are <code>ns</code>, <code>
+          us
+        </code> (or <code>µs</code>), <code>ms</code>, <code>s</code>, <code>
+          m
+        </code>, <code>h</code>
+        (default 5s).
+      </td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging (default <code>false</code>).
+      </td>
+    </tr>
+  </tbody>
+</table>

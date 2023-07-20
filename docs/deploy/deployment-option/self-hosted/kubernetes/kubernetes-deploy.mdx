@@ -5,8 +5,8 @@ tags:
 ---
 
 <head>
-    <meta name="title" content="Deploy Redpanda using the Helm Chart | Redpanda Docs"/>
-    <meta name="description" content="Use the Redpanda Helm chart to deploy a Redpanda cluster in Kubernetes."/>
+    <meta name="title" content="Deploy Redpanda using only the Helm Chart or with the Redpanda Operator | Redpanda Docs"/>
+    <meta name="description" content="Deploy a Redpanda cluster in Kubernetes."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/deploy/deployment-option/self-hosted/kubernetes/kubernetes-deploy/" />
 </head>
 
@@ -14,39 +14,167 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DefaultComponents from "./shared/_default-components.mdx"
 
-This topic describes how to use the Redpanda Helm chart to deploy a Redpanda cluster in Kubernetes.
+This topic describes how to deploy a Redpanda cluster in Kubernetes.
 
 ## Prerequisites
 
 Make sure that your Kubernetes cluster meets the [requirements](../kubernetes-cluster-requirements).
 
-## Deploy Redpanda and Redpanda Console
+## Deploy Redpanda
 
-In this step, you deploy Redpanda and Redpanda Console. Redpanda Console is a developer-friendly web UI for managing and debugging your Redpanda cluster and your applications. Redpanda Console is included as a subchart in the Redpanda Helm chart.
+In this step, you deploy Redpanda and Redpanda Console.
 
-1. Add the Redpanda Helm chart repository and install cert-manager using Helm:
+Redpanda Console is a developer-friendly web UI for managing and debugging your Redpanda cluster and your applications. Redpanda Console is included as a subchart in the Redpanda Helm chart.
+
+<Tabs groupId="kubernetes-tool">
+<TabItem value="operator" label="Helm + Operator">
+
+:::caution
+Redpanda Operator is in beta. Do not migrate existing production clusters to the Redpanda Operator.
+:::
+
+1. Make sure that you have permission to install custom resource definitions (CRDs):
+
+  ```bash
+  kubectl auth can-i create CustomResourceDefinition
+  ```
+
+  You need cluster-level permissions to install cert-manager and Redpanda Operator CRD in the next steps.
+
+1. Install [cert-manager](https://cert-manager.io/docs/installation/helm/) using Helm:
+
+  ```bash
+  helm repo add jetstack https://charts.jetstack.io
+  helm repo update
+  helm install cert-manager jetstack/cert-manager \
+    --set installCRDs=true \
+    --namespace cert-manager  \
+    --create-namespace
+  ```
+
+  TLS is enabled by default. The Redpanda Helm chart uses cert-manager to manage TLS certificates by default.
+
+1. Install the Redpanda Operator CRDs:
+
+  ```bash
+  kubectl kustomize https://github.com/redpanda-data/redpanda//src/go/k8s/config/crd | kubectl apply -f -
+  ```
+
+1. Deploy the Redpanda Operator:
 
   ```bash
   helm repo add redpanda https://charts.redpanda.com
-  helm repo add jetstack https://charts.jetstack.io
-  helm repo update
-  helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namespace cert-manager  --create-namespace
+  helm upgrade --install redpanda-controller redpanda/redpanda-operator \
+    --namespace <namespace> \
+    --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator \
+    --set image.tag=v23.2.1 \
+    --create-namespace
   ```
 
-  The Redpanda Helm chart uses cert-manager to manage TLS certificates. TLS is enabled by default.
-
-1. Install the Redpanda Helm chart:
+1. Ensure that the Deployment is successfully rolled out:
 
   ```bash
+  kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller-redpanda-operator
+  ```
+
+  ```text-no-copy
+  deployment "redpanda-controller-redpanda-operator" successfully rolled out
+  ```
+
+1. Install a Redpanda custom resource to deploy a Redpanda cluster and Redpanda Console:
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    chartRef: {}
+    clusterSpec: {}
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
+  ```
+
+  The empty `clusterSpec` field configures the default settings in the Redpanda Helm chart.
+
+1. Wait for the Redpanda Operator to deploy Redpanda using the Helm chart:
+
+  ```bash
+  kubectl get redpanda --namespace <namespace> --watch
+  ```
+
+  ```text-no-copy
+  NAME       READY   STATUS
+  redpanda   True    Redpanda reconciliation succeeded
+  ```
+
+1. Verify that each Redpanda broker is scheduled on only one Kubernetes node:
+
+  ```bash
+  kubectl get pod --namespace <namespace>  \
+    -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
+    app.kubernetes.io/component=redpanda-statefulset
+  ```
+
+  Example output:
+
+  ```text-no-copy
+  example-worker3   redpanda-0
+  example-worker2   redpanda-1
+  example-worker    redpanda-2
+  ```
+
+To deploy a fleet of two or more Redpanda clusters, use the RedpandaList resource.
+
+:::note
+All Redpanda custom resources must be deployed in the same namespace as the Redpanda Operator.
+:::
+
+```yaml
+apiVersion: cluster.redpanda.com/v1alpha1
+kind: RedpandaList
+metadata:
+items:
+  - apiVersion: cluster.redpanda.com/v1alpha1
+    kind: Redpanda
+    metadata:
+      name: redpanda
+    spec:
+      chartRef: {}
+      clusterSpec: {}
+```
+
+</TabItem>
+<TabItem value="helm" label="Helm">
+
+1. Install cert-manager using Helm:
+
+  ```bash
+  helm repo add jetstack https://charts.jetstack.io
+  helm repo update
+  helm install cert-manager jetstack/cert-manager \
+    --set installCRDs=true \
+    --namespace cert-manager  \
+    --create-namespace
+  ```
+
+  TLS is enabled by default. The Redpanda Helm chart uses cert-manager to manage TLS certificates.
+
+1. Install the Redpanda Helm chart to deploy a Redpanda cluster and Redpanda Console:
+
+  ```bash
+  helm repo add redpanda https://charts.redpanda.com
   helm install redpanda redpanda/redpanda \
-    --namespace redpanda \
+    --namespace <namespace> \
     --create-namespace
   ```
 
 1. Wait for the Redpanda cluster to be ready:
 
   ```bash
-  kubectl -n redpanda rollout status statefulset redpanda --watch
+  kubectl --namespace <namespace> rollout status statefulset redpanda --watch
   ```
 
   When the Redpanda cluster is ready, the output should look similar to the following:
@@ -58,23 +186,21 @@ In this step, you deploy Redpanda and Redpanda Console. Redpanda Console is a de
 1. Verify that each Redpanda broker is scheduled on only one Kubernetes node:
 
   ```bash
-  kubectl get pod -n redpanda  \
+  kubectl get pod --namespace <namespace> \
   -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name -l \
   app.kubernetes.io/component=redpanda-statefulset
   ```
 
-  <details>
-  <summary>
-  Example output
-  </summary>
-  
-  ```
+  Example output:
+
+  ```text-no-copy
   example-worker3   redpanda-0
   example-worker2   redpanda-1
   example-worker    redpanda-2
   ```
 
-  </details>
+</TabItem>
+</Tabs>
 
 ## Explore the default Kubernetes components
 
@@ -82,13 +208,11 @@ In this step, you deploy Redpanda and Redpanda Console. Redpanda Console is a de
 
 ## Customize the deployment
 
-The Redpanda Helm chart is configured in the [`values.yaml`](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values) file.
-
-To learn how to customize the Redpanda Helm chart, see [Customize the Helm Chart](../../../../../manage/kubernetes/configure-helm-chart).
+To learn how to configure Redpanda, see [Configure Redpanda in Kubernetes](../../../../../manage/kubernetes/configure-helm-chart).
 
 ## Find the latest versions of the Redpanda Helm charts
 
-The `helm install` command always pulls the latest version of the chart. To list the current latest version of the Redpanda Helm chart, use the `helm search` command:
+To list the latest version of the Redpanda Helm chart, use the `helm search` command:
 
 ```bash
 helm search repo redpanda
@@ -100,7 +224,7 @@ Example output
 </summary>
 
 ```
-NAME             	CHART VERSION	APP VERSION	DESCRIPTION                                      
+NAME             	CHART VERSION	APP VERSION	DESCRIPTION
 redpanda/redpanda	2.4.0        	v22.3.9    	Redpanda is the real-time engine for modern apps.
 redpanda/console 	0.3.3        	v2.0.2     	Helm chart to deploy Redpanda Console.
 ```
@@ -110,14 +234,18 @@ redpanda/console 	0.3.3        	v2.0.2     	Helm chart to deploy Redpanda Consol
 To find the versions that are installed on your machine, run the following:
 
 ```bash
-helm list -n redpanda
+helm list --namespace <namespace>
 ```
 
 ## Production considerations
 
-If you're deploying Redpanda for production, see the [production best practices](../kubernetes-best-practices). 
+If you're deploying Redpanda for production, see the [production best practices](../kubernetes-best-practices).
 
 ## Next steps
 
 See the [Manage Kubernetes topics](../../../../../manage/kubernetes) to learn how to customize the deployment to meet your needs.
 
+## Suggested reading
+
+- [Redpanda Helm Specification](../../../../../reference/redpanda-helm-spec)
+- [Redpanda CRD Reference](../../../../../reference/crd)

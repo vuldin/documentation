@@ -8,9 +8,9 @@ description: A diagnostics bundle is a ZIP file with data that can help debug an
 <head>
     <meta name="title" content="Diagnostics Bundles in Kubernetes | Redpanda Docs"/>
     <meta name="description" content="
-    A diagnostics bundle is a ZIP file with data that can help debug and diagnose issues with a Redpanda cluster, 
+    A diagnostics bundle is a ZIP file with data that can help debug and diagnose issues with a Redpanda cluster,
     a broker, or the machines on which the brokers are running.
-    You can use this file to debug issues yourself, 
+    You can use this file to debug issues yourself,
     or you can send it to the Redpanda support team to help resolve your issue."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/manage/kubernetes/troubleshooting/diagnostics-bundle/" />
 </head>
@@ -33,6 +33,30 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
 
 1. Create a ClusterRole to allow Redpanda to collect information from the Kubernetes API:
 
+  <Tabs groupId="kubernetes-tool">
+  <TabItem value="operator" label="Helm + Operator">
+
+  ```yaml title="redpanda-cluster.yaml"
+  apiVersion: cluster.redpanda.com/v1alpha1
+  kind: Redpanda
+  metadata:
+    name: redpanda
+  spec:
+    chartRef: {}
+    clusterSpec:
+      serviceAccount:
+        create: true
+      rbac:
+        enabled: true
+  ```
+
+  ```bash
+  kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
+  ```
+
+  
+  </TabItem>
+  <TabItem value="helm" label="Helm">
   <Tabs groupId="helm-config">
   <TabItem value="values" label="--values">
 
@@ -44,7 +68,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   ```
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --values serviceaccount.yaml --reuse-values
   ```
 
@@ -52,14 +76,16 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   <TabItem value="flags" label="--set">
 
   ```bash
-  helm upgrade --install redpanda redpanda/redpanda -n redpanda --create-namespace \
+  helm upgrade --install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set serviceAccount.create=true \
     --set rbac.enabled=true
   ```
 
   </TabItem>
   </Tabs>
-  
+  </TabItem>
+  </Tabs>
+
   :::tip
 
   If you aren't using the Helm chart, you can create the ClusterRole manually:
@@ -78,9 +104,9 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   <TabItem value="enabled" label="TLS Enabled">
 
   ```bash
-  kubectl exec -it -n redpanda redpanda-0 -c redpanda -- rpk debug bundle \
+  kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
     --admin-api-tls-truststore=<path-to-root-ca> \
-    --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644 \
+    -X admin.hosts=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644 \
     --admin-api-tls-enabled
   ```
 
@@ -88,9 +114,9 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   <TabItem value="disabled" label="TLS Disabled">
 
   ```bash
-  kubectl exec -it -n redpanda redpanda-0 -c redpanda -- rpk debug bundle \
-    --namespace redpanda \
-    --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
+  kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
+    --namespace <namespace> \
+    -X admin.hosts=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
   </TabItem>
@@ -100,10 +126,10 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
   provide it in the `--upload-url` flag to upload your diagnostics bundle to Redpanda.
 
   ```bash
-  kubectl exec -it -n redpanda redpanda-0 -c redpanda -- rpk debug bundle \
+  kubectl exec -it --namespace <namespace> redpanda-0 -c redpanda -- rpk debug bundle \
     --upload-url <url> \
-    --namespace redpanda \
-    --api-urls=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
+    --namespace <namespace> \
+    -X admin.hosts=http://redpanda-0.redpanda.redpanda.svc.cluster.local.:9644
   ```
 
   <details>
@@ -143,7 +169,7 @@ To generate a diagnostics bundle, execute the [`rpk debug bundle`](../../../../r
 1. Remove the diagnostics bundle from the Redpanda container:
 
   ```bash
-  kubectl exec redpanda-0 -c redpanda -n redpanda -- rm /var/lib/redpanda/<bundle-name>
+  kubectl exec redpanda-0 -c redpanda --namespace <namespace> -- rm /var/lib/redpanda/<bundle-name>
   ```
 
 :::info

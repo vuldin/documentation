@@ -4,7 +4,7 @@ title: Manage Disk Space
 
 <head>
     <meta name="title" content="Disk Space Management | Redpanda Docs"/>
-    <meta name="description" content="If you exceed the low disk space threshold, Redpanda blocks writes to the local node from Kafka producers."/>
+    <meta name="description" content="Redpanda provides several ways to manage disk space to ensure the production stability of the cluster."/>
     <link rel="canonical" href="https://docs.redpanda.com/docs/manage/cluster-maintenance/disk-utilization/" />
 </head>
 
@@ -39,6 +39,10 @@ Set retention properties at the topic level or the cluster level. If a value isn
 | Segment size      | `log_segment_size`  <br /> Default - `1073741824`  | `segment.bytes`  <br /> No default |
 
 Data expires from object storage following `retention.ms` or `retention.bytes`. For example, if `retention.bytes` is set to 10 GiB, then every partition in the topic has a limit of 10 GiB storage in the cloud. When `retention.bytes` is exceeded by data in object storage, the data in object storage is trimmed. With Tiered Storage enabled, data expires from local storage following `retention.local.target.ms` or `retention.local.target.bytes`. 
+
+:::note
+Both size-based and time-based retention policies are applied simultaneously, so it's possible for your size-based property to override your time-based property, or vice versa. For example, if your size-based property requires removing one segment, and your time-based property requires removing three segments, then three segments are removed. Size-based properties reclaim disk space as close as possible to the maximum size, without exceeding the limit. 
+:::
 
 Based on these properties, Redpanda runs a log cleanup process in the background. If you start to run out of disk space, adjust your retention properties to reduce the amount of disk space used. 
 
@@ -154,13 +158,68 @@ Log rolling can also be triggered by configurable timeouts. This is useful when 
 
 * [log_segment_ms_min](../../../reference/tunable-properties#log_segment_ms_min) and [log_segment_ms_max](../../../reference/tunable-properties#log_segment_ms_max) are cluster-level properties that configure the lower and upper limits, respectively, of log rolling timeouts.
 
-## Handle full disks
+## Local storage housekeeping
+Redpanda divides disk storage into different categories to provide a flexible configuration of space:
 
-If you exceed your low disk space threshold, Redpanda blocks clients from producing. In that state, Redpanda returns errors to external writers, but it still allows internal write traffic, such as replication and rebalancing. 
+- Reserved disk space (`disk_reservation_percent`): This overhead reservation is disk space that Redpanda does not use. 
+  - As disk space used by cache storage and log storage expand to their target sizes, this provides buffer space to avoid free disk space alerts.
+  - Because SSDs that run near capacity can experience performance degradation, this provides buffer space to prevent running a device at capacity.
+- Cache storage (`cloud_storage_cache_size_percent` or `cloud_storage_cache_size`): This is the maximum size of the [disk cache](../../tiered-storage#caching) used if Tiered Storage is enabled. As the cache reaches its limit, new data added to the cache removes old data from the cache.
+- Log storage (`retention_local_target_capacity_percent` or `retention_local_target_capacity_bytes`): This log data reservation is the disk space used as the target maximum size for user data, as well as Redpanda internal topics, like the control log. It's generally about 70-80% of total disk space. 
 
-The [`storage_min_free_bytes`](../../../reference/tunable-properties/#storage_min_free_bytes) tunable configuration property sets the low disk space threshold–the hard limit–for this write rejection. The default value is 5 GiB, which means that when any broker’s free space falls below 5 GiB, Redpanda rejects writes to all brokers.
+![Redpanda disk storage categories](../../../static/img/disk_storage.png)
 
-You can also set a soft limit for a minimum free disk space _alert_. This soft limit generates an error message and affects the value of the `redpanda_storage_disk_free_space_alert` metric. The alert works with the following configuration properties, which you can set on any data disk (one drive per node):
+When log data usage begins to approach the target size of log storage, data is removed from local disk according to an eviction policy that follows cluster-level and topic-level retention settings. When log data usage exceeds its configured target size, Redpanda selects data to remove to bring usage back under the target size. Redpanda attempts to be fair with one round-robin removal at a time of a segment across partitions that are eligible to have segments removed. Data removal occurs in each phase. As soon as storage usage falls below the target, the data removal process ends.
+
+See also: [Object storage housekeeping](../../tiered-storage/#object-storage-housekeeping)
+
+### Phases of data removal
+
+#### 1: Follow retention policy
+
+A periodic housekeeping task in Redpanda performs compaction and removes data that has expired according to your retention policy. This process applies to both Tiered Storage and non-Tiered Storage topics. When the target size is reached, Redpanda prefers removal of expired data over compaction, and attempts to apply retention to partitions in the order that removes the largest amount of data.
+ 
+- When `retention_local_strict` is false (default), the housekeeping process removes data above the configured consumable retention. This means that data usage is allowed to expand to occupy more of the log data reservation.
+- When `retention_local_strict` is true, the housekeeping process uses local retention settings to select what data to remove.
+
+#### 2: Trim to local retention
+
+This phase removes data that has exceeded the effective local retention policy, including explicit local retention settings applied to a topic, as well as the default local retention settings applied to Tiered Storage topics. Default local retention is the local retention assigned to any partition that does not have an explicit topic-level override.
+
+- When `retention_local_strict` is false (default), Redpanda does not remove any additional data: the local retention policy was met in the previous phase. 
+- When `retention_local_strict` is true, Redpanda removes data fairly across all topics until each topic has reached its local retention.
+
+After this phase, all partitions should be operating at a size that reflects their effective local retention. The next phase starts to override local retention settings to remove more data. 
+
+#### 3: Trim data with default local retention settings
+
+For topics with default local retention settings, this phase removes data down to a low-space level.
+
+The low-space level is a configured size (two segments) that provides minimal space for partition operation. Redpanda only considers trimming data that is safely in the cloud.
+
+#### 4: Trim data with explicitly-configured retention settings
+
+For topics with explicitly-configured retention settings, this phase removes data down to a low-space level.
+
+#### 5: Trim to active (latest) segment
+
+This phase trims all topics down to their last active segment. (Data in the active segment cannot be removed.) Data is not available for reclaim from the active segment until it is rolled, which occurs when it reaches its max size or when the `segment.ms` time expires.
+
+## Monitor disk space
+
+You can check your total disk size and free space by viewing the metrics: 
+* `redpanda_storage_disk_total_bytes`
+* `redpanda_storage_disk_free_bytes`
+
+Redpanda monitors disk space and updates these metrics and the `storage_space_alert` status based on your full disk alert threshold. You can check the alert status with the `redpanda_storage_disk_free_space_alert` metric. The alert values are:  
+* 0 = No alert
+* 1 = Low free space alert
+* 2 = Out of space (degraded, external writes are rejected)
+
+
+## Set free disk space alert
+
+You can set a soft limit for a minimum free disk space alert. This soft limit generates an error message and affects the value of the [`redpanda_storage_disk_free_space_alert`](../../../reference/public-metrics-reference/#redpanda_storage_disk_free_space_alert) metric. The alert works with the following configuration properties, which you can set on any data disk (one drive per node):
 
 | Property | Description | 
 | ---      | ---         |  
@@ -173,16 +232,11 @@ The alert threshold can be set in either bytes or percentage of total space. To 
 
 When a disk exceeds the set threshold, `redpanda_storage_disk_free_space_alert` updates, and an error message is written to the Redpanda service log. 
 
-## Monitor disk space
+## Handle full disks
 
-You can check your total disk size and free space by viewing the metrics: 
-* `redpanda_storage_disk_total_bytes`
-* `redpanda_storage_disk_free_bytes`
+If you exceed your low disk space threshold, Redpanda blocks clients from producing. In that state, Redpanda returns errors to external writers, but it still allows internal write traffic, such as replication and rebalancing. 
 
-Redpanda monitors disk space and updates these metrics and the `storage_space_alert` status based on your full disk alert threshold. You can check the alert status with the `redpanda_storage_disk_free_space_alert` metric. The alert values are:  
-* 0 = No alert
-* 1 = Low free space alert
-* 2 = Out of space (degraded, external writes are rejected)
+The [`storage_min_free_bytes`](../../../reference/tunable-properties/#storage_min_free_bytes) tunable configuration property sets the low disk space threshold–the hard limit–for this write rejection. The default value is 5 GiB, which means that when any broker’s free space falls below 5 GiB, Redpanda rejects writes to all brokers.
 
 ## Create a ballast file
 
@@ -207,4 +261,4 @@ rpk redpanda tune ballast_file
 | ---               | ---                                                |  
 | `tune_ballast_file`               | Set to `true` to enable ballast file creation. Default is `false`.   | 
 | `ballast_file_path`      | You can change the location of the ballast file, but it must be on the same mount point as the Redpanda data directory. Default is `/var/lib/redpanda/data/ballast`.      | 
-| `ballast_file_size`      | Increase the ballast file size if it is a very high-throughput cluster. Decrease the ballast file size if you have very little storage space. The ballast file should be large enough to give you time to delete data and reconfigure retention properties if Redpanda crashes, but small enough that you don't waste disk space. In general, set this to approximately 10 times the size of the largest segment, to have enough space to compact that topic. Default is `1GiB`. | 
+| `ballast_file_size`      | Increase the ballast file size if it is a very high-throughput cluster. Decrease the ballast file size if you have very little storage space. The ballast file should be large enough to give you time to delete data and reconfigure retention properties if Redpanda crashes, but small enough that you don't waste disk space. In general, set this to approximately 10 times the size of the largest segment, to have enough space to compact that topic. Default is `1 GiB`. | 

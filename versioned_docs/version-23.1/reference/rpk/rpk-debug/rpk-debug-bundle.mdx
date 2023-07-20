@@ -1,0 +1,258 @@
+---
+title: rpk debug bundle
+rpk_version: v23.1.6 (rev cc47e1ad1)
+---
+
+<head>
+  <meta name="title" content="rpk debug bundle| Redpanda Docs" />
+  <meta name="description" content="The rpk debug bundle command generates a diagnostics bundle for troubleshooting Redpanda deployments." />
+  <link rel="canonical" href="https://docs.redpanda.com/docs/reference/rpk/rpk-debug/rpk-debug-bundle/" />
+</head>
+
+import BundleContentsK8s from './shared/_bundle-contents-k8s.mdx'
+import BundleContentsLinux from './shared/_bundle-contents-linux.mdx'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+The `rpk debug bundle` command collects environment data that can help debug and diagnose issues with a Redpanda cluster, a broker, or the machine it`s running on. It
+then bundles the collected data into a ZIP file, called a diagnostics bundle.
+
+
+:::info
+In Kubernetes, you must execute the `rpk debug bundle` command inside a container that's running a Redpanda broker.
+:::
+
+## Usage
+
+```bash
+rpk debug bundle [flags]
+```
+
+## Flags
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Value</strong>
+      </td>
+      <td>
+        <strong>Type</strong>
+      </td>
+      <td>
+        <strong>Description</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Admin API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the Admin
+        API.
+      </td>
+    </tr>
+    <tr>
+      <td>--admin-api-tls-truststore</td>
+      <td>string</td>
+      <td>
+        The truststore to be used for TLS communication with the Admin API.
+      </td>
+    </tr>
+    <tr>
+      <td>--api-urls</td>
+      <td>string</td>
+      <td>
+        The address to the broker`s Admin API. Defaults to the one in the config
+        file.
+      </td>
+    </tr>
+    <tr>
+      <td>--brokers</td>
+      <td>strings</td>
+      <td>
+        Comma-separated list of broker <code>&lt;ip&gt;:&lt;port&gt;</code> pairs, for example 
+        <code>--brokers 192.168.78.34:9092,192.168.78.35:9092,192.179.23.54:9092</code>. 
+        Alternatively, you may set the <code>REDPANDA_BROKERS</code>
+        environment variable with the comma-separated list of broker addresses.
+      </td>
+    </tr>
+    <tr>
+      <td>--config</td>
+      <td>string</td>
+      <td>
+        Redpanda configuration file. If not set, rpk searches for the file in the
+        default locations.
+      </td>
+    </tr>
+    <tr>
+      <td>--controller-logs-size-limit</td>
+      <td>string</td>
+      <td>
+        Sets the limit of the controller log size that can be stored in the
+        bundle. Multipliers are also supported, e.g. 3MB, 1GiB (default "20MB").
+      </td>
+    </tr>
+    <tr>
+      <td>-h, --help</td>
+      <td>-</td>
+      <td> Display documentation for <code>rpk debug bundle</code>.</td>
+    </tr>
+    <tr>
+      <td>--logs-since</td>
+      <td>string</td>
+      <td>
+        Include log entries on or newer than the specified date in journalctl
+        date format, for example YYYY-MM-DD.
+      </td>
+    </tr>
+    <tr>
+      <td>--logs-size-limit</td>
+      <td>string</td>
+      <td>
+        Read the logs until the given size is reached. Multipliers are also
+        supported, e.g. 3MB, 1GiB (default "100MiB").
+      </td>
+    </tr>
+    <tr>
+      <td>--logs-until</td>
+      <td>string</td>
+      <td>
+        Include log entries on or older than the specified date in journalctl
+        date format, for example YYYY-MM-DD.<br/>
+        <strong>Not supported in Kubernetes</strong>
+      </td>
+    </tr>
+   <tr>
+      <td>--metrics-interval</td>
+      <td>duration</td>
+      <td>
+        The amount of time to wait before capturing the second snapshot of the metrics endpoints, for example 
+        <code>30s</code> (30 seconds) or <code>1.5m</code> (90 seconds).
+        This interval is useful because some metrics are counters that need values at two points in time. Default: <code>12s</code>.<br/>
+        <strong>Kubernetes only</strong>
+      </td>
+    </tr>
+    
+    <tr>
+      <td>--namespace</td>
+      <td>string</td>
+      <td>
+        The Kubernetes namespace in which the Redpanda cluster is running. Default: <code>redpanda</code><br/>
+        <strong>Kubernetes only</strong>.
+      </td>
+    </tr>
+    <tr>
+      <td>--password</td>
+      <td>string</td>
+      <td> SASL password to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>--sasl-mechanism</td>
+      <td>string</td>
+      <td>
+        The authentication mechanism to use. Supported values: <code>SCRAM-SHA-256</code> and 
+        <code>SCRAM-SHA-512</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>--timeout</td>
+      <td>duration</td>
+      <td>
+        The amount of time to wait for child commands to execute, for example 
+        <code>30s</code> (30 seconds) or <code>1.5m</code> (90 seconds). Default: <code>10s</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-cert</td>
+      <td>string</td>
+      <td>
+        The certificate to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-enabled</td>
+      <td>-</td>
+      <td>
+        Enable TLS for the Kafka API (not necessary if specifying custom certs).
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-key</td>
+      <td>string</td>
+      <td>
+        The certificate key to be used for TLS authentication with the broker.
+      </td>
+    </tr>
+    <tr>
+      <td>--tls-truststore</td>
+      <td>string</td>
+      <td>The truststore to be used for TLS communication with the broker.</td>
+    </tr>
+     <tr>
+      <td>--upload-url</td>
+      <td>string</td>
+      <td> The URL to which to upload the diagnostics bundle. 
+        This URL is usually given to you by the Redpanda support team to help you debug your deployment.<br/>
+        <strong>Kubernetes only</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>--user</td>
+      <td>string</td>
+      <td>SASL user to be used for authentication.</td>
+    </tr>
+    <tr>
+      <td>-v, --verbose</td>
+      <td>-</td>
+      <td>
+        Enable verbose logging. Default: <code>false</code>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Result
+
+The files and directories in the diagnostics bundle differ depending on the environment in which Redpanda is running.
+
+<Tabs groupId="platforms">
+<TabItem value="linux" label="Linux" default>
+
+<BundleContentsLinux/>
+
+</TabItem>
+<TabItem value="kubernetes" label="Kubernetes" default>
+
+<BundleContentsK8s/>
+
+</TabItem>
+</Tabs>
+
+## Examples
+
+### Collect Redpanda logs from a specific timeframe
+
+```
+rpk debug bundle --logs-since "2022-02-01" --logs-size-limit 3MiB
+```
+
+### Use a custom Kubernetes namespace
+
+```
+rpk debug bundle --namespace redpanda-namespace
+```

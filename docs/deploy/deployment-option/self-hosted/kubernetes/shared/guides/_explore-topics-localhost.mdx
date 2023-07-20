@@ -9,7 +9,7 @@ Because you're using the Community Edition of Redpanda Console, you should not e
 1. Expose Redpanda Console to your localhost:
 
   ```bash
-  kubectl -n redpanda port-forward svc/redpanda-console 8080:8080
+  kubectl --namespace <namespace> port-forward svc/redpanda-console 8080:8080
   ```
 
   <details>
