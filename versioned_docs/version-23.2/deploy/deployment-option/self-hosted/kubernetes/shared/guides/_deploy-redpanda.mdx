@@ -6,8 +6,8 @@ In this step, you deploy Redpanda with SASL authentication and self-signed TLS c
 <Tabs groupId="kubernetes-tool">
 <TabItem value="operator" label="Helm + Operator">
 
-:::caution Beta restriction
-The Redpanda Operator is currently in beta. As a result, it should be deployed only for managing new Redpanda cluster installations. Do not deploy Redpanda Operator to manage an existing Redpanda cluster.
+:::caution
+Redpanda Operator is in beta. Do not migrate existing production clusters to the Redpanda Operator.
 :::
 
 1. Install cert-manager using Helm:
@@ -15,30 +15,29 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
   ```bash
   helm repo add jetstack https://charts.jetstack.io
   helm repo update
-  helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namespace cert-manager  --create-namespace
+  helm install cert-manager jetstack/cert-manager \
+    --set installCRDs=true \
+    --namespace cert-manager  \
+    --create-namespace
   ```
 
   TLS is enabled by default. The Redpanda Helm chart uses cert-manager to manage TLS certificates by default.
 
-1. Clone the `redpanda` GitHub repository:
+1. Install the Redpanda Operator custom resource definitions (CRDs):
 
   ```bash
-  git clone https://github.com/redpanda-data/redpanda.git
-  ```
-
-  The Redpanda Operator Helm chart is only available in this repository during the beta period.
-
-1. Build the Helm dependencies:
-
-  ```bash
-  cd redpanda/src/go/k8s/helm-chart/charts
-  (cd redpanda-operator && helm dependency build)
+  kubectl kustomize https://github.com/redpanda-data/redpanda//src/go/k8s/config/crd | kubectl apply -f -
   ```
 
 1. Deploy the Redpanda Operator:
 
   ```bash
-  helm upgrade --install  redpanda-controller redpanda-operator --namespace <namespace> --set installCRDs=true --set scope=Namespace --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator,image.tag=v23.2.1-rc7 --create-namespace
+  helm repo add redpanda https://charts.redpanda.com
+  helm upgrade --install redpanda-controller redpanda/redpanda-operator \
+    --namespace <namespace> \
+    --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator \
+    --set image.tag=v23.2.1 \
+    --create-namespace
   ```
 
 1. Ensure that the Deployment is successfully rolled out:
@@ -107,10 +106,15 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 </TabItem>
 <TabItem value="helm" label="Helm">
 
-1. Add the Redpanda Helm chart repository to your local Helm client and install cert-manager using Helm:
+1. Install cert-manager using Helm:
 
   ```bash
-  helm repo add redpanda https://charts.redpanda.com && helm repo add jetstack https://charts.jetstack.io && helm repo update && helm install cert-manager jetstack/cert-manager  --set installCRDs=true --namespace cert-manager  --create-namespace
+  helm repo add jetstack https://charts.jetstack.io
+  helm repo update
+  helm install cert-manager jetstack/cert-manager \
+    --set installCRDs=true \
+    --namespace cert-manager  \
+    --create-namespace
   ```
 
   TLS is enabled by default. The Redpanda Helm chart uses cert-manager to manage TLS certificates by default.
@@ -118,6 +122,7 @@ The Redpanda Operator is currently in beta. As a result, it should be deployed o
 1. Install Redpanda with SASL enabled:
 
   ```bash
+  helm repo add redpanda https://charts.redpanda.com
   export DOMAIN=customredpandadomain.local && \
   helm install redpanda redpanda/redpanda --namespace <namespace> --create-namespace \
     --set auth.sasl.enabled=true \

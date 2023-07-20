@@ -30,11 +30,15 @@ _Appears in:_
 
 
 #### AdminAPITLS
-AdminAPITLS configures TLS for Redpanda Admin API 
- If Enabled is set to true, one-way TLS verification is enabled. In that case, a key pair ('tls.crt', 'tls.key') and CA certificate 'ca.crt' are generated and stored in a Secret named `<redpanda-cluster-name`>-admin-api-node and namespace as the Redpanda cluster. 'ca.crt' must be used by a client as a truststore when communicating with Redpanda. 
- If RequireClientAuth is set to true, two-way TLS verification is enabled. In that case, a client certificate is generated, which can be retrieved from the Secret named `<redpanda-cluster-name`>-admin-api-client'. 
- All TLS secrets are stored in the same namespace as the Redpanda cluster. 
- Additionally all mentioned certificates beside PEM version will have JKS and PKCS#12 certificate. Both stores are protected with the password that is the same as the name of the Cluster custom resource.
+AdminAPITLS configures TLS for Redpanda Admin API.
+
+If Enabled is set to true, one-way TLS verification is enabled. In that case, a key pair ('tls.crt', 'tls.key') and CA certificate 'ca.crt' are generated and stored in a Secret named `<redpanda-cluster-name`>-admin-api-node and namespace as the Redpanda cluster. 'ca.crt' must be used by a client as a truststore when communicating with Redpanda.
+
+If RequireClientAuth is set to true, two-way TLS verification is enabled. In that case, a client certificate is generated, which can be retrieved from the Secret named `<redpanda-cluster-name`>-admin-api-client'.
+
+All TLS secrets are stored in the same namespace as the Redpanda cluster.
+
+Additionally all mentioned certificates beside PEM version will have JKS and PKCS#12 certificate. Both stores are protected with the password that is the same as the name of the Cluster custom resource.
 
 _Appears in:_
 - [AdminAPI](#adminapi)
@@ -174,15 +178,8 @@ _Appears in:_
 | `cloudStorage` _[CloudStorageConfig](#cloudstorageconfig)_ | Cloud storage configuration for cluster |
 | `superUsers` _[Superuser](#superuser) array_ | List of superusers |
 | `enableSasl` _boolean_ | SASL enablement flag Deprecated: replaced by "kafkaEnableAuthorization" |
-| `kafkaEnableAuthorization` _boolean_ | Enable authorization for Kafka connections. Values are: 
- - `nil`: Ignored. Authorization is enabled with `enable_sasl: true` 
- - `true`: authorization is required 
- - `false`: authorization is disabled; 
- See also `enableSasl` and `configuration.kafkaApi[].authenticationMethod` |
-| `additionalConfiguration` _object (keys:string, values:string)_ | For configuration parameters not exposed, a map can be provided for string values. Such values are passed transparently to Redpanda. The key format is "`<subsystem>`.field", e.g., 
- additionalConfiguration: redpanda.enable_idempotence: "true" redpanda.default_topic_partitions: "3" pandaproxy_client.produce_batch_size_bytes: "2097152" 
- Notes: 1. versioning is not supported for map keys 2. key names not supported by Redpanda will lead to failure on start up 3. updating this map requires a manual restart of the Redpanda pods. Please be aware of sync period when one Redpandais POD is restarted 4. cannot have keys that conflict with existing struct fields - it leads to panic 
- By default if Replicas is 3 or more and redpanda.default_topic_partitions is not set default webhook is setting redpanda.default_topic_partitions to 3. |
+| `kafkaEnableAuthorization` _boolean_ | Enable authorization for Kafka connections. Values are: <ul><li>`nil`: Ignored. Authorization is enabled with `enable_sasl: true`</li><li>`true`: authorization is required</li><li>`false`: authorization is disabled;</li></ul>See also `enableSasl` and `configuration.kafkaApi[].authenticationMethod` |
+| `additionalConfiguration` _object (keys:string, values:string)_ | For configuration parameters not exposed, a map can be provided for string values. Such values are passed transparently to Redpanda. The key format is "`<subsystem>`.field", e.g. additionalConfiguration: redpanda.enable_idempotence: "true" redpanda.default_topic_partitions: "3" pandaproxy_client.produce_batch_size_bytes: "2097152". Notes: 1. versioning is not supported for map keys 2. key names not supported by Redpanda will lead to failure on start up 3. updating this map requires a manual restart of the Redpanda pods. Please be aware of sync period when one Redpandais POD is restarted 4. cannot have keys that conflict with existing struct fields - it leads to panic. By default if Replicas is 3 or more and redpanda.default_topic_partitions is not set default webhook is setting redpanda.default_topic_partitions to 3. |
 | `dnsTrailingDotDisabled` _boolean_ | DNSTrailingDotDisabled gives ability to turn off the fully-qualified DNS name. http://www.dns-sd.org/trailingdotsindomainnames.html |
 | `restartConfig` _[RestartConfig](#restartconfig)_ | RestartConfig allows to control the behavior of the cluster when restarting |
 | `licenseRef` _[SecretKeyRef](#secretkeyref)_ | If key is not provided in the SecretRef, Secret data should have key "license" |
@@ -423,8 +420,7 @@ _Appears in:_
 | --- | --- |
 | `enabled` _boolean_ | Enabled enables the external connectivity feature |
 | `subdomain` _string_ | Subdomain can be used to change the behavior of an advertised KafkaAPI. Each broker advertises Kafka API as follows ENDPOINT.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT. If Subdomain is empty then each broker advertises Kafka API as PUBLIC_NODE_IP:EXTERNAL_KAFKA_API_PORT. If TLS is enabled then this subdomain will be requested as a subject alternative name. |
-| `endpointTemplate` _string_ | EndpointTemplate is a Golang template string that allows customizing each broker advertised address. Redpanda uses the format BROKER_ID.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT by default for advertised addresses. When an EndpointTemplate is provided, then the BROKER_ID part is replaced with the endpoint computed from the template. The following variables are available to the template: - Index: the Redpanda broker progressive number - HostIP: the ip address of the Node, as reported in pod status 
- Common template functions from Sprig (http://masterminds.github.io/sprig/) are also available. The set of available functions is limited to hermetic functions because template application needs to be deterministic. |
+| `endpointTemplate` _string_ | EndpointTemplate is a Golang template string that allows customizing each broker advertised address. Redpanda uses the format BROKER_ID.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT by default for advertised addresses. When an EndpointTemplate is provided, then the BROKER_ID part is replaced with the endpoint computed from the template. The following variables are available to the template: - Index: the Redpanda broker progressive number - HostIP: the ip address of the Node, as reported in pod status. Common template functions from Sprig (http://masterminds.github.io/sprig/) are also available. The set of available functions is limited to hermetic functions because template application needs to be deterministic. |
 | `preferredAddressType` _string_ | The preferred address type to be assigned to the external advertised addresses. The valid types are ExternalDNS, ExternalIP, InternalDNS, InternalIP, and Hostname. When the address of the preferred type is not found the advertised addresses remains empty. The default preferred address type is ExternalIP. This option only applies when Subdomain is empty. |
 | `bootstrapLoadBalancer` _[LoadBalancerConfig](#loadbalancerconfig)_ | Configures a load balancer for bootstrapping |
 
@@ -591,8 +587,7 @@ _Appears in:_
 | --- | --- |
 | `enabled` _boolean_ | Enabled enables the external connectivity feature |
 | `subdomain` _string_ | Subdomain can be used to change the behavior of an advertised KafkaAPI. Each broker advertises Kafka API as follows ENDPOINT.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT. If Subdomain is empty then each broker advertises Kafka API as PUBLIC_NODE_IP:EXTERNAL_KAFKA_API_PORT. If TLS is enabled then this subdomain will be requested as a subject alternative name. |
-| `endpointTemplate` _string_ | EndpointTemplate is a Golang template string that allows customizing each broker advertised address. Redpanda uses the format BROKER_ID.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT by default for advertised addresses. When an EndpointTemplate is provided, then the BROKER_ID part is replaced with the endpoint computed from the template. The following variables are available to the template: - Index: the Redpanda broker progressive number - HostIP: the ip address of the Node, as reported in pod status 
- Common template functions from Sprig (http://masterminds.github.io/sprig/) are also available. The set of available functions is limited to hermetic functions because template application needs to be deterministic. |
+| `endpointTemplate` _string_ | EndpointTemplate is a Golang template string that allows customizing each broker advertised address. Redpanda uses the format BROKER_ID.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT by default for advertised addresses. When an EndpointTemplate is provided, then the BROKER_ID part is replaced with the endpoint computed from the template. The following variables are available to the template: - Index: the Redpanda broker progressive number - HostIP: the ip address of the Node, as reported in pod status. Common template functions from Sprig (http://masterminds.github.io/sprig/) are also available. The set of available functions is limited to hermetic functions because template application needs to be deterministic. |
 | `preferredAddressType` _string_ | The preferred address type to be assigned to the external advertised addresses. The valid types are ExternalDNS, ExternalIP, InternalDNS, InternalIP, and Hostname. When the address of the preferred type is not found the advertised addresses remains empty. The default preferred address type is ExternalIP. This option only applies when Subdomain is empty. |
 | `bootstrapLoadBalancer` _[LoadBalancerConfig](#loadbalancerconfig)_ | Configures a load balancer for bootstrapping |
 | `ingress` _[IngressConfig](#ingressconfig)_ | Configures a ingress resource |
@@ -688,8 +683,7 @@ _Appears in:_
 | --- | --- |
 | `limits` _object (keys:[ResourceName](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcename-v1-core), values:Quantity)_ | Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |
 | `requests` _object (keys:[ResourceName](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcename-v1-core), values:Quantity)_ | Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |
-| `claims` _[ResourceClaim](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourceclaim-v1-core) array_ | Claims lists the names of resources, defined in spec.resourceClaims, that are used by this container. 
- This is an alpha field and requires enabling the DynamicResourceAllocation feature gate. 
+| `claims` _[ResourceClaim](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourceclaim-v1-core) array_ | Claims lists the names of resources, defined in spec.resourceClaims, that are used by this container. This is an alpha field and requires enabling the DynamicResourceAllocation feature gate. 
  This field is immutable. |
 | `redpanda` _object (keys:[ResourceName](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcename-v1-core), values:Quantity)_ | Redpanda describes the amount of compute resources passed to redpanda. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |
 
@@ -703,12 +697,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `disableMaintenanceModeHooks` _boolean_ | DisableMaintenanceModeHooks deactivates the preStop and postStart hooks that force nodes to enter maintenance mode when stopping and exit maintenance mode when up again |
-| `underReplicatedPartitionThreshold` _integer_ | UnderReplicatedPartitionThreshold controls when rolling update will continue with restarts. The procedure can be described as follows: 
- 1. Rolling update checks if Pod specification needs to be replaced and deletes it 2. Deleted Redpanda Pod is put into maintenance mode (postStart hook will disable maintenance mode when new Pod starts) 3. Rolling update waits for Pod to be in Ready state 4. Rolling update checks if cluster is in healthy state 5. Rolling update checks if restarted Redpanda Pod admin API Ready endpoint returns HTTP 200 response 6. Using UnderReplicatedPartitionThreshold each under replicated partition metric is compared with the threshold 7. Rolling update moves to the next Redpanda pod 
- The metric `vectorized_cluster_partition_under_replicated_replicas` is used in the comparison 
- Mentioned metrics has the following help description: `vectorized_cluster_partition_under_replicated_replicas` Number of under replicated replicas 
- By default, the UnderReplicatedPartitionThreshold will be 0, which means all partitions needs to catch up without any lag. |
-
+| `underReplicatedPartitionThreshold` _integer_ | UnderReplicatedPartitionThreshold controls when rolling update will continue with restarts. The procedure can be described as follows: 1. Rolling update checks if Pod specification needs to be replaced and deletes it 2. Deleted Redpanda Pod is put into maintenance mode (postStart hook will disable maintenance mode when new Pod starts) 3. Rolling update waits for Pod to be in Ready state 4. Rolling update checks if cluster is in healthy state 5. Rolling update checks if restarted Redpanda Pod admin API Ready endpoint returns HTTP 200 response 6. Using UnderReplicatedPartitionThreshold each under replicated partition metric is compared with the threshold 7. Rolling update moves to the next Redpanda pod. The metric `vectorized_cluster_partition_under_replicated_replicas` is used in the comparison. Mentioned metrics has the following help description: `vectorized_cluster_partition_under_replicated_replicas` Number of under replicated replicas. By default, the UnderReplicatedPartitionThreshold will be 0, which means all partitions needs to catch up without any lag. |
 
 #### Schema
 Schema defines configurable fields for Schema Registry
@@ -737,11 +726,16 @@ _Appears in:_
 
 
 #### SchemaRegistryAPITLS
-SchemaRegistryAPITLS configures the TLS of the Pandaproxy API 
- If Enabled is set to true, one-way TLS verification is enabled. In that case, a key pair ('tls.crt', 'tls.key') and CA certificate 'ca.crt' are generated and stored in a Secret named `<redpanda-cluster-name`>-schema-registry-node' and namespace as the Redpanda cluster. 'ca.crt' must be used by a client as a truststore when communicating with Schema registry. 
- If RequireClientAuth is set to true, two-way TLS verification is enabled. If ClientCACertRef is provided, the operator will configure the Schema Registry to use the CA cert it contains. Otherwise a client certificate is generated, which can be retrieved from the Secret named `<redpanda-cluster-name`>-schema-registry-client'. 
- All TLS secrets are stored in the same namespace as the Redpanda cluster. 
- Additionally all mentioned certificates beside PEM version will have JKS and PKCS#12 certificate. Both stores are protected with the password that is the same as the name of the Cluster custom resource.
+
+SchemaRegistryAPITLS configures the TLS of the Pandaproxy API.
+
+If Enabled is set to true, one-way TLS verification is enabled. In that case, a key pair ('tls.crt', 'tls.key') and CA certificate 'ca.crt' are generated and stored in a Secret named `<redpanda-cluster-name`>-schema-registry-node' and namespace as the Redpanda cluster. 'ca.crt' must be used by a client as a truststore when communicating with Schema registry.
+
+If RequireClientAuth is set to true, two-way TLS verification is enabled. If ClientCACertRef is provided, the operator will configure the Schema Registry to use the CA cert it contains. Otherwise a client certificate is generated, which can be retrieved from the Secret named `<redpanda-cluster-name`>-schema-registry-client'.
+
+All TLS secrets are stored in the same namespace as the Redpanda cluster.
+
+Additionally all mentioned certificates beside PEM version will have JKS and PKCS#12 certificate. Both stores are protected with the password that is the same as the name of the Cluster custom resource.
 
 _Appears in:_
 - [SchemaRegistryAPI](#schemaregistryapi)
@@ -765,8 +759,7 @@ _Appears in:_
 | --- | --- |
 | `enabled` _boolean_ | Enabled enables the external connectivity feature |
 | `subdomain` _string_ | Subdomain can be used to change the behavior of an advertised KafkaAPI. Each broker advertises Kafka API as follows ENDPOINT.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT. If Subdomain is empty then each broker advertises Kafka API as PUBLIC_NODE_IP:EXTERNAL_KAFKA_API_PORT. If TLS is enabled then this subdomain will be requested as a subject alternative name. |
-| `endpointTemplate` _string_ | EndpointTemplate is a Golang template string that allows customizing each broker advertised address. Redpanda uses the format BROKER_ID.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT by default for advertised addresses. When an EndpointTemplate is provided, then the BROKER_ID part is replaced with the endpoint computed from the template. The following variables are available to the template: - Index: the Redpanda broker progressive number - HostIP: the ip address of the Node, as reported in pod status 
- Common template functions from Sprig (http://masterminds.github.io/sprig/) are also available. The set of available functions is limited to hermetic functions because template application needs to be deterministic. |
+| `endpointTemplate` _string_ | EndpointTemplate is a Golang template string that allows customizing each broker advertised address. Redpanda uses the format BROKER_ID.SUBDOMAIN:EXTERNAL_KAFKA_API_PORT by default for advertised addresses. When an EndpointTemplate is provided, then the BROKER_ID part is replaced with the endpoint computed from the template. The following variables are available to the template: - Index: the Redpanda broker progressive number - HostIP: the ip address of the Node, as reported in pod status. Common template functions from Sprig (http://masterminds.github.io/sprig/) are also available. The set of available functions is limited to hermetic functions because template application needs to be deterministic. |
 | `preferredAddressType` _string_ | The preferred address type to be assigned to the external advertised addresses. The valid types are ExternalDNS, ExternalIP, InternalDNS, InternalIP, and Hostname. When the address of the preferred type is not found the advertised addresses remains empty. The default preferred address type is ExternalIP. This option only applies when Subdomain is empty. |
 | `bootstrapLoadBalancer` _[LoadBalancerConfig](#loadbalancerconfig)_ | Configures a load balancer for bootstrapping |
 | `staticNodePort` _boolean_ | Indicates that the node port for the service needs not to be generated. |
@@ -814,17 +807,10 @@ _Appears in:_
 | --- | --- |
 | `enabled` _boolean_ | Enabled is whether AWS secret manager is enabled. Only one store can be enabled at a time. |
 | `region` _string_ | Region in which service is deployed so that related resources like secrets are put to the same region |
-| `kmsKeyId` _string_ | KmsKeyID is the ARN, key ID, or alias of the KMS key that Secrets Manager uses to encrypt the secret value in the secret. 
- To use a KMS key in a different account, use the key ARN or the alias ARN. 
- If you don't specify this value, then Secrets Manager uses the key aws/secretsmanager. If that key doesn't yet exist, then Secrets Manager creates it for you automatically the first time it encrypts the secret value. 
- If the secret is in a different Amazon Web Services account from the credentials calling the API, then you can't use aws/secretsmanager to encrypt the secret, and you must create and use a customer managed KMS key. |
+| `kmsKeyId` _string_ | KmsKeyID is the ARN, key ID, or alias of the KMS key that Secrets Manager uses to encrypt the secret value in the secret. To use a KMS key in a different account, use the key ARN or the alias ARN. If you don't specify this value, then Secrets Manager uses the key aws/secretsmanager. If that key doesn't yet exist, then Secrets Manager creates it for you automatically the first time it encrypts the secret value. If the secret is in a different Amazon Web Services account from the credentials calling the API, then you can't use aws/secretsmanager to encrypt the secret, and you must create and use a customer managed KMS key. |
 | `AWSCredentialsRef` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core)_ | AWSCredentialsRef refers to Kubernetes secret where AWS access key id and secret access key is taken and used as environments variable |
 | `serviceAccountRoleARNAnnotation` _string_ | ServiceAccountRoleARNAnnotation will be included in the Service Account definition. That Kubernetes Service Account will be used in Kubernetes Deployment Spec of Console Ref https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html |
-| `tags` _object (keys:string, values:string)_ | Tags is a list of tags to attach to the secret. Each tag is a key and value a pair of strings in a JSON text string, for example: 
- [{"Key":"CostCenter","Value":"12345"},{"Key":"environment","Value":"production"}] 
- Secrets Manager tag key names are case sensitive. A tag with the key "ABC" is a different tag from one with key "abc". 
- Tags can be used for permissions, so that you can namespace your secrets within a single secret store. Console will also only allow the deletion of secrets that posses the configured tags. Tags default to: "owner": "console" |
-
+| `tags` _object (keys:string, values:string)_ | Tags is a list of tags to attach to the secret. Each tag is a key and value a pair of strings in a JSON text string, for example: [{"Key":"CostCenter","Value":"12345"},{"Key":"environment","Value":"production"}] Secrets Manager tag key names are case sensitive. A tag with the key "ABC" is a different tag from one with key "abc". Tags can be used for permissions, so that you can namespace your secrets within a single secret store. Console will also only allow the deletion of secrets that posses the configured tags. Tags default to: "owner": "console" |
 
 #### SecretManagerGCP
 SecretManagerGCP is the configuration object for using Google Cloud's secret manager.
@@ -838,8 +824,7 @@ _Appears in:_
 | `credentialsSecretRef` _[SecretKeyRef](#secretkeyref)_ | CredentialsSecretRef points to Kubernetes secret where service account will be mounted to Console and used to authenticate again GCP API. |
 | `serviceAccountNameAnnotation` _string_ | ServiceAccountNameAnnotation will be included in the Service Account definition. That Kubernetes Service Account will be used in Kubernetes Deployment Spec of Console Ref https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity |
 | `projectId` _string_ | ProjectID is the GCP project in which to store the secrets. |
-| `labels` _object (keys:string, values:string)_ | Labels help you to organize your project, add arbitrary labels as key/value pairs to your resources. Use labels to indicate different environments, services, teams, and so on. Console may use additional labels for each secret. 
- Use a label with key "owner" to namespace secrets within a secret manager. This label will always be set for the creation and listing of all secrets. If you change the value after secrets have been created, Console will no longer return them and consider them as managed by another application. The owner label is optional but recommended. 
+| `labels` _object (keys:string, values:string)_ | Labels help you to organize your project, add arbitrary labels as key/value pairs to your resources. Use labels to indicate different environments, services, teams, and so on. Console may use additional labels for each secret. Use a label with key "owner" to namespace secrets within a secret manager. This label will always be set for the creation and listing of all secrets. If you change the value after secrets have been created, Console will no longer return them and consider them as managed by another application. The owner label is optional but recommended. 
  Labels default to: "owner": "console" |
 
 
@@ -852,9 +837,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `enabled` _boolean_ |  |
-| `secretNamePrefix` _string_ | SecretNamePrefix is the prefix that shall be used for each secret name that will be stored. The prefix is used for namespacing your secrets, so that one secret store can be used by multiple tenants. For AWS it's common to use a path-like structure whereas GCP does not allow slashes. 
- Examples: AWS: redpanda/analytics/prod/console/ GCP: redpanda-analytics-prod-console- 
- Changing this prefix won't let you access secrets created under a different prefix. |
+| `secretNamePrefix` _string_ | SecretNamePrefix is the prefix that shall be used for each secret name that will be stored. The prefix is used for namespacing your secrets, so that one secret store can be used by multiple tenants. For AWS it's common to use a path-like structure whereas GCP does not allow slashes. Examples: AWS: redpanda/analytics/prod/console/ GCP: redpanda-analytics-prod-console- Changing this prefix won't let you access secrets created under a different prefix. |
 | `gcpSecretManager` _[SecretManagerGCP](#secretmanagergcp)_ |  |
 | `awsSecretManager` _[SecretManagerAWS](#secretmanageraws)_ |  |
 | `kafkaConnect` _[SecretStoreKafkaConnect](#secretstorekafkaconnect)_ |  |
@@ -881,8 +864,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `name` _string_ | Name refers to the Kafka connect cluster name that has been given in the connect configuration. This name must match some cluster name or the configuration will be rejected. |
-| `secretNamePrefixAppend` _string_ | SecretNamePrefixAppend is an optional string that shall be appended to the global secretNamePrefix. This config is helpful if you want to use a specific prefix for secrets belonging to this Kafka connect cluster. You may want to do this if you want to restrict the permissions for the kafka connect workers reading these secrets. 
- Example: secretstore.secretNamePrefix is set to: "redpanda/prod/" secretstore.kafkaConnect.clusters.dwh.secretNamePrefixAppend is set to: "dwh/" => Secrets will be created with the prefix "redpanda/prod/dwh/" so that you can apply special iam permissions in your cloud account. |
+| `secretNamePrefixAppend` _string_ | SecretNamePrefixAppend is an optional string that shall be appended to the global secretNamePrefix. This config is helpful if you want to use a specific prefix for secrets belonging to this Kafka connect cluster. You may want to do this if you want to restrict the permissions for the kafka connect workers reading these secrets. Example: secretstore.secretNamePrefix is set to: "redpanda/prod/" secretstore.kafkaConnect.clusters.dwh.secretNamePrefixAppend is set to: "dwh/" => Secrets will be created with the prefix "redpanda/prod/dwh/" so that you can apply special iam permissions in your cloud account. |
 
 
 #### Server

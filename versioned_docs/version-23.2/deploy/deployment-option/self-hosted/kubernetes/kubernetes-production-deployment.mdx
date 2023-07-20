@@ -27,6 +27,10 @@ To deploy Redpanda in Kubernetes, you can choose to use Helm for its simplicity,
 | **Multi-tenant Kubernetes clusters** | Supported. Helm allows you to deploy multiple independent Redpanda clusters by defining different Helm release names. | Supported. The Redpanda Operator enables a more declarative approach for managing multi-tenant clusters using the RedpandaList custom resource. |
 | **Dependency and configuration management** | Managed directly through the Redpanda Helm chart. | Configurations defined in custom resources are passed to Helm, which then manages the dependencies and configurations. |
 
+:::tip
+If you are using the Redpanda Helm chart and want to migrate to the latest Redpanda Operator to manage your deployment, see [Migrate from the Redpanda Helm chart](../../../../../upgrade/migrate/kubernetes/helm-to-operator).
+:::
+
 ### Helm
 
 Helm is a package manager for Kubernetes, which simplifies the process of defining, installing, and upgrading Kubernetes applications. Helm uses charts, a collection of files that describe a related set of Kubernetes resources, to deploy applications in a Kubernetes cluster.
