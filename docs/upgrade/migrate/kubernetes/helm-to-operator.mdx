@@ -64,13 +64,13 @@ To migrate to the latest Redpanda Operator and use it to manage your Helm deploy
   For details on the structure and configuration options of the Redpanda custom resource, refer to the [Redpanda Operator CRD reference](../../../../reference/crd#redpandaclusterspec).
   :::
 
-1. Deploy the Redpanda cluster by creating an instance of the Redpanda custom resource in the same namespace as the Redpanda Operator:
+1. Adopt the Redpanda cluster by creating an instance of the Redpanda custom resource in the same namespace as the Redpanda Operator:
 
   ```bash
   kubectl apply -f redpanda-cluster.yaml --namespace <namespace>
   ```
 
-1. Wait for the Redpanda resource to be successfully deployed:
+1. Wait for the Redpanda resource to successfully reach a `deployed` state:
 
   ```bash
   kubectl get redpanda --namespace <namespace> --watch
