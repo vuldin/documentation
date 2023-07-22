@@ -64,7 +64,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
 
   ```bash
   helm repo add redpanda https://charts.redpanda.com
-  helm upgrade --install redpanda-controller redpanda/redpanda-operator \
+  helm upgrade --install redpanda-controller redpanda/operator \
     --namespace <namespace> \
     --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator \
     --set image.tag=v23.2.1 \
@@ -74,11 +74,11 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
 1. Ensure that the Deployment is successfully rolled out:
 
   ```bash
-  kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller-redpanda-operator
+  kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller
   ```
 
   ```text-no-copy
-  deployment "redpanda-controller-redpanda-operator" successfully rolled out
+  deployment "redpanda-controller" successfully rolled out
   ```
 
 1. Install a Redpanda custom resource to deploy a Redpanda cluster and Redpanda Console:
