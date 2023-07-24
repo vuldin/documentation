@@ -665,3 +665,6 @@
 
 # End of beta redirect
 /docs/beta/*                                                                          /docs/:splat 301!
+
+# Current version
+/docs/23.2/*                                                                     /docs/:splat 301!
