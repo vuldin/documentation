@@ -43,8 +43,8 @@ paths:
       responses:
         200:
           description: Brokers' configurations response
-          externalDocs: 
-            url: https://docs.redpanda.com/docs/reference/node-properties/
+          #externalDocs: 
+          #  url: https://docs.redpanda.com/docs/reference/node-properties/
           content:
             application/json:
               schema:
@@ -1149,6 +1149,16 @@ paths:
         200:
           description: Partition metadata is up to date
           content: {}
+  /cloud_storage/cache/trim:
+    post:
+      tags:
+      - Tiered Storage
+      summary: Trim local cache
+      description: Trim the local cache of tiered storage objects.
+      operationId: cloud_storage_cache_trim
+      responses:
+        200:
+          description: Invoked trim
   /redpanda-services/restart:
     put:
       tags:
@@ -3578,16 +3588,26 @@ components:
         cloud_log_size_bytes:
           type: integer
           description: Total size of the addressable cloud log for the partition
+        stm_region_size_bytes:
+          type: integer
+          description: Total size of the addressable segments in the STM region of the log
+        archive_size_bytes:
+          type: integer
+          description: Total size of the archive region of the log
         local_log_size_bytes:
           type: integer
           description: Total size of the addressable local log for the partition
-        cloud_log_segment_count:
+        stm_region_segment_count:
           type: integer
-          description: Number of segments in the local log
+          description: Number of segments in the STM region of the cloud log
         cloud_log_start_offset:
           type: integer
           nullable: true
           description: The first Kafka offset accessible from the cloud (inclusive)
+        stm_region_start_offset:
+          type: integer
+          nullable: true
+          description: The first Kafka offset accessible from the cloud in the STM region (inclusive)
         cloud_log_last_offset:
           type: integer
           nullable: true
@@ -3852,6 +3872,11 @@ components:
           type: integer
           description: Number of replicas left on a broker
           format: int64
+        allocation_failures:
+          type: array
+          description: A subset of partitions originating from this node with allocation failures
+          items:
+            type: string
       description: Decommissioning status of the broker
     disk_space_info:
       type: object
@@ -4250,6 +4275,11 @@ components:
         is_healthy:
           type: boolean
           description: Basic cluster health indicator
+        unhealthy_reasons: 
+          type: array
+          description: A list of reasons why the cluster is unhealthy
+          items:
+            type: string
         leaderless_partitions:
           type: array
           description: List of partitions for which no leader is elected
