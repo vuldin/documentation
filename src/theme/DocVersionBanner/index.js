@@ -50,7 +50,7 @@ function UnmaintainedVersionLabel({versionMetadata}) {
         versionLabel: <b>{versionMetadata.label}</b>,
       }}>
       {
-        'This is the documentation for Redpanda v{versionLabel}, which is no longer supported.'
+        'This is the documentation for Redpanda v{versionLabel}.'
       }
     </Translate>
   );
