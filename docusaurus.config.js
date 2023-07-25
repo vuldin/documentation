@@ -116,13 +116,7 @@ module.exports = async () => {
             versions: {
               current: {
                 label: '23.2',
-              },
-              "21.11": {
-                banner:'unmaintained'
-              },
-              "22.1": {
-                banner:'unmaintained'
-              },
+              }
             },
             beforeDefaultRemarkPlugins: [
                 [variableInjector, {

@@ -42,19 +42,32 @@ function UnreleasedVersionLabel({siteTitle, versionMetadata}) {
   );
 }
 function UnmaintainedVersionLabel({versionMetadata}) {
+  const label = 'This is the documentation for Redpanda';
+  let support = '.';
+  const versionLabel = 'v' + versionMetadata.version;
+
+  if(versionMetadata.version <= 22.1) //change this when new versions EOL
+    support =', which is no longer supported.';
+
   return (
     <Translate
       id="theme.docs.versions.unmaintainedVersionLabel"
       description="The label used to tell the user that he's browsing an unmaintained doc version"
       values={{
-        versionLabel: <b>{versionMetadata.label}</b>,
+        versionLabel: versionLabel,
+        noticeLabel: (
+          <>
+            {label} <b>{versionLabel}</b>{support}
+          </>
+        ),
       }}>
       {
-        'This is the documentation for Redpanda v{versionLabel}.'
+        '{noticeLabel}'
       }
     </Translate>
   );
 }
+
 const BannerLabelComponents = {
   unreleased: UnreleasedVersionLabel,
   unmaintained: UnmaintainedVersionLabel,
@@ -64,28 +77,24 @@ function BannerLabel(props) {
     BannerLabelComponents[props.versionMetadata.banner];
   return <BannerLabelComponent {...props} />;
 }
-function LatestVersionSuggestionLabel({versionLabel, to, onClick}) {
+function LatestVersionSuggestionLabel({ versionLabel, to, onClick }) {
+  const latestVersionLink = (
+    <b>
+      <Link to={to} onClick={onClick}>
+        {`v${versionLabel}`}
+      </Link>
+    </b>
+  );
+
   return (
     <Translate
       id="theme.docs.versions.latestVersionSuggestionLabel"
       description="The label used to tell the user to check the latest version"
       values={{
-        versionLabel,
-        latestVersionLink: (
-          <b>
-            <Link to={to} onClick={onClick}>
-              <Translate
-                id="theme.docs.versions.latestVersionLinkLabel"
-                description="The label used for the latest version suggestion link label">
-                latest version
-              </Translate>
-            </Link>
-          </b>
-        ),
-      }}>
-      {
-        'For up-to-date documentation, see the {latestVersionLink} ({versionLabel}).'
-      }
+        latestVersionLink,
+      }}
+    >
+      {`For the latest version of the documentation, see {latestVersionLink}.`}
     </Translate>
   );
 }
