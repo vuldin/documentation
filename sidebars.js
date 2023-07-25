@@ -61,7 +61,7 @@
       items: [
         {
           type: "doc",
-          label: "Supported Kafka Clients",
+          label: "Kafka Compatibility",
           id: "develop/kafka-clients",
         },
         {
