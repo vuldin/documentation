@@ -128,7 +128,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
   kubectl auth can-i create CustomResourceDefinition
   ```
 
-  You need cluster-level permissions to install cert-manager and Redpanda Operator CRD in the next steps.
+  You need cluster-level permissions to install cert-manager and Redpanda Operator CRDs in the next steps.
 
 1. Install [cert-manager](https://cert-manager.io/docs/installation/helm/) using Helm:
 
@@ -163,7 +163,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
   kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller
   ```
 
-  ```text-no-copy
+  ```text-nocopy
   deployment "redpanda-controller" successfully rolled out
   ```
 
@@ -195,7 +195,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
   kubectl get redpanda --namespace <namespace> --watch
   ```
 
-  ```text-no-copy
+  ```text-nocopy
   NAME       READY   STATUS
   redpanda   True    Redpanda reconciliation succeeded
   ```

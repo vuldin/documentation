@@ -25,7 +25,7 @@ your specified format.
 
 Slashes can be used for common escapes:
 
-```no-copy
+```nocopy
     \t \n \r \\ \xNN
 ```
 
@@ -33,7 +33,7 @@ matches tabs, newlines, carriage returns, slashes, and hex encoded characters.
 
 Percent encoding reads into specific values of a record:
 
-```no-copy
+```nocopy
     %t    topic
     %T    topic length
     %k    key
@@ -48,7 +48,7 @@ Percent encoding reads into specific values of a record:
 Three escapes exist to parse characters that are used to modify the previous
 escapes:
 
-```no-copy
+```nocopy
     %%    percent sign
     %{    left brace
     %}    right brace
@@ -67,7 +67,7 @@ All modifiers go within braces following a percent-escape.
 
 Reading number values can have the following modifiers:
 
-```no-copy
+```nocopy
      ascii       parse numeric digits until a non-numeric (default)
 
      hex64       sixteen hex characters
@@ -99,11 +99,11 @@ decode into three.
 
 Reading text values can have the following modifiers:
 
-```no-copy
+```nocopy
     hex       read text then hex decode it
     base64    read text then std-encoding base64 decode it
     re        read text matching a regular expression
-```no-copy
+```nocopy
 
 ### Headers
 
@@ -111,7 +111,7 @@ Headers are parsed with an internal key / value specifier format. For example,
 the following will read three headers that begin and end with a space and are
 separated by an equal:
 
-```no-copy
+```nocopy
     %H{3}%h{ %k=%v }
 ```
 

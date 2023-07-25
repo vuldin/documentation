@@ -24,7 +24,7 @@ Outside of these special formats, formatting follows the rules described below.
 Formatting output is based on percent escapes and modifiers. Slashes can be
 used for common escapes:
 
-```no-copy
+```nocopy
     \t \n \r \\ \xNN
 
 prints tabs, newlines, carriage returns, slashes, or hex encoded characters.p
@@ -71,7 +71,7 @@ All modifiers go within braces following a percent-escape.
 
 Formatting number values can have the following modifiers:
 
-```no-copy
+```nocopy
      ascii       print the number as ascii (default)
 
      hex64       sixteen hex characters
@@ -108,7 +108,7 @@ By default, the timestamp field is printed as a millisecond number value. In
 addition to the number modifiers above, timestamps can be printed with either
 Go formatting or strftime formatting:
 
-```no-copy
+```nocopy
     %d{go[2006-01-02T15:04:05Z07:00]}
     %d{strftime[%F]}
 ```
@@ -116,7 +116,7 @@ Go formatting or strftime formatting:
 An arbitrary amount of brackets (or braces, or # symbols) can wrap your date
 formatting:
 
-```no-copy
+```nocopy
     %d{strftime### [%F] ###}
 ```
 
@@ -132,7 +132,7 @@ these are packed into bit flags. Printing an attribute requires first selecting
 which attribute you want to print, and then optionally specifying how you want
 it to be printed:
 
-```no-copy
+```nocopy
      %a{compression}
      %a{compression;number}
      %a{compression;big64}
@@ -143,7 +143,7 @@ Compression is by default printed as text ("none", "gzip", ...). Compression
 can be printed as a number with `;number`, where number is any number
 formatting option described above. No compression is 0, gzip is 1, etc.
 
-```no-copy
+```nocopy
      %a{timestamp-type}
      %a{timestamp-type;big64}
 ```
@@ -152,7 +152,7 @@ The record's timestamp type is printed as -1 for very old records (before
 timestamps existed), 0 for client generated timestamps, and 1 for broker
 generated timestamps. Number formatting can be controlled with ";number".
 
-```no-copy
+```nocopy
      %a{transactional-bit}
      %a{transactional-bit;bool}
 ```
@@ -160,7 +160,7 @@ generated timestamps. Number formatting can be controlled with ";number".
 Prints 1 if the record a part of a transaction or 0 if it is not.
 Number formatting can be controlled with `;number`.
 
-```no-copy
+```nocopy
      %a{control-bit}
      %a{control-bit;bool}
 ```
@@ -173,7 +173,7 @@ Number formatting can be controlled with ";number".
 Text fields without modifiers default to writing the raw bytes. Alternatively,
 there are the following modifiers:
 
-```no-copy
+```nocopy
     %t{hex}
     %k{base64}
     %v{base64raw}
@@ -185,7 +185,7 @@ text with standard encoding, and the base64raw modifier encodes the text with
 raw standard encoding. The unpack modifier has a further internal
 specification, similar to timestamps above:
 
-```no-copy
+```nocopy
     x    pad character (does not parse input)
     <    switch what follows to little endian
     >    switch what follows to big endian
@@ -215,7 +215,7 @@ output.
 
 Headers are formatted with percent encoding inside of the modifier:
 
-```no-copy
+```nocopy
     %h{ %k=%v{hex} }
 ```
 
@@ -239,7 +239,7 @@ The `--offset` flag allows for specifying where to begin consuming, and
 optionally, where to stop consuming. The literal words "start" and "end"
 specify consuming from the start and the end.
 
-```no-copy
+```nocopy
     start     consume from the beginning
     end       consume from the end
     :end      consume until the current end
@@ -258,7 +258,7 @@ specify consuming from the start and the end.
 There are a few options for timestamps, with each option being evaluated
 until one succeeds:
 
-```no-copy
+```nocopy
     13 digits             parsed as a unix millisecond
     9 digits              parsed as a unix second
     YYYY-MM-DD            parsed as a day, UTC
@@ -275,7 +275,7 @@ If a duration is used for t2, if t1 is a duration, then t2 is relative to now.
 
 Durations are parsed simply:
 
-```no-copy
+```nocopy
     3ms    three milliseconds
     10s    ten seconds
     9m     nine minutes
@@ -285,7 +285,7 @@ Durations are parsed simply:
 
 For example,
 
-```no-copy
+```nocopy
     -o @2022-02-14:1h   consume 1h of time on Valentine's Day 2022
     -o @-48h:-24h       consume from 2 days ago to 1 day ago
     -o @-1m:end         consume from 1m ago until now
