@@ -668,3 +668,5 @@
 
 # Current version
 /docs/23.2/*                                                                     /docs/:splat 301!
+
+/docs/22.2/platform/introduction/licenses/ /docs/introduction/licenses 301!
