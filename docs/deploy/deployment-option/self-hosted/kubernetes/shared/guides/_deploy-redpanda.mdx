@@ -46,6 +46,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
     --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator \
     --set image.tag=v23.2.1 \
     --create-namespace
+    --timeout 1h
   ```
 
 1. Ensure that the Deployment is successfully rolled out:
@@ -137,6 +138,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
     --set "auth.sasl.users[0].name=superuser" \
     --set "auth.sasl.users[0].password=secretpassword" \
     --set external.domain=${DOMAIN} --wait
+    --timeout 1h
   ```
 
   Here, you create a superuser called `superuser` that can grant permissions to new users in your cluster using access control lists (ACLs). You also define a custom domain that each broker will advertise externally.
