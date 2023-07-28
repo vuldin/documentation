@@ -669,5 +669,8 @@
 # Current version
 /docs/23.2/*                                                                     /docs/:splat 301!
 
-/docs/23.1/manage/cluster-maintenance/configuration                                        /docs/23.1/manage/cluster-maintenance/cluster-property-configuration/  301!
-/docs/22.2/platform/introduction/licenses/                                                 /docs/introduction/licenses 301!
+/docs/23.1/manage/cluster-maintenance/configuration                                       /docs/23.1/manage/cluster-maintenance/cluster-property-configuration/  301!
+/docs/22.2/platform/*                                                                     /docs/22.2/:splat
+/docs/platform/*                                                                          /docs/:splat
+/docs/next/*                                                                              /docs/:splat
+/docs/deploy/deployment-option/cloud/dedicated                                   /docs/deploy/deployment-option/cloud/cloud-overview 301!
