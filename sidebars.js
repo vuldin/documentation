@@ -259,7 +259,6 @@
                     },
                     {
                       type: "doc",
-                      label: "Automate Deployment for Production",
                       id: "deploy/deployment-option/self-hosted/manual/production/production-deployment-automation",
                     },
                     {
