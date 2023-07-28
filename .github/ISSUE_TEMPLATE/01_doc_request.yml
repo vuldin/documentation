@@ -1,6 +1,5 @@
 name: 📚 Documentation update request
 description: Suggest a change to existing Redpanda documentation.
-labels: [doc request]
 body:
   - type: markdown
     attributes:
