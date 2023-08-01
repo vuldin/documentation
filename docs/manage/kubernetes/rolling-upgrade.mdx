@@ -35,6 +35,11 @@ Redpanda platform version numbers follow the convention AB.C.D, where AB is the 
 - A running Redpanda cluster.
 - [jq](https://stedolan.github.io/jq/download/) for listing available versions.
 - An understanding of the [impact of broker restarts](#impact-of-broker-restarts) on clients, node CPU, and any alerting systems you use.
+- Review incompatible changes in new versions:
+
+  | Version | Change | 
+  | ---     | ---    |
+  |23.1     | If remote read is disabled, and if the requested term falls below the local log's beginning, then Redpanda updates the Kafka handler to return the start offset of Redpanda's local log. In other words, if you request a value older than the lowest offset, Redpanda returns the lowest offset, not -1. |
 
 ## Find a new version
 

@@ -35,6 +35,10 @@ Redpanda platform version numbers follow the convention AB.C.D, where AB is the 
 - A running Redpanda cluster.
 - [jq](https://stedolan.github.io/jq/download/) for listing available versions.
 - An understanding of the [impact of broker restarts](#impact-of-broker-restarts) on clients, node CPU, and any alerting systems you use.
+  
+### Review incompatible changes
+
+  - Patches in [22.3.14](https://github.com/redpanda-data/redpanda/discussions/9522) and [23.1.2](https://github.com/redpanda-data/redpanda/discussions/9523) changed the behavior when remote read is disabled and the requested term falls below the local log's beginning. In earlier versions, Redpanda returned an offset -1. With the patch, when you request a value older than the lowest offset, Redpanda returns the lowest offset, not -1.
 
 ## Find a new version
 
