@@ -64,6 +64,8 @@ Optional cloud storage backend variant used to select API capabilities. If `unkn
 
 **Restart required**: yes
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_cache_check_interval
@@ -88,6 +90,53 @@ Hostname to connect to for retrieving role-based credentials. If `null`, hostnam
 
 **Restart required**: yes
 
+**Related topics**:
+- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
+
+**Supported versions**: Redpanda v23.2 or later
+
+---
+
+### cloud_storage_credentials_source
+
+The source of credentials to connect to cloud services. If [`cloud_storage_credentials_host`](#cloud_storage_credentials_host) is `null`, this is used to derive the hostname to connect to retrieve role-based credentials.
+
+Valid values:
+- If deploying on an EC2 VM: `aws_instance_metadata`
+- If deploying on EKS: `sts` (AWS service token service)
+- If deploying on a GCE VM: `gcp_instance_metadata`
+- If deploying on GKE: `gcp_instance_metadata`
+- If using fixed credentials from a configuration file: `config_file`
+
+**Default**: `config_file`
+
+**Valid values**:
+- `config_file`
+- `aws_instance_metadata`
+- `sts`
+- `gcp_instance_metadata`
+
+**Restart required**: no
+
+**Related topics**:
+- [Chunk eviction strategies for Tiered Storage](../../manage/tiered-storage#chunk-eviction-strategies)
+
+**Supported versions**: Redpanda v23.2 or later
+
+---
+
+### cloud_storage_credentials_host
+
+Hostname to connect to for retrieving role-based credentials. If `null`, hostname is derived from [`cloud_storage_credentials_source`](#cloud_storage_credentials_source). Only required when using IAM role based access.
+
+**Type**: string
+
+**Default**: null
+
+**Restart required**: yes
+
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_credentials_source
@@ -110,6 +159,23 @@ Valid values:
 - `gcp_instance_metadata`
 
 **Restart required**: yes
+
+---
+
+### cloud_storage_disable_chunk_reads
+
+Flag for turning off chunk-based reads and enabling full-segment downloads. 
+
+**Type**: boolean
+
+**Default**: false
+
+**Restart required**: no
+
+**Related topics**:
+- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
+
+**Supported versions**: Redpanda v23.2 or later
 
 ---
 
@@ -166,6 +232,22 @@ Flag to enable adjacent segment merging in cloud object storage. When this prope
 **Related topics**:
 - [Adjacent segment merging for Tiered Storage](../../manage/tiered-storage#adjacent-segment-merging)
 
+**Supported versions**: Redpanda v23.1 or later
+
+---
+
+### cloud_storage_graceful_transfer_timeout_ms
+
+Maximum duration to wait for uploads to complete before a leadership transfer. If `null`, leadership transfers proceed with no delay.
+
+**Units**: milliseconds
+
+**Default**: 5000 (5 sec)
+
+**Restart required**: no
+
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_graceful_transfer_timeout_ms
@@ -193,6 +275,8 @@ Interval for object storage housekeeping tasks.
 **Related topics**:
 - [Object storage housekeeping for Tiered Storage](../../manage/tiered-storage#object-storage-housekeeping)
 
+**Supported versions**: Redpanda v23.2 or later
+
 ---
 
 ### cloud_storage_idle_threshold_rps
@@ -208,6 +292,8 @@ Request rate threshold for idle state detection of cloud object storage. If the 
 **Related topics**:
 - [Object storage housekeeping for Tiered Storage](../../manage/tiered-storage#object-storage-housekeeping)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_idle_timeout_ms
@@ -222,6 +308,8 @@ Timeout used to detect idle state of the object storage API. If no object storag
 
 **Related topics**:
 - [Object storage housekeeping for Tiered Storage](../../manage/tiered-storage#object-storage-housekeeping)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -246,6 +334,8 @@ Manifest upload timeout.
 **Default**: 10000 (10 seconds)
 
 **Restart required**: yes
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -301,6 +391,8 @@ The maximum limit per partition for the number of segments pending deletion from
 
 **Restart required**: no
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_metadata_sync_timeout_ms
@@ -312,6 +404,23 @@ Timeout for shadow indexing (SI) metadata synchronization.
 **Default**: 10000 (10 seconds)
 
 **Restart required**: no
+
+---
+
+### cloud_storage_min_chunks_per_segment_threshold
+
+The minimum number of chunks per segment for trimming to be enabled. If the number of chunks in a segment is below this threshold, the segment is small enough that all chunks in it can be hydrated at any given time.
+
+**Units**: number of chunks per segment
+
+**Default**: 5
+
+**Restart required**: no
+
+**Related topics**:
+- [Caching for Tiered Storage](../../manage/tiered-storage#caching)
+
+**Supported versions**: Redpanda v23.2 or later
 
 ---
 
@@ -350,6 +459,22 @@ The number of bytes of size-based retention for topics that are created during a
 **Default**: 1073741824 (1 GiB)
 
 **Restart required**: no
+
+**Supported versions**: Redpanda v23.1 or later
+
+---
+
+### cloud_storage_roles_operation_timeout_ms
+
+Timeout for IAM role related operations. While connecting to object storage, failed tasks that refresh the IAM roles token are retried after this timeout elapses.
+
+**Units**: milliseconds
+
+**Default**: 30000 (30 sec)
+
+**Restart required**: yes
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -394,6 +519,8 @@ The desired segment size in object storage. If `null`, the property is disabled,
 **Related topics**:
 - [Adjacent segment merging for Tiered Storage](../../manage/tiered-storage#adjacent-segment-merging)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_segment_size_min
@@ -412,6 +539,8 @@ The minimum segment size in object storage. If `null`, the property is disabled,
 
 **Related topics**:
 - [Adjacent segment merging for Tiered Storage](../../manage/tiered-storage#adjacent-segment-merging)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -745,6 +874,8 @@ Maximum number of producer IDs that the resource manager state machine caches in
 
 **Restart required**: no
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### members_backend_retry_ms
@@ -820,6 +951,8 @@ If the duration since the last received response to a node's heartbeat request i
 **Range**: [100, 10000]
 
 **Restart required**: no
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -1052,6 +1185,8 @@ Period at which Redpanda checks for expired consumer group offsets.
 - [group_offset_retention_sec](#group_offset_retention_sec)
 - [legacy_group_offset_retention_enabled](#legacy_group_offset_retention_enabled)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### group_offset_retention_sec
@@ -1071,6 +1206,8 @@ If `null`, the automatic offset retention feature is disabled.
 **Related properties**: 
 - [group_offset_retention_check_ms](#group_offset_retention_check_ms)
 - [legacy_group_offset_retention_enabled](#legacy_group_offset_retention_enabled)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -1269,6 +1406,8 @@ For Redpanda versions **earlier than 23.1**:
 **Related properties**: 
 - [group_offset_retention_sec](#group_offset_retention_sec)
 - [group_offset_retention_check_ms](#group_offset_retention_check_ms)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -1531,6 +1670,22 @@ Timeout for raft's append entries RPC.
 
 --------------------------------------------------------------------------------
 
+## Schema properties
+
+### kafka_schema_id_validation_cache_capacity
+
+Cache capacity per shard for validating schema IDs.
+
+**Units**: number of cache entries
+
+**Default**: 128
+
+**Restart required**: no
+
+**Supported versions**: Redpanda v23.2 or later
+
+--------------------------------------------------------------------------------
+
 ## Storage properties
 
 ### abort_index_segment_size
@@ -1729,6 +1884,8 @@ The lower bound for the topic property `segment.ms` and the cluster property `lo
 - [log_segment_ms_max](#log_segment_ms_max)
 - [log_segment_ms](../cluster-properties#log_segment_ms)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### log_segment_ms_max
@@ -1746,6 +1903,8 @@ The upper bound for the topic property `segment.ms` and the cluster property `lo
 **Related properties**: 
 - [log_segment_ms_min](#log_segment_ms_min)
 - [log_segment_ms](../cluster-properties#log_segment_ms)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -1836,6 +1995,8 @@ Flag to enable termination of the Redpanda process when a memory allocation fail
 **Default**: true
 
 **Restart required**: no
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -2102,6 +2263,8 @@ Period for which to log transmit (tx) statistics per partition.  Requires the tx
 **Default**: 10
 
 **Restart required**: no
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 

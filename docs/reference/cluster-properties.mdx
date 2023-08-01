@@ -53,6 +53,8 @@ The name of the Azure storage account to use with Tiered Storage. If `null`, the
 
 **Restart required**: yes
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_azure_container
@@ -69,6 +71,8 @@ The container must belong to [cloud_storage_azure_storage_account](#cloud_storag
 
 **Restart required**: yes
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### cloud_storage_azure_shared_key
@@ -84,6 +88,8 @@ Redpanda expects this key string to be Base64 encoded.
 **Default**: null
 
 **Restart required**: yes
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -299,6 +305,8 @@ Valid modes:
 
 **Restart required**: no
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### partition_autobalancing_mode
@@ -394,6 +402,8 @@ An example: `([{'group_name': 'first_group','clients_prefix': 'group_1','quota':
 **Related topics**:
 - [Client group throughput limits](../../manage/cluster-maintenance/manage-throughput#client-group-throughput-limits)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### kafka_client_group_fetch_byte_rate_quota
@@ -413,6 +423,8 @@ An example: `([{'group_name': 'first_group','clients_prefix': 'group_1','quota':
 
 **Related topics**:
 - [Client group throughput limits](../../manage/cluster-maintenance/manage-throughput#client-group-throughput-limits)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -598,6 +610,8 @@ Enable the Kafka partition reassignment API.
 
 **Restart required**: no
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### kafka_group_recovery_timeout_ms
@@ -634,6 +648,8 @@ A list of topics that are protected from deletion and configuration changes by K
 - [Consumer Offsets](../../develop/consume-data/consumer-offsets)
 - [Schema Registry](../../manage/schema-registry)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### kafka_noproduce_topics
@@ -643,6 +659,8 @@ A list of topics that are protected from being produced to by Kafka clients. Set
 **Default**: `['__audit']`
 
 **Restart required**: no
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -689,6 +707,8 @@ If `0`, the balancer is disabled and all throughput quotas are immutable.
 **Related topics**:
 - [Node-wide throughput limits](../../manage/cluster-maintenance/manage-throughput#node-wide-throughput-limits)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### kafka_quota_balancer_min_shard_throughput_ratio
@@ -711,6 +731,8 @@ If set to `0.0`, the minimum is disabled. If set to `1.0`, then the balancer won
 
 **Related topics**:
 - [Node-wide throughput limits](../../manage/cluster-maintenance/manage-throughput#node-wide-throughput-limits)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -736,6 +758,8 @@ If set to `0`, no minimum is enforced.
 **Related topics**:
 - [Node-wide throughput limits](../../manage/cluster-maintenance/manage-throughput#node-wide-throughput-limits)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### kafka_quota_balancer_window_ms
@@ -752,6 +776,8 @@ Time window used to average the current throughput measurement for the quota bal
 
 **Related topics**:
 - [Node-wide throughput limits](../../manage/cluster-maintenance/manage-throughput#node-wide-throughput-limits)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -797,6 +823,8 @@ If `null`, the property is disabled, and traffic is not limited.
 **Related topics**:
 - [Node-wide throughput limits](../../manage/cluster-maintenance/manage-throughput#node-wide-throughput-limits)
 
+**Supported versions**: Redpanda v23.1 or later
+
 ---
 
 ### kafka_throughput_limit_node_out_bps
@@ -815,6 +843,8 @@ If `null`, the property is disabled, and traffic is not limited.
 
 **Related topics**:
 - [Node-wide throughput limits](../../manage/cluster-maintenance/manage-throughput#node-wide-throughput-limits)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -835,6 +865,8 @@ The topic property [`segment.ms`](../topic-properties#segmentms) overrides the v
 **Related properties**: 
 - [log_segment_ms_min](../tunable-properties#log_segment_ms_min) 
 - [log_segment_ms_max](../tunable-properties#log_segment_ms_max)
+
+**Supported versions**: Redpanda v23.1 or later
 
 ---
 
@@ -982,6 +1014,8 @@ Target fetch-size quota byte rate. If `null`, the property is disabled, and no q
 **Default**: null
 
 **Restart required**: no
+
+**Supported versions**: Redpanda v23.1 or later
 
 -------------------------------------------------------------------------------
 
@@ -1306,6 +1340,8 @@ To figure out whether to set `storage_ignore_timestamps_in_future_sec` for your 
 **Default**: null
 
 **Restart required**: no
+
+**Supported versions**: Redpanda v22.3 or later
 
 -------------------------------------------------------------------------------
 
