@@ -108,31 +108,32 @@ function smartRedirect(){
   const prefix = window.location.origin + '/docs/';
   let closeURL;
   let sessionStorageKey;
-  if (versionNumber!==null) {
-    try{
-      closeURL=findCloseURL(lastString,versionNumber);
-      possibleRedirect = prefix + versionNumber +'/'+ closeURL;
-      sessionStorageKey= 'smartRedirectHasRun_'+versionNumber+'_'+lastString;
+  
+    if (versionNumber!==null) {
+      try{
+        closeURL=findCloseURL(lastString,versionNumber);
+        possibleRedirect = prefix + versionNumber +'/'+ closeURL;
+        sessionStorageKey= 'smartRedirectHasRun_'+versionNumber+'_'+lastString;
+      }
+      catch (error){
+        return null;
+      }
     }
-    catch (error){
-      return null;
+    else{
+      closeURL = findCloseURL(lastString);
+      possibleRedirect = prefix + closeURL;
+      sessionStorageKey = 'smartRedirectHasRun_'+lastString;
+    }
+    const hasRun = sessionStorage.getItem(sessionStorageKey);
+    if(hasRun === null){
+      sessionStorage.setItem(sessionStorageKey, true);
+      if(closeURL !== undefined){
+        hasSmartRedirected = true;
+        smartRedirectPath = possibleRedirect;
+        possibleNewRedirectRule = originalPathName + " " + "/docs/" + closeURL + " 301!";
+      }
     }
   }
-  else{
-    closeURL = findCloseURL(lastString);
-    possibleRedirect = prefix + closeURL;
-    sessionStorageKey = 'smartRedirectHasRun_'+lastString;
-  }
-  const hasRun = sessionStorage.getItem(sessionStorageKey);
-  if(hasRun === null){
-    sessionStorage.setItem(sessionStorageKey, true);
-    if(closeURL !== undefined){
-      hasSmartRedirected = true;
-      smartRedirectPath = possibleRedirect;
-      possibleNewRedirectRule = originalPathName + " " + "/docs/" + closeURL + " 301!";
-    }
-  }
-}
 
 function encode(data) {
   return Object.keys(data)
@@ -158,6 +159,7 @@ const NotFoundForm = () => {
     formData.possibleNewRedirectRule = possibleNewRedirectRule;
 
     setFormData({ ...formData });
+    if(!window.location.href.includes("deploy-preview")){
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -171,7 +173,7 @@ const NotFoundForm = () => {
         console.log("Form successfully submitted");
       })
       .catch((error) => console.log(error));
-  };
+  }};
 
   useEffect(() => {
     handleSubmit(SubmitEvent);
