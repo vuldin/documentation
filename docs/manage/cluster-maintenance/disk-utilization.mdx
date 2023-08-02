@@ -160,7 +160,7 @@ Log rolling can also be triggered by configurable timeouts. This is useful when 
 
 * [log_segment_ms_min](../../../reference/tunable-properties#log_segment_ms_min) and [log_segment_ms_max](../../../reference/tunable-properties#log_segment_ms_max) are cluster-level properties that configure the lower and upper limits, respectively, of log rolling timeouts.
 
-## Local storage housekeeping
+## Space management
 Redpanda divides disk storage into different categories to provide a flexible configuration of space:
 
 - Reserved disk space (`disk_reservation_percent`): This overhead reservation is disk space that Redpanda does not use. 

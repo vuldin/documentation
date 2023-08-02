@@ -189,7 +189,7 @@ Note that the first regular expression must start with the `^` symbol, and the l
 
 ## Delete records from a topic
 
-Redpanda lets you delete data from the beginning of a partition up to a specific offset (event). The offset represents the true creation time of the event, not the time when it was stored by Redpanda. Deleting records frees up disk space, which is especially helpful if your producers are pushing more data than you anticipated in your retention plan. Do this when you know that all consumers have read up to that given offset, and the data is no longer needed.
+Redpanda lets you delete data from the beginning of a partition up to a specific offset (event). The offset represents the true creation time of the event, not the time when it was stored by Redpanda. Deleting records frees up space in local disk and in object storage, which is especially helpful if your producers are pushing more data than you anticipated when sizing your storage infrastructure, or if you want to implement a data retention policy aligned with a particular business event and not in age or size.  Do this when you know that all consumers have read up to that given offset, and the data is no longer needed.
 
 There are different ways to delete records from a topic, including using the `rpk topic trim` command or using the DeleteRecords Kafka API with Kafka clients. 
 

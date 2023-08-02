@@ -20,7 +20,7 @@ Every Redpanda topic-partition forms a Raft group with a single elected leader. 
 
 Leadership balancing is enabled by default with the [`enable_leader_balancer`](../../../reference/cluster-properties/#enable_leader_balancer) property. Automatic partition leadership balancing improves cluster performance by transferring the leadership of a broker's partitions to other replicas. It changes where data is read from and written to first, but leadership transfer does not involve any data transfer. 
 
-The [`leader_balancer_mode`](../../../reference/cluster-properties/#leader_balancer_mode) property ensures that each shard in a cluster has an equal number of partitions. It determines the movement of leadership for the replica set of a partition. It supports two modes:
+The [`leader_balancer_mode`](../../../reference/cluster-properties/#leader_balancer_mode) property ensures that each shard in a cluster is assigned an equal number of partition leaders and attempts to spread every topic's partition leaders evenly across all brokers in a cluster. It supports two modes:
 - `random_hill_climbing`: This mode randomly searches for potential leadership movements. If one is found that better balances the number of leaders per shard and the leaders of a given topic per broker, then the movement is applied to the cluster. This is the default.
 - `greedy_balanced_shards`: This mode uses a heuristic to search for leadership movements that better balance leaders per shard. It applies any movement it finds.
 

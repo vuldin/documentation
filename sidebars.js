@@ -22,6 +22,7 @@
       label: "Get Started",
       link: { type: "doc", id: "get-started/index" },
       items: [
+        "get-started/whats-new",
         {
           type: "doc",
           label: "Introduction to Redpanda",

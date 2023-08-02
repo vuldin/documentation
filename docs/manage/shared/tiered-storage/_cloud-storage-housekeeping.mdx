@@ -7,4 +7,4 @@ To determine when the system is idle for housekeeping, Redpanda constantly calcu
 
 If the object storage API becomes active after housekeeping begins, then housekeeping is paused until it becomes idle again. If object storage is not idle for <TunableClusterProperty name="cloud_storage_housekeeping_interval_ms" frontmatter={props.frontmatter}/>, then housekeeping is forced to run until it completes. This guarantees that all housekeeping jobs are run once for every `cloud_storage_housekeeping_interval_ms`. 
 
-See also: <Link to={props.frontmatter.linkRoot + 'manage/cluster-maintenance/disk-utilization/#local-storage-housekeeping'}>Local storage housekeeping</Link>
+See also: <Link to={props.frontmatter.linkRoot + 'manage/cluster-maintenance/disk-utilization/#space-management'}>Space management</Link>

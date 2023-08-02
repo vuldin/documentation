@@ -2,7 +2,7 @@ import TunableClusterProperty from '../tiered-storage/_tunable-cluster-props.mdx
 
 #### Chunking remote segments
 
-To support more concurrent consumers of historical data with less local storage, Redpanda can download small chunks of remote segments from the cache directory. For example, when a client fetch request spans a subsection of a 1 GiB segment, instead of downloading the entire 1 GiB segment, Redpanda can download 16 MiB chunks that contain just enough data required to fulfill the fetch request. 
+To support more concurrent consumers of historical data with less local storage, Redpanda can download small chunks of remote segments to the cache directory. For example, when a client fetch request spans a subsection of a 1 GiB segment, instead of downloading the entire 1 GiB segment, Redpanda can download 16 MiB chunks that contain just enough data required to fulfill the fetch request. 
 
 The paths on disk to a chunk are structured as `p_chunks/{chunk_start_offset}`, where `p` is the original path to the segment in the object storage cache. The `_chunks` subdirectory holds chunk files identified by the chunk start offset. These files can be reclaimed by the cache eviction process during the normal eviction path.
  
