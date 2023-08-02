@@ -282,7 +282,12 @@
                     },
                   ]
                 },
-              ]
+                {
+                  type: "doc",
+                  label: "Connectors",
+                  id: "deploy/deployment-option/self-hosted/docker-image",
+                },
+                 ]
             },
             {
               type: "category",
