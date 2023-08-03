@@ -674,3 +674,10 @@
 /docs/platform/*                                                                          /docs/:splat
 /docs/next/*                                                                              /docs/:splat
 /docs/deploy/deployment-option/cloud/dedicated                                   /docs/deploy/deployment-option/cloud/cloud-overview 301!
+
+
+#21.11 and 22.1 console
+/docs/21.11/quickstart/console-installation                                             /docs/22.2/quickstart/console-installation/ 301!
+/docs/22.1/quickstart/console-installation                                              /docs/22.2/quickstart/console-installation/ 301!
+/docs/21.11/console/                                                                    /docs/22.2/console/ 301!
+/docs/22.1/console/                                                                     /docs/22.2/console/ 301!

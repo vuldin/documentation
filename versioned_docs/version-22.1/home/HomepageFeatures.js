@@ -26,14 +26,14 @@ const FeatureList = [
     url: '/docs/22.1/deployment/production-deployment',
   },
   {
-    title: 'Redpanda Console',
+    title: 'Cluster Administration',
     image: require('../../../static/img/console-docs.png').default,
     description: (
       <>
-        Use the Redpanda Console dashboard to administer clusters and get visibility into your data streams.
+        Perform day-to-day operations in your cluster with Redpanda.
       </>
     ),
-    url: '/docs/manage/console',
+    url: '/docs/22.1/cluster-administration/',
   },
   {
     title: 'rpk Command Reference',
