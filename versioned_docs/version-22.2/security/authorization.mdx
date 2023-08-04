@@ -8,6 +8,8 @@ title: Configuring Authorization
     <link rel="canonical" href="https://docs.redpanda.com/docs/manage/security/authorization/" />
 </head>
 
+import RpAclTip from '../shared/_rpk-acl-tip.mdx'
+
 Authorization works in tandem with [authentication](../authentication). Access-control lists (ACLs) provide a way to configure fine-grained access to provisioned users. ACLs work with SASL/SCRAM and with mTLS with principal mapping for authentication. 
 
 ## ACLs
@@ -39,6 +41,8 @@ All ACLs require a principal. A principal is composed of two parts: the type, an
 The `--allow-principal` and `--deny-principal` flags add this prefix for you, if necessary. 
 
 The special name '\*' matches any name, meaning an ACL with principal "User:\*" grants or denies the permission for any user.
+
+<RpAclTip/>
 
 ### Hosts
 

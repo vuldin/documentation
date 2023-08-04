@@ -3,6 +3,8 @@ title: rpk acl
 rpk_version: v23.2.1
 ---
 
+import RpAclTip from '../../shared/_rpk-acl-tip.mdx'
+
 Manage ACLs and SASL users.
 
 This command space creates, lists, and deletes ACLs, as well as creates SASL
@@ -29,6 +31,8 @@ It is recommended to be as specific as possible when granting ACLs. Granting
 more ACLs than necessary per principal may inadvertently allow clients to do
 things they should not, such as deleting topics or joining the wrong consumer
 group.
+
+<RpAclTip/>
 
 PRINCIPALS
 
