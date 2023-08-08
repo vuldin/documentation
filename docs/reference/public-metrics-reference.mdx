@@ -337,7 +337,7 @@ Latency of the request indicated by the label in the Schema Registry. The measur
 
 #### redpanda_kafka_max_offset
 
-Offset of the last message committed for the partition.
+The high watermark offset of a partition. Suitable for calculating consumer group lag.
 
 **Type**: gauge
 
@@ -345,6 +345,9 @@ Offset of the last message committed for the partition.
 - `redpanda_namespace` 
 - `redpanda_partition` 
 - `redpanda_topic` 
+
+**Related topics**:
+- [Consumer group lag](../../manage/kubernetes/monitor/#consumer-group-lag)
 
 ---
 
