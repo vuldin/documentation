@@ -345,7 +345,7 @@ Expected output:
 [{"topic":"test_topic","key":null,"value":"Redpanda","partition":0,"offset":0}]
 ```
 
-### Consume topic events with consumers
+### Create a consumer
 
 To retrieve events from a topic using consumers, you must create a consumer and a consumer group, and then subscribe the consumer instance to a topic. Each action involves a different endpoint and method.
 
@@ -423,8 +423,9 @@ Expected output:
 {"instance_id":"test_consumer","base_uri":"http://127.0.0.1:8082/consumers/test_group/instances/test_consumer"}
 ```
 
-:::note
-Consumers expire after five minutes of inactivity. To prevent this from happening, try consuming events within a loop. If the consumer has expired, you can create a new one with the same name.
+:::note notes
+- Consumers expire after five minutes of inactivity. To prevent this from happening, try consuming events within a loop. If the consumer has expired, you can create a new one with the same name.
+- The output 'base_uri` will be used in subsequent `curl` requests.
 :::
 
 ### Subscribe to the topic
@@ -437,7 +438,7 @@ After creating the consumer, subscribe to the topic that you created.
 ```bash
 curl -s -o /dev/null -w "%{http_code}" \
   -X POST \
-  "http://localhost:8082/consumers/test_group/instances/test_consumer/subscription"\
+  "<base-uri>/subscription"\
   -H "Content-Type: application/vnd.kafka.v2+json" \
   -d '{
   "topics": [
@@ -489,7 +490,7 @@ Retrieve the events from the topic:
 
 ```bash
 curl -s \
-  "http://localhost:8082/consumers/test_group/instances/test_consumer/records?timeout=1000&max_bytes=100000"\
+  "<base-uri>/records?timeout=1000&max_bytes=100000"\
   -H "Accept: application/vnd.kafka.json.v2+json"
 ```
 
@@ -545,7 +546,7 @@ Expected output:
 ```bash
 curl -s \
    -X 'GET' \
-  'http://localhost:8082/consumers/test_group/instances/test_consumer/offsets' \
+  '<base-uri>/offsets' \
   -H 'accept: application/vnd.kafka.v2+json' \
   -H 'Content-Type: application/vnd.kafka.v2+json' \
   -d '{
@@ -600,7 +601,7 @@ After events have been handled by a consumer, the offsets can be committed, so t
 ```bash
 curl -s -o /dev/null -w "%{http_code}" \
 -X 'POST' \
-'http://localhost:8082/consumers/test_group/instances/test_consumer/offsets' \
+'<base-uri>/offsets' \
 -H 'accept: application/vnd.kafka.v2+json' \
 -H 'Content-Type: application/vnd.kafka.v2+json' \
 -d '{
@@ -718,7 +719,7 @@ To remove a consumer from a group, send a DELETE request as shown below:
 ```bash
 curl -s -o /dev/null -w "%{http_code}" \
    -X 'DELETE' \
-  'http://localhost:8082/consumers/test_group/instances/test_consumer' \
+  '<base-uri>' \
   -H 'Content-Type: application/vnd.kafka.v2+json'
 ```
 
