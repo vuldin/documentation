@@ -1,0 +1,27 @@
+import MigrationCLIVersion from "./_migration-cli-version.mdx"
+
+1. Download the `cluster-to-redpanda-migration` archive for Linux:
+
+      ```bash
+      curl -LO https://github.com/redpanda-data/redpanda/releases/latest/download/cluster-to-redpanda-migration-linux-amd64.zip
+      ```
+
+1. Ensure that you have the folder `~/.local/bin`:
+
+  ```bash
+  mkdir -p ~/.local/bin
+  ```
+
+1. Add it to your `$PATH`:
+
+  ```bash
+  export PATH="~/.local/bin:$PATH"
+  ```
+
+1. Unzip the `cluster-to-redpanda-migration` files to your `~/.local/bin/` directory:
+
+  ```bash
+  unzip cluster-to-redpanda-migration-linux-amd64.zip -d ~/.local/bin/
+  ```
+
+1. <MigrationCLIVersion/>

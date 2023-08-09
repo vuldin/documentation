@@ -1,0 +1,67 @@
+import MigrationCLIVersion from "./_migration-cli-version.mdx"
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+To install `cluster-to-redpanda-migration` CLI on macOS, choose the option that corresponds to your system architecture. For example, if you have an M1 or M2 chip, use the **Apple Silicon** instructions.
+
+<Tabs>
+<TabItem value="intelmac" label="Intel macOS" default>
+
+1. Download the `cluster-to-redpanda-migration` archive for macOS:
+
+      ```bash
+      curl -LO https://github.com/redpanda-data/redpanda/releases/latest/download/cluster-to-redpanda-migration-darwin-amd64.zip
+      ```
+
+1. Ensure that you have the folder `~/.local/bin`:
+
+    ```bash
+    mkdir -p ~/.local/bin
+    ```
+
+1. Add it to your `$PATH`:
+
+    ```bash
+    export PATH=$PATH:~/.local/bin
+    ```
+
+1. Unzip the `cluster-to-redpanda-migration` files to your `~/.local/bin/` directory:
+
+    ```bash
+    unzip cluster-to-redpanda-migration-darwin-amd64.zip -d ~/.local/bin/
+    ```
+
+1. <MigrationCLIVersion/>
+
+</TabItem>
+<TabItem value="applesilicon" label="Apple Silicon">
+
+1. Download the `cluster-to-redpanda-migration` archive for macOS:
+
+      ```bash
+      curl -LO https://github.com/redpanda-data/redpanda/releases/latest/download/cluster-to-redpanda-migration-darwin-arm64.zip
+      ```
+
+1. Ensure that you have the folder `~/.local/bin`:
+
+    ```bash
+    mkdir -p ~/.local/bin
+    ```
+
+1. Add it to your `$PATH`:
+
+    ```bash
+    export PATH=$PATH:~/.local/bin
+    ```
+
+1. Unzip the `cluster-to-redpanda-migration` files to your `~/.local/bin/` directory:
+
+    ```bash
+    unzip cluster-to-redpanda-migration-darwin-amd64.zip -d ~/.local/bin/
+    ```
+
+1. <MigrationCLIVersion/>
+
+</TabItem>
+</Tabs>

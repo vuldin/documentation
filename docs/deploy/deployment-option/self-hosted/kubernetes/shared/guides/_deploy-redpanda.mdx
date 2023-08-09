@@ -6,15 +6,13 @@ In this step, you deploy Redpanda with SASL authentication and self-signed TLS c
 <Tabs groupId="kubernetes-tool">
 <TabItem value="operator" label="Helm + Operator">
 
-:::caution
-Redpanda Operator is in beta. Do not migrate existing production clusters to the Redpanda Operator.
-:::
-
 1. Make sure that you have permission to install custom resource definitions (CRDs):
 
   ```bash
-  kubectl auth can-i create CustomResourceDefinition
+  kubectl auth can-i create CustomResourceDefinition --all-namespaces
   ```
+
+  You should see `yes` in the output.
 
   You need cluster-level permissions to install cert-manager and Redpanda Operator CRDs in the next steps.
 
@@ -44,7 +42,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
   helm upgrade --install redpanda-controller redpanda/operator \
     --namespace <namespace> \
     --set image.repository=docker.redpanda.com/redpandadata/redpanda-operator \
-    --set image.tag=v23.2.1 \
+    --set image.tag=v23.2.4 \
     --create-namespace
     --timeout 1h
   ```
@@ -52,7 +50,7 @@ Redpanda Operator is in beta. Do not migrate existing production clusters to the
 1. Ensure that the Deployment is successfully rolled out:
 
   ```bash
-  kubectl --namespace <namespace> rollout status --watch deployment/redpanda-controller
+  kubectl --namespace <namespace> rollout status -w deployment/redpanda-controller-operator
   ```
 
   ```text-nocopy

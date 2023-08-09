@@ -510,11 +510,11 @@
           "label": "Migrate from the Redpanda Helm chart",
           "id": "upgrade/migrate/kubernetes/helm-to-operator"
         },
-        /*{
+        {
           "type": "doc",
           "label": "Migrate from the Cluster and Console Custom Resources",
-          "id": "upgrade/migrate/kubernetes/helm-to-operator"
-        },*/
+          "id": "upgrade/migrate/kubernetes/operator"
+        },
         {
           "type": "category",
           "label": "Deprecated Features",
