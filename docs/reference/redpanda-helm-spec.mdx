@@ -6,7 +6,7 @@ tags:
 description: Find the default values and descriptions of settings in the Redpanda Helm chart.
 ---
 
-![Version: 5.0.10](https://img.shields.io/badge/Version-5.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v23.2.4](https://img.shields.io/badge/AppVersion-v23.2.4-informational?style=flat-square)
+![Version: 5.1.0](https://img.shields.io/badge/Version-5.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v23.2.4](https://img.shields.io/badge/AppVersion-v23.2.4-informational?style=flat-square)
 
 This page describes the official Redpanda Helm Chart. In particular, this page describes the contents of the chart’s [`values.yaml` file](https://github.com/redpanda-data/helm-charts/blob/main/charts/redpanda/values.yaml). Each of the settings is listed and described on this page, along with any default values.
 
@@ -25,6 +25,7 @@ Kubernetes: `^1.21.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://charts.redpanda.com | connectors | >=0.1.2 <1.0 |
 | https://charts.redpanda.com | console | >=0.5 <1.0 |
 
 ## Settings
@@ -158,6 +159,16 @@ See the [property reference documentation](https://docs.redpanda.com/docs/refere
 See the [property reference documentation](https://docs.redpanda.com/docs/reference/tunable-properties/#topic_partitions_per_shard).
 
 **Default:** `1000`
+
+### [connectors](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=connectors)
+
+Redpanda Managed Connectors settings For a reference of configuration settings, see the [Redpanda Connectors documentation](https://docs.redpanda.com/docs/deploy/deployment-option/cloud/managed-connectors/).
+
+**Default:**
+
+```
+{"deployment":{"create":false},"enabled":false,"test":{"create":false}}
+```
 
 ### [console](https://artifacthub.io/packages/helm/redpanda-data/redpanda?modal=values&path=console)
 
